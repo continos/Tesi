@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const cheerio = require('cheerio'); 
 
 const app = express();
 const port = 3000;
@@ -14,32 +15,28 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Serve i file statici (html, css, js, immagini) dalla cartella corrente
 app.use(express.static(__dirname));
 
+// Backup del contenuto originale per possibile revert
+let originalContentBackup = null;
+
 // Gestisce la richiesta POST a /save
 app.post('/save', (req, res) => {
-  let fileName, content, scope;
+  const { file, content, scope } = req.body;
+  const filePath = path.join(__dirname, file);
 
-  // Gestisce sia JSON che form-urlencoded
-  if (req.headers['content-type'] === 'application/json') {
-    fileName = req.body.file;
-    content = req.body.content;
-    scope = req.body.scope;
-  } else {
-    fileName = req.body.file;
-    content = req.body.content;
-    scope = req.body.scope;
-  }
-
-  // Controllo di sicurezza base: permette di salvare solo file .html nella stessa cartella
-  const filePath = path.join(__dirname, fileName);
-  if (path.dirname(filePath) !== __dirname || !fileName.endsWith('.html')) {
+  // Controllo di sicurezza
+  if (path.dirname(filePath) !== __dirname || !file.endsWith('.html')) {
     return res.status(400).send('Error: Invalid file path or file type.');
   }
-  // Leggi il file esistente
+
+  // Leggi il file esistente e crea backup
   fs.readFile(filePath, 'utf8', (readErr, existingContent) => {
     if (readErr) {
       console.error('Error reading file:', readErr);
       return res.status(500).send('Error reading file.');
     }
+    
+    // Salva il contenuto originale per possibile revert
+    originalContentBackup = existingContent;
 
     // Usa cheerio per analizzare e modificare l'HTML
     const $ = cheerio.load(existingContent);
@@ -62,17 +59,23 @@ app.post('/save', (req, res) => {
       }
 
       // Integrazione Git
-      const commitMessage = `Updated ${scope} section in ${fileName} via web editor`;
-      const escapeShellArg = (arg) => `'${arg.replace(/'/g, "'\\''")}'`;
-      const gitCommand = `git add ${escapeShellArg(fileName)} && git commit -m ${escapeShellArg(commitMessage)}`;
-
+      const commitMessage = `Updated ${scope} section in ${file} via web editor`;
+      const gitCommand = `git add "${file}" && git commit -m "${commitMessage.replace(/"/g, '\\"')}"`;
       exec(gitCommand, (gitErr, stdout, stderr) => {
         if (gitErr) {
           console.error('Git error:', stderr);
-          return res.status(200).send('File saved, but error during git commit.');
+          // Revert delle modifiche se Git fallisce
+          fs.writeFile(filePath, originalContentBackup, (revertErr) => {
+            if (revertErr) {
+              console.error('Error reverting file:', revertErr);
+              return res.status(500).send('File saved but git commit failed and could not revert.');
+            }
+            return res.status(500).send('File saved but git commit failed. Changes reverted.');
+          });
+        } else {
+          console.log('Git output:', stdout);
+          res.status(200).send('success');
         }
-        console.log('Git output:', stdout);
-        res.status(200).send('success');
       });
     });
   });
@@ -102,6 +105,22 @@ app.post('/save', (req, res) => {
     });
   });
 });*/
+
+// Endpoint per revert manuale (opzionale)
+app.post('/revert', (req, res) => {
+  if (!originalContentBackup) {
+    return res.status(400).send('No backup available for revert.');
+  }
+  
+  const filePath = path.join(__dirname, 'index.html');
+  fs.writeFile(filePath, originalContentBackup, (err) => {
+    if (err) {
+      console.error('Error reverting file:', err);
+      return res.status(500).send('Error during revert.');
+    }
+    res.status(200).send('File reverted to previous version.');
+  });
+});
 
 app.listen(port, () => {
   console.log('Server running at http://localhost:' + port);
