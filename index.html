@@ -90,10 +90,10 @@
         <div class="row">
           <div class="col-xl-4">
             <!-- Toolbar fissa per TinyMCE-->
-            
+            <div id="herotoolbar"></div>
             <!-- Elementi editabili-->
-            <h1 class="tinymce-heading mce-content-body aos-init aos-animate mce-edit-focus" id="mce_0" style="position: relative;" contenteditable="true" spellcheck="false">Ricerca Informatica</h1>
-            <blockquote class="tinymce-body mce-content-body aos-init aos-animate" data-aos-delay="100" id="mce_10" style="position: relative;" contenteditable="true" spellcheck="false"><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis cum recusandae eum laboriosam voluptatem repudiandae odio, vel exercitationem officiis provident minima.</p></blockquote>
+            <h1 class="tinymce-heading">Ricerca</h1>
+            <blockquote class="tinymce-body" data-aos-delay="100"><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis cum recusandae eum laboriosam voluptatem repudiandae odio, vel exercitationem officiis provident minima.</p></blockquote>
             <div class="d-flex aos-init aos-animate" data-aos-delay="200">
               <a href="#about" class="btn-get-started">Get Started</a>
               <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
@@ -570,11 +570,22 @@
       const heroClone = hero.cloneNode(true);
       // Remove the "data-aos" attributes to prevent re-animation on next load
       heroClone.querySelectorAll('[data-aos]').forEach(el => el.removeAttribute('data-aos'));
-       // Rimuovi la toolbar dal clone perché verrà ricreata al caricamento
-      const toolbarClone = heroClone.querySelector('#herotoolbar');
-      if (toolbarClone) {
-        toolbarClone.remove();
-      }
+       
+     
+      // mantieni il contenitore toolbar ma svuota i figli generati da TinyMCE
+      const toolbar = heroClone.querySelector('#herotoolbar');
+      if (toolbar) toolbar.innerHTML = '';
+
+       // Pulisci gli attributi TinyMCE prima di inviare
+      heroClone.querySelectorAll('.mce-content-body').forEach(el => {
+        el.classList.remove('mce-content-body', 'mce-edit-focus');
+        el.removeAttribute('contenteditable');
+        el.removeAttribute('spellcheck');
+        if (el.id && el.id.startsWith('mce_')) {
+          el.removeAttribute('id');
+        }
+        el.removeAttribute('style');
+      });
 
       // Invia l’HTML della sezione (o dell’intera pagina se preferisci)
       const finalHtml = heroClone.outerHTML;
