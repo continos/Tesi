@@ -92,7 +92,9 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-4">
+            <!-- Toolbar fissa per TinyMCE-->
             <div id="herotoolbar"></div>
+            <!-- Elementi editabili-->
             <h1 class="tinymce-heading" data-aos="fade-up">Focus On What Matters</h1>
             <blockquote class="tinymce-body" data-aos="fade-up" data-aos-delay="100">
               <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis cum recusandae eum laboriosam voluptatem repudiandae odio, vel exercitationem officiis provident minima. </p>
@@ -100,7 +102,6 @@
             <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
               <a href="#about" class="btn-get-started">Get Started</a>
               <a href="https://www.youtube.com/watch?v=Y7f98aduVJ8" class="glightbox btn-watch-video d-flex align-items-center"><i class="bi bi-play-circle"></i><span>Watch Video</span></a>
-              <a href="#" id="save-button" class="btn-get-started" style="margin-left: 15px; background-color: #15a04a;"><span>Save Changes</span></a>
             </div>
           </div>
         </div>
@@ -532,29 +533,35 @@
   <script src="assets/js/main.js"></script>
 
   <script>
-    // Original TinyMCE initialization
-    const headingConfig = {
-      selector: '.tinymce-heading',
+    // Config comune per inline + toolbar fissa
+    const commonInlineConfig = {
       menubar: false,
       inline: true,
-      plugins: [ 'lists', 'autolink' ],
-      toolbar: 'undo redo | bold italic underline',
+      plugins: [ 'save','link','lists', 'autolink' ],
+      // pulsante save appare nella toolbar fissa
+      toolbar: 'undo redo | bold italic underline | save',
+      // Rende il pulsante attivo solo quando ci sono modifiche
+      save_enablewhendirty: true,
+      fixed_toolbar_container: '#herotoolbar',
+      save_onsavecallback: (editor) => {
+        saveContent(editor);
+      }
+    };
+    const headingConfig = {
+      ...commonInlineConfig,
+      selector: '.tinymce-heading',
       valid_elements: 'strong,em,span[style],a[href]',
       valid_styles: { '*': 'font-size,font-family,color,text-decoration,text-align' },
-      fixed_toolbar_container: '#herotoolbar',
       powerpaste_word_import: 'clean',
       powerpaste_html_import: 'clean',
     };
 
     const bodyConfig = {
+      ...commonInlineConfig,
       selector: '.tinymce-body',
-      menubar: false,
-      inline: true,
-      plugins: [ 'link', 'lists', 'autolink' ],
-      toolbar: [ 'undo redo | bold italic underline | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent' ],
+      toolbar: [ 'undo redo | bold italic underline | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent | save' ],
       valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
       valid_styles: { '*': 'font-size,font-family,color,text-decoration,text-align' },
-      fixed_toolbar_container: '#herotoolbar',
       powerpaste_word_import: 'clean',
       powerpaste_html_import: 'clean',
     };
@@ -562,7 +569,41 @@
     tinymce.init(headingConfig);
     tinymce.init(bodyConfig);
 
-    // Save functionality
+    function saveContent(editor){
+      // Clona solo la sezione hero e rimuovi data-aos
+      const hero = document.querySelector('#hero');
+      const heroClone = hero.cloneNode(true);
+      // Remove the "data-aos" attributes to prevent re-animation on next load
+      heroClone.querySelectorAll('[data-aos]').forEach(el => el.removeAttribute('data-aos'));
+      // Invia l’HTML della sezione (o dell’intera pagina se preferisci)
+      const finalHtml = heroClone.outerHTML;
+
+      fetch('/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          file: 'index.html',     // o il path che preferisci
+          content: finalHtml,     // oppure l'intero document.documentElement.outerHTML se vuoi tutta la pagina
+          scope: 'hero'           // opzionale, per far capire al server cosa stai salvando
+        })
+      })
+      .then(res => res.text())
+      .then(txt => {
+        // Reset dirty state e feedback utente
+        editor.setDirty(false);
+        if (txt.trim() === 'success') {
+          alert('Pagina salvata!');
+        } else {
+          alert('Errore durante il salvataggio:\n' + txt);
+        }
+      })
+      .catch(err => {
+        alert('Errore di rete: ' + err.message);
+        console.error(err);
+      });
+    }
+
+    /* Save functionality
     document.getElementById('save-button').addEventListener('click', (e) => {
       e.preventDefault();
 
@@ -615,7 +656,7 @@
         alert('Errore di rete. Assicurati che il server sia in esecuzione e che save.php esista.');
         console.error('Save error:', error);
       });
-    });
+    });*/
   </script>
 </body>
 
