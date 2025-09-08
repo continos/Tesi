@@ -1,0 +1,22 @@
+{
+	"/artificial-intelligence-big-data.html": {
+		"topics": [
+			{
+				"title": "<strong>Content Processing and Acquisition</strong>",
+				"body": "<p>The robustness recently achieved by NLP technologies makes their applicability very promising for the support in the design of advanced system development. Human Language Technologies (HLT) for <strong>Content Acquisition</strong> favor the incremental design of unstructured data processing systems through reuse. HLTs are crucial for robust and accurate analysis of unstructured text, and for enriching them with semantic meta-data or other implict information. It allows to extract interesting semantic phenomena and to map them into structured representation of a target domain.</p><p>When a semantic meta-model is available, for example in form of an existing ontology, HLT allows to locate concepts in the text (irrespectively from the variable forms in which they appear in the free text), mark them according to Knowledge Representation Languages (such as RDF or OWL) thus unifying different shallow representations of the same concepts. In this way semantic annotations of concepts in the text are obtained for the original document, making it more suitable for clustering, retrieval and browsing activities. In synthesis, HLT enables to perform and simplify advanced functionalities (e.g. semantic search) that are possible over the text.</p><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a>"
+			},
+			{
+				"title": "Knowledge Engineering, Semantic Web and Linked Data",
+				"body": "<p>a certain field or domain into artifacts known as knowledge bases. The intension of the term is broad, encompassing all aspects \u2013 scientific, technical, social \u2013 related to this creative act.</p><p>In the era of the Web, it emerged the need to collect, represent and expose data so that the information can be consumed not only by humans, but by machines in convenient ways, fostering a global echo-system of agents being able to retrieve, exchange and understand data and to cooperate to solve complex tasks. Such extension of the Web is called Semantic Web. Data that is published on the Web, represented according to well-defined standards and interconnected to other Data on the Web is called Linked Data.</p><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a>"
+			},
+			{
+				"title": "Machine Learning",
+				"body": "<p>Statistical learning methods make the assumption that lexical or grammatical observations are useful hints for modeling different semantic inferences. Linguistic observations provide features for a learning method that are generalized into predictive components in the final model, induced from the training examples. In (Mitchell, 1997), Tom Mitchell provided an interesting definition of a learning program:</p><p>A computer program is said to learn from experience <b>E</b> with respect to some class of tasks <b>T</b> and performance measure <b>P</b>, if its performance at tasks in <b>T</b>, as measured by <b>P</b>, improves with experience <b>E</b>.</p><div class=\"topic-actions\"><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a></div>"
+			},
+			{
+				"title": "Web & Information Retrieval",
+				"body": "<p>Modern systems in Information Technology need to access the huge amount of information that is stored and constantly produced in the Web. Most human knowledge is represented and expressed using language and the proper application of Natural Language Processing (NLP) techniques is crucial in exploiting such data.</p><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a>"
+			}
+		]
+	}
+}
