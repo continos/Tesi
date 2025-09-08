@@ -1,7 +1,7 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html><html lang="it"><head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Nova Bootstrap Template</title>
+  <title>Informatica - Università di Roma "Tor Vergata"</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
@@ -22,8 +22,11 @@
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/mainInformatica.css" rel="stylesheet">
   
+  <!-- TinyMCE -->
+  <script src="https://cdn.tiny.cloud/1/jkk1wkgxk4g54w8og4nojznwwgdjbc725u92envtaovjb0eh/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
+
 
   <!-- =======================================================
   * Template Name: Nova
@@ -32,7 +35,6 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-  <script src="https://cdn.tiny.cloud/1/jkk1wkgxk4g54w8og4nojznwwgdjbc725u92envtaovjb0eh/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
 </head>
 
 <body class="index-page">
@@ -42,19 +44,33 @@
 
       <a href="index.html" class="logo d-flex align-items-center">
         <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.png" alt=""> -->
-        <h1 class="sitename">Nova</h1>
+        <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"> 
+        <!-- <h1 class="sitename"></h1> -->
       </a>
 
       <nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="index.html" class="active">Home<br></a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="services.html">Services</a></li>
-          <li><a href="portfolio.html">Portfolio</a></li>
-          <li><a href="team.html">Team</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <li class="dropdown"><a href="#"><span>Research</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="artificial-intelligence-big-data.html">Artificial Intelligence & Big Data</a></li>
+              <li><a href="distributed-computing-complex-networks.html">Distributed Computing & Complex Networks</a></li>
+              <li><a href="software-systems.html">Software Systems</a></li>
+              <li><a href="systems-data-security.html">Systems & Data Security</a></li>
+            </ul>
+          </li>
+          <li><a href="publications.html">Publications</a></li>
+          <li class="dropdown"><a href="#"><span>Academics</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="http://www.informatica.uniroma2.it/" target="_blank">Bachelor</a></li>
+              <li><a href="http://www.informatica.uniroma2.it/index2.htm" target="_blank">Master</a></li>
+            </ul>
+          </li>
+          <li><a href="people.html">People</a></li>
+          <li><a href="blog-e-news.html">News</a></li>
+          <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>        
+        </ul>
+          <!--li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Dropdown 1</a></li>
               <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -70,9 +86,7 @@
               <li><a href="#">Dropdown 3</a></li>
               <li><a href="#">Dropdown 4</a></li>
             </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
+          </!--li-->
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
@@ -104,7 +118,169 @@
 
     </section><!-- /Hero Section -->
 
-    <!-- Why Us Section -->
+    <!-- Research Section -->
+    <section id="research" class="research section">      
+    <!-- Section Title -->
+    <div class="container section-title" data-aos="fade-up">
+      <h2>Research</h2>
+      <p>Le nostre principali aree di ricerca.</p>
+    </div><!-- End Section Title -->
+
+    <div class="container">
+
+      <!-- Row 1: Image Left, Text Right -->
+      <div class="row align-items-center gy-4 mb-5">
+        <div class="col-lg-6" data-aos="fade-up">
+          <img
+  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg"
+  class="img-fluid" alt="Artificial Intelligence & Big Data">
+        </div>
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <h3>Artificial Intelligence & Big Data</h3>
+          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
+  seguito.</p>
+          <a href="artificial-intelligence-big-data.html"
+  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Row 2: Text Left, Image Right -->
+      <div class="row align-items-center gy-4 mb-5">
+        <div class="col-lg-6 order-lg-2" data-aos="fade-up">
+          <img
+  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg"
+  class="img-fluid" alt="Distributed Computing & Complex Networks">
+        </div>
+        <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
+          <h3>Distributed Computing & Complex Networks</h3>
+          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
+  seguito.</p>
+          <a
+  href="https://www-2020.cs.uniroma2.it/distributed-computing-complex-networks/"
+  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Row 3: Image Left, Text Right -->
+      <div class="row align-items-center gy-4 mb-5">
+        <div class="col-lg-6" data-aos="fade-up">
+          <img src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg" class="img-fluid" alt="Software Systems">
+        </div>
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <h3>Software Systems</h3>
+          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
+  seguito.</p>
+          <a href="https://www-2020.cs.uniroma2.it/software-systems/"
+  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Row 4: Text Left, Image Right -->
+      <div class="row align-items-center gy-4">
+        <div class="col-lg-6 order-lg-2" data-aos="fade-up">
+          <img
+  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg"
+  class="img-fluid" alt="Systems & Data Security">
+        </div>
+        <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
+          <h3>Systems & Data Security</h3>
+          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
+  seguito.</p>
+          <a href="https://www-2020.cs.uniroma2.it/systems-data-security/"
+  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    </section><!-- /Research Section -->
+
+    <!-- News Section -->
+    <section id="news" class="call-to-action section dark-background">
+
+      <img src="assets/img/cta-bg.jpg" alt="">
+
+      <div class="container">
+        <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
+          <div class="col-xl-10">
+            <div class="text-center">
+              <h3>All the latest news</h3>
+              <p>Rimani aggiornato su tutte le novità e gli eventi del dipartimento.</p>
+              <a class="cta-btn" href="blog-e-news.html">Read all news</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /News Section -->
+
+    <!-- Academics Section -->
+    <section id="academics" class="academics section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Academics</h2>
+        <p>La nostra offerta formativa.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+        <div class="row justify-content-center gy-4">
+
+          <!-- Bachelor Card -->
+          <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="service-item position-relative text-center">
+              <div class="icon">
+                <i class="bi bi-mortarboard" style="color: #0277bd;"></i>
+              </div>
+              <h3>Bachelor</h3>
+              <p>Descrizione del corso di laurea triennale. Questo testo può essere
+    modificato.</p>
+              <a href="http://www.informatica.uniroma2.it/" class="readmore" target="_blank"
+    rel="noopener noreferrer"><span>Go</span><i class="bi bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+          <!-- Master Card -->
+          <div class="col-lg-5 col-md-6" data-aos="fade-up" data-aos-delay="200">
+            <div class="service-item position-relative text-center">
+              <div class="icon">
+                <i class="bi bi-person-video3" style="color: #0277bd;"></i>
+              </div>
+              <h3>Master</h3>
+              <p>Descrizione del corso di laurea magistrale. Questo testo può essere
+    modificato.</p>
+              <a href="http://www.informatica.uniroma2.it/index2.htm" class="readmore"
+    target="_blank" rel="noopener noreferrer"><span>Go</span><i class="bi
+    bi-arrow-right"></i></a>
+            </div>
+          </div><!-- End Service Item -->
+
+        </div>
+      </div>
+
+    </section><!-- /Academics Section -->
+
+    <!-- Publications Section -->
+    <section id="publications" class="recent-posts section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Publications</h2>
+        <p>Scopri le più recenti pubblicazioni dei nostri docenti e ricercatori.</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up">
+        <div class="row justify-content-center">
+          <div class="col-lg-6 text-center">
+            <a href="publications.html" class="btn-get-started">View all Publications</a>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Publications Section -->
+
+
+    <!-- Why Us Section ->
     <section id="why-us" class="why-us section">
 
       <div class="container">
@@ -146,7 +322,7 @@
                     <h4 class="mb-3">Optio reiciendis accusantium iusto architecto at quia minima maiores quidem, dolorum.</h4>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, ipsam perferendis asperiores explicabo vel tempore velit totam, natus nesciunt accusantium dicta quod quibusdam ipsum maiores nobis non, eum. Ullam reiciendis dignissimos laborum aut, magni voluptatem velit doloribus quas sapiente optio.</p>
                   </div>
-                </div><!-- End slide item -->
+                </div><!-- End slide item ->
 
                 <div class="swiper-slide">
                   <div class="item">
@@ -154,7 +330,7 @@
                     <h4 class="mb-3">Amet cumque nam sed voluptas doloribus iusto. Dolorem eos aliquam quis.</h4>
                     <p>Dolorem quia fuga consectetur voluptatem. Earum consequatur nulla maxime necessitatibus cum accusamus. Voluptatem dolorem ut numquam dolorum delectus autem veritatis facilis. Et ea ut repellat ea. Facere est dolores fugiat dolor.</p>
                   </div>
-                </div><!-- End slide item -->
+                </div><!-- End slide item ->
 
                 <div class="swiper-slide">
                   <div class="item">
@@ -162,7 +338,7 @@
                     <h4 class="mb-3">Necessitatibus voluptatibus explicabo dolores a vitae voluptatum.</h4>
                     <p>Neque voluptates aut. Soluta aut perspiciatis porro deserunt. Voluptate ut itaque velit. Aut consectetur voluptatem aspernatur sequi sit laborum. Voluptas enim dolorum fugiat aut.</p>
                   </div>
-                </div><!-- End slide item -->
+                </div><!-- End slide item ->
 
                 <div class="swiper-slide">
                   <div class="item">
@@ -170,7 +346,7 @@
                     <h4 class="mb-3">Tempora quos est ut quia adipisci ut voluptas. Deleniti laborum soluta nihil est. Eum similique neque autem ut.</h4>
                     <p>Ut rerum et autem vel. Et rerum molestiae aut sit vel incidunt sit at voluptatem. Saepe dolorem et sed voluptate impedit. Ad et qui sint at qui animi animi rerum.</p>
                   </div>
-                </div><!-- End slide item -->
+                </div><!-- End slide item ->
 
               </div>
               <div class="swiper-pagination"></div>
@@ -186,14 +362,14 @@
 
     </section><!-- /Why Us Section -->
 
-    <!-- Services Section -->
+    <!-- Services Section ->
     <section id="services" class="services section">
 
-      <!-- Section Title -->
+      <!-- Section Title ->
       <div class="container section-title" data-aos="fade-up">
         <h2>Our Services</h2>
         <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-      </div><!-- End Section Title -->
+      </div><!-- End Section Title ->
 
       <div class="container">
 
@@ -207,7 +383,7 @@
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
           </div>
-          <!-- End Service Item -->
+          <!-- End Service Item ->
 
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="200">
             <div class="icon flex-shrink-0"><i class="bi bi-card-checklist" style="color: #15a04a;"></i></div>
@@ -216,7 +392,7 @@
               <p class="description">Minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat tarad limino ata</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
-          </div><!-- End Service Item -->
+          </div><!-- End Service Item ->
 
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="300">
             <div class="icon flex-shrink-0"><i class="bi bi-bar-chart" style="color: #d90769;"></i></div>
@@ -225,7 +401,7 @@
               <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
-          </div><!-- End Service Item -->
+          </div><!-- End Service Item ->
 
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="400">
             <div class="icon flex-shrink-0"><i class="bi bi-binoculars" style="color: #15bfbc;"></i></div>
@@ -234,7 +410,7 @@
               <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
-          </div><!-- End Service Item -->
+          </div><!-- End Service Item ->
 
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="500">
             <div class="icon flex-shrink-0"><i class="bi bi-brightness-high" style="color: #f5cf13;"></i></div>
@@ -243,7 +419,7 @@
               <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
-          </div><!-- End Service Item -->
+          </div><!-- End Service Item ->
 
           <div class="col-lg-4 col-md-6 service-item d-flex" data-aos="fade-up" data-aos-delay="600">
             <div class="icon flex-shrink-0"><i class="bi bi-calendar4-week" style="color: #1335f5;"></i></div>
@@ -252,7 +428,7 @@
               <p class="description">Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi</p>
               <a href="#" class="readmore stretched-link"><span>Learn More</span><i class="bi bi-arrow-right"></i></a>
             </div>
-          </div><!-- End Service Item -->
+          </div><!-- End Service Item ->
 
         </div>
 
@@ -260,7 +436,7 @@
 
     </section><!-- /Services Section -->
 
-    <!-- Call To Action Section -->
+    <!-- Call To Action Section ->
     <section id="call-to-action" class="call-to-action section dark-background">
 
       <img src="assets/img/cta-bg.jpg" alt="">
@@ -279,7 +455,7 @@
 
     </section><!-- /Call To Action Section -->
 
-    <!-- Features Section -->
+    <!-- Features Section ->
     <section id="features" class="features section">
 
       <div class="container">
@@ -295,56 +471,56 @@
                   <i class="bi bi-eye" style="color: #ff8b2c;"></i>
                   <span>Easy Cart Features</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-infinity" style="color: #5578ff;"></i>
                   <span>Sit amet consectetur adipisicing</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-mortarboard" style="color: #e80368;"></i>
                   <span>Ipsum Rerum Explicabo</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-star" style="color: #ffa76e;"></i>
                   <span>Easy Cart Features</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-x-diamond" style="color: #11dbcf;"></i>
                   <span>Easy Cart Features</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-camera-video" style="color: #4233ff;"></i>
                   <span>Sit amet consectetur adipisicing</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-brightness-high" style="color: #29cc61;"></i>
                   <span>Ipsum Rerum Explicabo</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
 
               <div class="col-md-6">
                 <div class="icon-list d-flex">
                   <i class="bi bi-activity" style="color: #ff5828;"></i>
                   <span>Easy Cart Features</span>
                 </div>
-              </div><!-- End Icon List Item-->
+              </div><!-- End Icon List Item->
             </div>
           </div>
           <div class="col-lg-5 position-relative" data-aos="zoom-out" data-aos-delay="200">
@@ -370,14 +546,14 @@
 
     </section><!-- /Features Section -->
 
-    <!-- Recent Posts Section -->
+    <!-- Recent Posts Section ->
     <section id="recent-posts" class="recent-posts section">
 
-      <!-- Section Title -->
+      <!-- Section Title ->
       <div class="container section-title" data-aos="fade-up">
         <h2>Recent Blog Posts</h2>
 
-      </div><!-- End Section Title -->
+      </div><!-- End Section Title ->
 
       <div class="container">
 
@@ -447,6 +623,48 @@
 
     <div class="footer-top">
       <div class="container">
+        <div class="row gy-4 justify-content-center">
+
+          <!-- Colonna 1: Logo Università -->
+          <div class="col-lg-4 col-md-6 footer-about text-center">
+            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank"
+  rel="noopener noreferrer">
+              <img
+  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png"
+  alt="Università di Roma Tor Vergata">
+            </a>
+          </div>
+
+          <!-- Colonna 2: Link Utili/Admin -->
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Area Riservata</h4>
+            <ul>
+              <li><a href="#">Accedi</a></li>
+              <!-- In futuro, questo link punterà alla pagina di login per l'editing -->
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+
+  <!--footer id="footer" class="footer light-background">
+
+    <div class="footer-top">
+      <div class="container">
         <div class="row gy-4">
           <div class="col-lg-5 col-md-12 footer-about">
             <a href="index.html" class="logo d-flex align-items-center">
@@ -499,15 +717,15 @@
     <div class="container copyright text-center">
       <p>© <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        <!-- All the links in the footer should remain intact. ->
+        <!-- You can delete the links only if you've purchased the pro version. ->
+        <!-- Licensing information: https://bootstrapmade.com/license/ ->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] ->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
 
-  </footer>
+  </!--footer-->
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
@@ -526,7 +744,22 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <!-- Carica lo script dell'editor generico -->
+  <script src="assets/js/editor.js"></script>
 
+  <!-- Inizializza l'editor per questa pagina specifica -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Diciamo allo script di attivare l'editing sulla sezione #hero,
+      // usando la toolbar #herotoolbar e salvando sul file index.html
+      initializeEditableSection({
+        toolbarId: '#herotoolbar',
+        sectionId: '#hero',
+        filePath: 'index.html'
+      });
+    });
+  </script>
+  <!--<script src="assets/js/tinymce.js"></script>
   <script>
     // Config comune per inline + toolbar fissa
     const commonInlineConfig = {
@@ -671,7 +904,7 @@
         console.error('Save error:', error);
       });
     });*/
-  </script>
+  </script>-->
 
 
 </body></html>

@@ -18,67 +18,89 @@ app.use(express.static(__dirname));
 // Backup del contenuto originale per possibile revert
 let originalContentBackup = null;
 
+// Funzione per pulire gli attributi TinyMCE
+function cleanTinyMCEAttributes(html) {
+  const $ = cheerio.load(html);
+  
+  // Rimuovi attributi e classi specifiche di TinyMCE
+  $('.mce-content-body').removeClass('mce-content-body mce-edit-focus');
+  $('[contenteditable="true"]').removeAttr('contenteditable');
+  $('[spellcheck="false"]').removeAttr('spellcheck');
+  $('[id^="mce_"]').removeAttr('id');
+  $('[style*="position: relative"]').removeAttr('style');
+  
+  return $.html();
+}
+
 // Gestisce la richiesta POST a /save
 app.post('/save', (req, res) => {
-  const { file, content, scope } = req.body;
-  const filePath = path.join(__dirname, file);
+  try {
+    const { file, content, scope } = req.body;
+    const filePath = path.join(__dirname, file);
 
-  // Controllo di sicurezza
-  if (path.dirname(filePath) !== __dirname || !file.endsWith('.html')) {
-    return res.status(400).send('Error: Invalid file path or file type.');
-  }
-
-  // Leggi il file esistente e crea backup
-  fs.readFile(filePath, 'utf8', (readErr, existingContent) => {
-    if (readErr) {
-      console.error('Error reading file:', readErr);
-      return res.status(500).send('Error reading file.');
-    }
-    
-    // Salva il contenuto originale per possibile revert
-    originalContentBackup = existingContent;
-
-    // Usa cheerio per analizzare e modificare l'HTML
-    const $ = cheerio.load(existingContent);
-    
-    // Sostituisci solo la sezione hero
-    if (scope === 'hero') {
-      $('#hero').replaceWith(content);
-    } else {
-      // Per altri scope, implementa la logica appropriata
-      $(`#${scope}`).replaceWith(content);
+    // Controllo di sicurezza
+    if (path.dirname(filePath) !== __dirname || !file.endsWith('.html')) {
+      return res.status(400).send('Error: Invalid file path or file type.');
     }
 
-    const updatedHtml = $.html();
+    // Leggi il file esistente e crea backup
+    fs.readFile(filePath, 'utf8', (readErr, existingContent) => {
+      if (readErr) {
+        console.error('Error reading file:', readErr);
+        return res.status(500).send('Error reading file.');
+      }
+      
+      // Salva il contenuto originale per possibile revert
+      originalContentBackup = existingContent;
 
-    // Scrivi il file aggiornato
-    fs.writeFile(filePath, updatedHtml, (writeErr) => {
-      if (writeErr) {
-        console.error('Error writing file:', writeErr);
-        return res.status(500).send('Error writing file.');
+      // Pulisci gli attributi TinyMCE dal contenuto da salvare
+      const cleanedContent = cleanTinyMCEAttributes(content);
+
+      // Usa cheerio per analizzare e modificare l'HTML
+      const $ = cheerio.load(existingContent);
+      
+      // Sostituisci solo la sezione hero
+      if (scope === 'hero') {
+        $('#hero').replaceWith(cleanedContent);
+      } else {
+        // Per altri scope, implementa la logica appropriata
+        $(`#${scope}`).replaceWith(content);
       }
 
-      // Integrazione Git
-      const commitMessage = `Updated ${scope} section in ${file} via web editor`;
-      const gitCommand = `git add "${file}" && git commit -m "${commitMessage.replace(/"/g, '\\"')}"`;
-      exec(gitCommand, (gitErr, stdout, stderr) => {
-        if (gitErr) {
-          console.error('Git error:', stderr);
-          // Revert delle modifiche se Git fallisce
-          fs.writeFile(filePath, originalContentBackup, (revertErr) => {
-            if (revertErr) {
-              console.error('Error reverting file:', revertErr);
-              return res.status(500).send('File saved but git commit failed and could not revert.');
-            }
-            return res.status(500).send('File saved but git commit failed. Changes reverted.');
-          });
-        } else {
-          console.log('Git output:', stdout);
-          res.status(200).send('success');
+      const updatedHtml = $.html();
+
+      // Scrivi il file aggiornato
+      fs.writeFile(filePath, updatedHtml, (writeErr) => {
+        if (writeErr) {
+          console.error('Error writing file:', writeErr);
+          return res.status(500).send('Error writing file.');
         }
+
+        // Integrazione Git
+        const commitMessage = `Updated ${scope} section in ${file} via web editor`;
+        const gitCommand = `git add "${file}" && git commit -m "${commitMessage.replace(/"/g, '\\"')}"`;
+        exec(gitCommand, (gitErr, stdout, stderr) => {
+          if (gitErr) {
+            console.error('Git error:', stderr);
+            // Revert delle modifiche se Git fallisce
+            fs.writeFile(filePath, originalContentBackup, (revertErr) => {
+              if (revertErr) {
+                console.error('Error reverting file:', revertErr);
+                return res.status(500).send('File saved but git commit failed and could not revert.');
+              }
+              return res.status(500).send('File saved but git commit failed. Changes reverted.');
+            });
+          } else {
+            console.log('Git output:', stdout);
+            res.status(200).send('success');
+          }
+        });
       });
     });
-  });
+  } catch (error) {
+    console.error('Unexpected error:', error);
+    res.status(500).send('Unexpected error occurred.');
+  }
 });
   /*fs.writeFile(filePath, content, (err) => {
     if (err) {
