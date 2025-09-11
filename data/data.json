@@ -29,7 +29,8 @@
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
 				"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
 			}
-		]
+		],
+		"sharedFooter": "\n\n    <div class=\"footer-top\">\n      <div class=\"container\">\n        <div class=\"row gy-4 justify-content-center\">\n\n          \n          <div class=\"col-lg-4 col-md-6 footer-about text-center\">\n            <a href=\"https://web.uniroma2.it/\" class=\"logo d-block mb-4\" target=\"_blank\" rel=\"noopener noreferrer\">\n              <img src=\"https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png\" alt=\"Universit\u00e0 di Roma Tor Vergata\">\n            </a>\n          </div>\n\n          \n          <div class=\"col-lg-2 col-6 footer-links\">\n            <h4>Area RisServata</h4>\n            <ul>\n              <li><a href=\"#\">Accedi</a></li>\n              \n            </ul>\n          </div>\n\n        </div>\n      </div>\n    </div>\n\n    <div class=\"container copyright text-center\">\n      <p>\u00a9 <span>Copyright</span> <strong class=\"px-1 sitename\">Nova</strong> <span>All Rights Reserved</span></p>\n      <div class=\"credits\">\n        \n        \n        \n        \n        Designed by <a href=\"https://bootstrapmade.com/\">BootstrapMade</a>\n      </div>\n    </div>\n\n  "
 	},
 	"/research/artificial-intelligence-big-data.html": {
 		"topics": [
