@@ -50,7 +50,8 @@
 				"body": "<p>Modern systems in Information Technology need to access the huge amount of information that is stored and constantly produced in the Web. Most human knowledge is represented and expressed using language and the proper application of Natural Language Processing (NLP) techniques is crucial in exploiting such data.</p><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a>"
 			}
 		],
-		"data-simply-page-template": "research-template.html"
+		"data-simply-page-template": "research-template.html",
+		"researchMenu": []
 	},
 	"/index.html": {
 		"researchMenu": [],
