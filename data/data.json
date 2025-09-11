@@ -56,5 +56,9 @@
 	"/index.html": {
 		"researchMenu": [],
 		"data-simply-page-template": "research-template.html"
+	},
+	"/research/distributed-computing-complex-networks.html": {
+		"researchMenu": [],
+		"data-simply-page-template": "research-template.html"
 	}
 }
