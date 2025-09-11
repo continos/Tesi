@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title data-simply-field="pageTitle">Nuova Pagina</title>
+
+  <!-- Favicons -->
+  <link href="/assets/img/favicon.png" rel="icon">
+  <link href="/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="/assets/css/mainInformatica.css" rel="stylesheet">
+
+</head>
+
+<body class="details-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+
+      <a href="/index.html" class="logo d-flex align-items-center">
+        <img src="/assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata">
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/index.html">Home<br></a></li>
+          <li class="dropdown"><a href="#"><span>Research</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul data-simply-list="researchMenu" data-simply-data="researchPages">
+              <template>
+                <li><a data-simply-field="link">Menu Item</a></li>
+              </template>
+            </ul>
+          </li>
+          <li><a href="/publications.html">Publications</a></li>
+          <li class="dropdown"><a href="#"><span>Academics</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="http://www.informatica.uniroma2.it/" target="_blank">Bachelor</a></li>
+              <li><a href="http://www.informatica.uniroma2.it/index2.htm" target="_blank">Master</a></li>
+            </ul>
+          </li>
+          <li><a href="/people.html">People</a></li>
+          <li><a href="/blog-e-news.html">News</a></li>
+          <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+    </div>
+  </header>
+
+  <main id="main" class="main">
+    <!-- Il contenuto della pagina andrà qui -->
+  </main>
+
+  <footer id="footer" class="footer light-background" data-simply-path="/" data-simply-field="sharedFooter">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4 justify-content-center">
+
+          <!-- Colonna 1: Logo Università -->
+          <div class="col-lg-4 col-md-6 footer-about text-center">
+            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
+              <img src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
+            </a>
+          </div>
+
+          <!-- Colonna 2: Link Utili/Admin -->
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Area Riservata</h4>
+            <ul>
+              <li><a href="#">Accedi</a></li>
+              <!-- In futuro, questo link punterà alla pagina di login per l'editing -->
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+
+  <!-- Main JS File -->
+  <script src="/assets/js/main.js"></script>
+
+  <!-- SimplyEdit -->
+  <script src="/assets/js/simply-edit-config.js"></script>
+  <script src="/simplyedit/js/simply-edit.js" data-api-key="mykey" data-simply-settings="simplySettings"></script>
+</body>
+
+</html>
