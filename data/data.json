@@ -1,5 +1,37 @@
 {
-	"/artificial-intelligence-big-data.html": {
+	"/": {
+		"homeResearchItems": [
+			{
+				"data-simply-template": "image-left",
+				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg",
+				"title": "Artificial Intelligence & Big Data",
+				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
+				"href": "research/artificial-intelligence-big-data.html"
+			},
+			{
+				"data-simply-template": "image-right",
+				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg",
+				"title": "Distributed Computing & Complex Networks",
+				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
+				"href": "https://www-2020.cs.uniroma2.it/distributed-computing-complex-networks/"
+			},
+			{
+				"data-simply-template": "image-left",
+				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg",
+				"title": "Software Systems",
+				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
+				"href": "https://www-2020.cs.uniroma2.it/software-systems/"
+			},
+			{
+				"data-simply-template": "image-right",
+				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg",
+				"title": "Systems & Data Security",
+				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
+				"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
+			}
+		]
+	},
+	"/research/artificial-intelligence-big-data.html": {
 		"topics": [
 			{
 				"title": "<strong>Content Processing and Acquisition</strong>",
@@ -18,6 +50,10 @@
 				"body": "<p>Modern systems in Information Technology need to access the huge amount of information that is stored and constantly produced in the Web. Most human knowledge is represented and expressed using language and the proper application of Natural Language Processing (NLP) techniques is crucial in exploiting such data.</p><a href=\"#\" class=\"btn-topic-link\"><i class=\"bi bi-box-arrow-up-right\"></i> Link</a>"
 			}
 		],
+		"data-simply-page-template": "research-template.html"
+	},
+	"/index.html": {
+		"researchMenu": [],
 		"data-simply-page-template": "research-template.html"
 	}
 }
