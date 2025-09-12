@@ -88,6 +88,19 @@
 	},
 	"/publications.html": {
 		"pageTitle": "Publications - Informatica - Universit\u00e0 di Roma \"Tor Vergata\"",
-		"researchMenu": []
+		"researchMenu": [],
+		"sections": [
+			{
+				"backgroundImage": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg",
+					"class": "page-title-bg",
+					"alt": "",
+					"title": null
+				},
+				"mainHeading": "Publications",
+				"breadcrumb": "Sottotitolo",
+				"data-simply-template": "pageTitle"
+			}
+		]
 	}
 }
