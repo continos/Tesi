@@ -63,7 +63,7 @@
 		"data-simply-page-template": "research-template.html",
 		"pageTitle": "Distributed Computing & Complex Networks",
 		"mainHeading": "Distributed Computing &amp; Complex Networks",
-		"breadcrumb": "<li class=\"fusion-breadcrumb-item\" aria-current=\"page\"><span class=\"breadcrumb-leaf\">Distributed Computing &amp; Complex Networks</span></li>",
+		"breadcrumb": "Distributed Computing &amp;amp; Complex Networks",
 		"news-content": "\n        <p>Qui verranno visualizzate le ultime notizie. Per ora, questo \u00e8 un segnaposto.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi tutte le News</a>\n      ",
 		"publications-subtitle": "Distributed Computing & Complex Networks",
 		"publications-content": "\n        <p>Spiacente nessuna pubblicazione corrispondente ai criteri di ricerca.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi le Pubblicazioni</a>\n      ",
