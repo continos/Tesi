@@ -78,6 +78,36 @@
           </div>
         </div>
       </template>
+      <template data-simply-template="publicationSearch" data-simply-template-icon="fa-search">
+        <section id="publications-search" class="publications-search section">
+          <div class="container">
+            <!-- Titolo della Sezione -->
+            <div class="section-title" data-aos="fade-up">
+              <h2>Cerca Pubblicazioni</h2>
+              <p>Cerca nell'archivio di art.torvergata.it</p>
+            </div>
+            <!-- Barra di Ricerca -->
+            <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
+              <div class="col-lg-8">
+                <form id="search-form" class="d-flex">
+                  <input type="text" id="search-query" class="form-control me-2" placeholder="Inserisci titolo, autore, anno...">
+                  <button type="submit" class="btn btn-primary">Cerca</button>
+                </form>
+              </div>
+            </div>
+            <!-- Area Risultati -->
+            <div id="results-container" class="row gy-4 mt-4">
+              <!-- I risultati della ricerca verranno inseriti qui dinamicamente -->
+            </div>
+            <!-- Indicatore di Caricamento -->
+            <div id="loading-indicator" class="text-center mt-4" style="display: none;">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Caricamento...</span>
+              </div>
+            </div>
+          </div>
+        </section>
+      </template>
       <template data-simply-template="content" data-simply-template-icon="fa-align-left">
         <section class="content">
           <h2 class="title" data-simply-field="title">Title</h2>
@@ -146,6 +176,7 @@
 
   <!-- Main JS File -->
   <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/publication-search.js" defer></script> 
 
   <!-- SimplyEdit -->
   <script src="/assets/js/simply-edit-config.js"></script>

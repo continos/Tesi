@@ -2,6 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { exec } = require('child_process');
+const cheerio = require('cheerio');
+const session = require('express-session');
 
 const app = express();
 const port = 3000;
@@ -162,11 +164,68 @@ app.put('/data/data.json', (req, res) => {
     });
   });
 });
-/*
-const cheerio = require('cheerio');
 
-// API endpoint per ottenere la lista delle pagine di ricerca
+// API endpoint per la ricerca di pubblicazioni su art.torvergata.it
+app.get('/api/search-publications', async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ message: 'Query di ricerca mancante.' });
+  }
+
+  // URL per l'esportazione in formato CSV, molto più robusto dello scraping HTML
+  // URL per la ricerca semplice, che restituisce HTML
+  const searchUrl = `https://art.torvergata.it/simple-search?query=${encodeURIComponent(query)}&rpp=100`; // Aumento i risultati per pagina
+
+  try {
+    console.log(`Scraping risultati per "${query}" da: ${searchUrl}`);
+
+    const response = await fetch(searchUrl);
+    if (!response.ok) {
+      throw new Error(`Errore dalla rete: ${response.statusText}`);
+    }
+    const html = await response.text();
+    const $ = cheerio.load(html);
+
+    const publications = [];
+    // Selettore per iterare su ogni riga <tr> della tabella dei risultati
+    $('#tableView_body table tbody tr').each((i, el) => {
+      const columns = $(el).find('td');
+      
+      const date = $(columns[0]).text().trim();
+      const titleElement = $(columns[1]).find('a');
+      const title = titleElement.text().trim();
+      const link = `https://art.torvergata.it${titleElement.attr('href')}`;
+      const authors = $(columns[2]).text().trim();
+      const type = $(columns[3]).text().trim();
+
+      // Analizza l'icona del file e la traduce in un nome standard
+      const iconElement = $(columns[4]).find('i');
+      let fileIconType = 'unknown'; // Default
+      if (iconElement.hasClass('fa-minus')) {
+        fileIconType = 'minus';
+      } else if (iconElement.hasClass('fa-lock')) {
+        fileIconType = 'lock';
+      } else if (iconElement.hasClass('fa-file-alt')) {
+        fileIconType = 'file';
+      }
+
+      if (title) { // Aggiungi solo se un titolo è stato trovato
+        publications.push({ title, link, authors, date, type, fileIcon: fileIconType });
+      }
+    });
+
+    res.json(publications);
+
+  } catch (error) {
+    console.error('Errore durante lo scraping delle pubblicazioni:', error);
+    res.status(500).json({ message: 'Errore durante il recupero delle pubblicazioni.' });
+  }
+});
+
+
+/* API endpoint per ottenere la lista delle pagine di ricerca
 app.get('/api/research-pages', (req, res) => {
+
   const researchDir = path.join(__dirname, 'research');
 
   fs.readdir(researchDir, (err, files) => {
