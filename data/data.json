@@ -30,7 +30,97 @@
 				"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
 			}
 		],
-		"sharedFooter": "\n\n    <div class=\"footer-top\">\n      <div class=\"container\">\n        <div class=\"row gy-4 justify-content-center\">\n\n          \n          <div class=\"col-lg-4 col-md-6 footer-about text-center\">\n            <a href=\"https://web.uniroma2.it/\" class=\"logo d-block mb-4\" target=\"_blank\" rel=\"noopener noreferrer\">\n              <img src=\"https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png\" alt=\"Universit\u00e0 di Roma Tor Vergata\">\n            </a>\n          </div>\n\n          \n          <div class=\"col-lg-2 col-6 footer-links\">\n            <h4>Area Riservata</h4>\n            <ul>\n              <li><a href=\"#\">Accedi</a></li>\n              \n            </ul>\n          </div>\n\n        </div>\n      </div>\n    </div>\n\n    <div class=\"container copyright text-center\">\n      <p>\u00a9 <span>Copyright</span> <strong class=\"px-1 sitename\">Nova</strong> <span>All Rights Reserved</span></p>\n      <div class=\"credits\">\n        \n        \n        \n        \n        Designed by <a href=\"https://bootstrapmade.com/\">BootstrapMade</a>\n      </div>\n    </div>\n\n  "
+		"footerLogo": {
+			"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png",
+			"alt": "Università di Roma Tor Vergata"
+		},
+		"footerLoginLink": {
+			"innerHTML": "Accedi",
+			"href": "#"
+		},
+		"logo": {
+			"src": "/assets/img/logoTv.png",
+			"alt": "Informatica - Università di Roma Tor Vergata"
+		},
+		"header": [
+			{
+				"item": {
+				"innerHTML": "Home",
+				"href": "/index.html"
+				},
+				"data-simply-template": "item"
+			},
+			{
+				"item": {
+				"innerHTML": "Research",
+				"href": "#"
+				},
+				"submenu": [
+				{
+					"item": {
+					"innerHTML": "Artificial Intelligence & Big Data",
+					"href": "/research/artificial-intelligence-big-data.html"
+					},
+					"data-simply-template": "item"
+				},
+				{
+					"item": {
+					"innerHTML": "Distributed Computing & Complex Networks",
+					"href": "/research/distributed-computing-complex-networks.html"
+					},
+					"data-simply-template": "item"
+				}
+				],
+				"data-simply-template": "submenu"
+			},
+			{
+				"item": {
+				"innerHTML": "Publications",
+				"href": "/publications.html"
+				},
+				"data-simply-template": "item"
+			},
+			{
+				"item": {
+				"innerHTML": "Academics",
+				"href": "#"
+				},
+				"submenu": [
+				{
+					"item": {
+					"innerHTML": "Bachelor",
+					"href": "http://www.informatica.uniroma2.it/"
+					},
+					"data-simply-template": "item"
+				},
+				{
+					"item": {
+					"innerHTML": "Master",
+					"href": "http://www.informatica.uniroma2.it/index2.htm"
+					},
+					"data-simply-template": "item"
+				}
+				],
+				"data-simply-template": "submenu"
+			},
+			{
+				"item": {
+				"innerHTML": "People",
+				"href": "/people.html"
+				},
+				"data-simply-template": "item"
+			},
+			{
+				"item": {
+				"innerHTML": "News",
+				"href": "/blog-e-news.html"
+				},
+				"data-simply-template": "item"
+			},
+			{
+        		"data-simply-template": "search-icon"
+      		}
+		]
 	},
 	"/research/artificial-intelligence-big-data.html": {
 		"topics": [

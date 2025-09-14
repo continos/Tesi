@@ -31,43 +31,76 @@
 
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
-
-      <a href="/index.html" class="logo d-flex align-items-center">
-        <img src="/assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata">
-      </a>
-
-      <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="/index.html">Home<br></a></li>
-          <li class="dropdown"><a href="#"><span>Research</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul data-simply-list="researchMenu" data-simply-data="researchPages">
-              <template>
-                <li><a data-simply-field="link">Menu Item</a></li>
-              </template>
-            </ul>
-          </li>
-          <li><a href="/publications.html">Publications</a></li>
-          <li class="dropdown"><a href="#"><span>Academics</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="http://www.informatica.uniroma2.it/" target="_blank">Bachelor</a></li>
-              <li><a href="http://www.informatica.uniroma2.it/index2.htm" target="_blank">Master</a></li>
-            </ul>
-          </li>
-          <li><a href="/people.html">People</a></li>
-          <li><a href="/blog-e-news.html">News</a></li>
-          <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>
-        </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
-
+        <a href="index.html" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"  data-simply-field="logo" data-simply-path="/"> 
+          <!-- <h1 class="sitename"></h1> -->
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul data-simply-list="header" data-simply-path="/" data-simply-sortable>
+            <template data-simply-template="item">
+              <li><a data-simply-field="item">Item</a></li>
+            </template>
+            <template data-simply-template="submenu">
+              <li class="dropdown">
+                <a data-simply-field="item" href="#"><span>Submenu</span> 
+                <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul data-simply-list="submenu" data-simply-sortable>
+                  <template data-simply-template="item">
+                    <li><a data-simply-field="item">Item</a></li>
+                  </template>
+                </ul>
+              </li>
+            </template>
+            <template data-simply-template="search-icon">
+              <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>
+            </template>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
     </div>
   </header>
 
   <main id="main" class="main">
-    <!-- Il contenuto della pagina andrà qui -->
+    <div class="sections" data-simply-list="sections" data-simply-sortable="true">
+      <!-- Page Title -->
+      <template data-simply-template="pageTitle" data-simply-template-icon="fa-header">
+        <div class="page-title dark-background" >
+          <img class="page-title-bg" data-simply-field="backgroundImage" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg" alt="">
+          <div class="container page-title-content">
+            <h1 data-simply-field="mainHeading">Titolo Principale</h1>
+            <nav class="breadcrumbs">
+              <ol>
+                <li><a href="/index.html">Home</a></li>
+                <li class="current" data-simply-field="breadcrumb">Sottotitolo</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </template>
+      <template data-simply-template="content" data-simply-template-icon="fa-align-left">
+        <section class="content">
+          <h2 class="title" data-simply-field="title">Title</h2>
+          <div class="text" data-simply-field="text">Text</div>
+        </section>
+      </template>
+      <template data-simply-template="pullquote" data-simply-template-icon="fa-quote-right">
+        <section class="pullquote">
+          <div class="text" data-simply-field="text">Text</div>
+          <blockquote class="quote" data-simply-field="quote">Quote</blockquote>
+        </section>
+      </template>
+      <template data-simply-template="image left" data-simply-template-icon="fa-picture-o">
+        <section class="image-left">
+          <img class="image" data-simply-field="image">
+          <div class="text" data-simply-field="text">Text</div>
+        </section>
+      </template>
+    </div>
   </main>
 
-  <footer id="footer" class="footer light-background" data-simply-path="/" data-simply-field="sharedFooter">
+
+  <footer id="footer" class="footer light-background">
     <div class="footer-top">
       <div class="container">
         <div class="row gy-4 justify-content-center">
@@ -75,7 +108,7 @@
           <!-- Colonna 1: Logo Università -->
           <div class="col-lg-4 col-md-6 footer-about text-center">
             <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
-              <img src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
+              <img data-simply-field="footerLogo" data-simply-path="/" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
             </a>
           </div>
 
@@ -83,8 +116,7 @@
           <div class="col-lg-2 col-6 footer-links">
             <h4>Area Riservata</h4>
             <ul>
-              <li><a href="#">Accedi</a></li>
-              <!-- In futuro, questo link punterà alla pagina di login per l'editing -->
+              <li><a data-simply-field="footerLoginLink" data-simply-path="/" href="#">Accedi</a></li>
             </ul>
           </div>
 
@@ -93,12 +125,10 @@
     </div>
 
     <div class="container copyright text-center">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span></p>
+      <p>
+        © <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span>
+      </p>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
@@ -120,6 +150,9 @@
   <!-- SimplyEdit -->
   <script src="/assets/js/simply-edit-config.js"></script>
   <script src="/simplyedit/js/simply-edit.js" data-api-key="mykey" data-simply-settings="simplySettings"></script>
+  <!-- Pulsante per attivare Edit Mode -->
+  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode">
+    <i class="bi bi-pencil-square"></i>
+  </a>
 </body>
-
 </html>

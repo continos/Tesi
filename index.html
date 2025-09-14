@@ -38,25 +38,54 @@
 </head>
 
 <body class="index-page">
-
   <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+        <a href="index.html" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"  data-simply-field="logo" data-simply-path="/"> 
+          <!-- <h1 class="sitename"></h1> -->
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul data-simply-list="header" data-simply-path="/" data-simply-sortable>
+            <template data-simply-template="item">
+              <li><a data-simply-field="item">Item</a></li>
+            </template>
+            <template data-simply-template="submenu">
+              <li class="dropdown">
+                <a data-simply-field="item" href="#"><span>Submenu</span> 
+                <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul data-simply-list="submenu" data-simply-sortable>
+                  <template data-simply-template="item">
+                    <li><a data-simply-field="item">Item</a></li>
+                  </template>
+                </ul>
+              </li>
+            </template>
+            <template data-simply-template="search-icon">
+              <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>
+            </template>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+    </div>
+  </header>
+  <!--header-- id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
 
       <a href="index.html" class="logo d-flex align-items-center">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!- Uncomment the line below if you also wish to use an image logo ->
         <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"> 
-        <!-- <h1 class="sitename"></h1> -->
+        <!- <h1 class="sitename"></h1> ->
       </a>
 
-      <nav id="navmenu" class="navmenu">
+      <!-nav id="navmenu" class="navmenu">
         <ul>
           <li><a href="index.html" class="active">Home<br></a></li>
           <li class="dropdown"><a href="#"><span>Research</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="artificial-intelligence-big-data.html">Artificial Intelligence & Big Data</a></li>
-              <li><a href="distributed-computing-complex-networks.html">Distributed Computing & Complex Networks</a></li>
-              <li><a href="software-systems.html">Software Systems</a></li>
-              <li><a href="systems-data-security.html">Systems & Data Security</a></li>
+            <ul data-simply-list="researchMenu" data-simply-data="researchPages">
+              <template>
+                <li><a data-simply-field="link">Menu Item</a></li>
+              </template>
             </ul>
           </li>
           <li><a href="publications.html">Publications</a></li>
@@ -70,7 +99,7 @@
           <li><a href="blog-e-news.html">News</a></li>
           <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>        
         </ul>
-          <!--li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+          <!-li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
             <ul>
               <li><a href="#">Dropdown 1</a></li>
               <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
@@ -86,16 +115,16 @@
               <li><a href="#">Dropdown 3</a></li>
               <li><a href="#">Dropdown 4</a></li>
             </ul>
-          </!--li-->
+          </!--li->
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-      </nav>
+      </!--nav>
 
     </div>
-  </header>
+  </header-->
 
   <main class="main">
   
-    <!-- Hero Section -->
+    <!-- Hero Section ->
     <section id="hero" class="hero section dark-background">
 
       <img src="assets/img/hero-bg.jpg" alt="" class="aos-init aos-animate">
@@ -103,9 +132,9 @@
       <div class="container">
         <div class="row">
           <div class="col-xl-4">
-            <!-- Toolbar fissa per TinyMCE-->
+            <!-- Toolbar fissa per TinyMCE->
             <div id="herotoolbar"></div>
-            <!-- Elementi editabili-->
+            <!-- Elementi editabili->
             <h1 class="tinymce-heading">Ricerca</h1>
             <blockquote class="tinymce-body" data-aos-delay="100"><p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Perspiciatis cum recusandae eum laboriosam voluptatem repudiandae odio, vel exercitationem officiis provident minima.</p></blockquote>
             <div class="d-flex aos-init aos-animate" data-aos-delay="200">
@@ -126,70 +155,35 @@
       <p>Le nostre principali aree di ricerca.</p>
     </div><!-- End Section Title -->
 
-    <div class="container">
+    <div class="container" data-simply-list="homeResearchItems" data-simply-path="/" data-simply-sortable>
+      
+      <template data-simply-template="image-left">
+        <!-- Row: Image Left, Text Right -->
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6" data-aos="fade-up">
+            <img data-simply-field="image_src" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="href" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+          </div>
+        </div>
+      </template>
 
-      <!-- Row 1: Image Left, Text Right -->
-      <div class="row align-items-center gy-4 mb-5">
-        <div class="col-lg-6" data-aos="fade-up">
-          <img
-  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg"
-  class="img-fluid" alt="Artificial Intelligence & Big Data">
+      <template data-simply-template="image-right">
+        <!-- Row: Text Left, Image Right -->
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6 order-lg-2" data-aos="fade-up">
+            <img data-simply-field="image_src" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="href" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
+          </div>
         </div>
-        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-          <h3>Artificial Intelligence & Big Data</h3>
-          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
-  seguito.</p>
-          <a href="artificial-intelligence-big-data.html"
-  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Row 2: Text Left, Image Right -->
-      <div class="row align-items-center gy-4 mb-5">
-        <div class="col-lg-6 order-lg-2" data-aos="fade-up">
-          <img
-  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg"
-  class="img-fluid" alt="Distributed Computing & Complex Networks">
-        </div>
-        <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
-          <h3>Distributed Computing & Complex Networks</h3>
-          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
-  seguito.</p>
-          <a
-  href="https://www-2020.cs.uniroma2.it/distributed-computing-complex-networks/"
-  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Row 3: Image Left, Text Right -->
-      <div class="row align-items-center gy-4 mb-5">
-        <div class="col-lg-6" data-aos="fade-up">
-          <img src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg" class="img-fluid" alt="Software Systems">
-        </div>
-        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-          <h3>Software Systems</h3>
-          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
-  seguito.</p>
-          <a href="https://www-2020.cs.uniroma2.it/software-systems/"
-  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-        </div>
-      </div>
-
-      <!-- Row 4: Text Left, Image Right -->
-      <div class="row align-items-center gy-4">
-        <div class="col-lg-6 order-lg-2" data-aos="fade-up">
-          <img
-  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg"
-  class="img-fluid" alt="Systems & Data Security">
-        </div>
-        <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
-          <h3>Systems & Data Security</h3>
-          <p>Descrizione dell'area di ricerca. Questo testo può essere modificato in
-  seguito.</p>
-          <a href="https://www-2020.cs.uniroma2.it/systems-data-security/"
-  class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>
-        </div>
-      </div>
+      </template>
 
     </div>
 
@@ -620,18 +614,14 @@
   </main>
 
   <footer id="footer" class="footer light-background">
-
     <div class="footer-top">
       <div class="container">
         <div class="row gy-4 justify-content-center">
 
           <!-- Colonna 1: Logo Università -->
           <div class="col-lg-4 col-md-6 footer-about text-center">
-            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank"
-  rel="noopener noreferrer">
-              <img
-  src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png"
-  alt="Università di Roma Tor Vergata">
+            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
+              <img data-simply-field="footerLogo" data-simply-path="/" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
             </a>
           </div>
 
@@ -639,8 +629,42 @@
           <div class="col-lg-2 col-6 footer-links">
             <h4>Area Riservata</h4>
             <ul>
+              <li><a data-simply-field="footerLoginLink" data-simply-path="/" href="#">Accedi</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center">
+      <p>
+        © <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span>
+      </p>
+      <div class="credits">
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+  </footer>
+
+  <!--footer-- id="footer" class="footer light-background" data-simply-path="/" data-simply-field="sharedFooter">
+      <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4 justify-content-center">
+
+          <!- Colonna 1: Logo Università ->
+          <div class="col-lg-4 col-md-6 footer-about text-center">
+            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
+              <img src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
+            </a>
+          </div>
+
+          <!- Colonna 2: Link Utili/Admin ->
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Area Riservata</h4>
+            <ul>
               <li><a href="#">Accedi</a></li>
-              <!-- In futuro, questo link punterà alla pagina di login per l'editing -->
+              <!- In futuro, questo link punterà alla pagina di login per l'editing ->
             </ul>
           </div>
 
@@ -651,15 +675,14 @@
     <div class="container copyright text-center">
       <p>© <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you've purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        <!- All the links in the footer should remain intact. ->
+        <!- You can delete the links only if you've purchased the pro version. ->
+        <!- Licensing information: https://bootstrapmade.com/license/ ->
+        <!- Purchase the pro version with working PHP/AJAX contact form: [buy-url] ->
         Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
-
-  </footer>
+  </!--footer-->
 
   <!--footer id="footer" class="footer light-background">
 
@@ -747,7 +770,7 @@
   <!-- Carica lo script dell'editor generico -->
   <script src="assets/js/editor.js"></script>
 
-  <!-- Inizializza l'editor per questa pagina specifica -->
+  <!-- Inizializza l'editor per questa pagina specifica 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       // Diciamo allo script di attivare l'editing sulla sezione #hero,
@@ -758,7 +781,7 @@
         filePath: 'index.html'
       });
     });
-  </script>
+  </script>-->
   <!--<script src="assets/js/tinymce.js"></script>
   <script>
     // Config comune per inline + toolbar fissa
@@ -905,6 +928,11 @@
       });
     });*/
   </script>-->
-
+  <script src="assets/js/simply-edit-config.js"></script>
+  <script src="simplyedit/js/simply-edit.js" data-api-key="mykey" data-simply-settings="simplySettings"></script>
+  <!-- Pulsante per attivare Edit Mode -->
+  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode">
+    <i class="bi bi-pencil-square"></i>
+  </a>
 
 </body></html>

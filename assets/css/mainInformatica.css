@@ -64,6 +64,14 @@ body {
   color: var(--default-color);
   background-color: var(--background-color);
   font-family: var(--default-font);
+  /* rendo flex per tenere il footer infondo */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; 
+}
+
+main.main {
+  flex-grow: 1;
 }
 
 a {
@@ -627,6 +635,30 @@ h6 {
   position: relative;
 }
 
+/* Stili per il Page Title con immagine di sfondo editabile */
+.page-title-container {
+  position: relative;
+  text-align: center;
+  overflow: hidden; /* Nasconde le parti dell'immagine che escono dal div */
+  padding: 80px 0; /* Ripristina il padding che era nel .page-title */
+}
+
+.page-title-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Si comporta come background-size: cover */
+  z-index: 1;
+  filter: brightness(0.5); /* Ripristina l'effetto scuro del .dark-background */
+}
+
+.page-title-content {
+  position: relative;
+  z-index: 2; /* Assicura che il testo stia sopra l'immagine */
+}
+
 .page-title:before {
   content: "";
   background-color: color-mix(in srgb, var(--background-color), transparent 40%);
@@ -646,7 +678,10 @@ h6 {
 
 .page-title .breadcrumbs ol {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; 
+  white-space: nowrap;
+  overflow: hidden; 
+  text-overflow: ellipsis; 
   list-style: none;
   justify-content: center;
   padding: 0;
@@ -691,8 +726,22 @@ section,
 --------------------------------------------------------------*/
 .section-title {
   text-align: center;
-  padding-bottom: 60px;
+  margin-top:60px;
+  /*padding-bottom: 60px;*/
   position: relative;
+}
+/*
+  * se un .section-title è il figlio diretto
+  * di una <section> (che ha già il suo padding),
+  * allora no margine superiore per evitare doppi spazi.
+*/
+.container .section-title {
+  margin-top: 0px;
+  padding-bottom: 60px;
+}
+.section .section-title{
+  margin-top: 0px;
+  padding-bottom: 60px;
 }
 
 .section-title h2 {
@@ -2500,6 +2549,7 @@ section,
   background-color: transparent ;
   color: rgb(25, 25, 25);
   padding: 20px 25px;
+  padding-left: 0px;
   font-size: 30px; 
   box-shadow: none;
   font-weight: 600;
@@ -2538,55 +2588,160 @@ section,
     color: rgb(112, 112, 112); 
 }
 
+
 /* Stile per il pulsante Link dentro l'accordion
-  --------------------------------------------------------------*/
-  .btn-topic-link,
-  .btn-edit-topic,
-  .btn-cancel-edit {
-    color: #ffffff; 
-    border-radius: 2px; 
-    padding: 8px 20px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-flex;     
-    align-items: center;     
-    justify-content: center; 
-    border: none; 
-    transition: background-color 0.3s ease; 
-  }
+--------------------------------------------------------------*/
+.btn-topic-link,
+.btn-edit-topic,
+.btn-cancel-edit {
+  color: #ffffff; 
+  border-radius: 2px; 
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;     
+  align-items: center;     
+  justify-content: center; 
+  border: none; 
+  transition: background-color 0.3s ease; 
+}
 
-  .btn-topic-link {
-    background-color: rgb(25, 25, 25); 
-  }
+.btn-topic-link {
+  background-color: rgb(25, 25, 25); 
+}
 
-  .btn-edit-topic {
-    background-color: #6c757d; 
-  }
+.btn-edit-topic {
+  background-color: #6c757d; 
+}
 
-  .btn-cancel-edit {
-    background-color: #dc3545; 
-  }
+.btn-cancel-edit {
+  background-color: #dc3545; 
+}
 
-  .btn-topic-link:hover {
-    background-color: rgb(2, 119, 189);
-    color: #ffffff; 
-  }
+.btn-topic-link:hover {
+  background-color: rgb(2, 119, 189);
+  color: #ffffff; 
+}
 
-  .btn-topic-link i,
-  .btn-edit-topic i,
-  .btn-cancel-edit i {
-    margin-right: 8px; 
-  }
+.btn-topic-link i,
+.btn-edit-topic i,
+.btn-cancel-edit i {
+  margin-right: 8px; 
+}
 
-  .topic-actions {
-    display: flex;
-    justify-content: space-between; 
-    align-items: center;           
-  }
+.topic-actions {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;           
+}
 
-  /* Quando un .accordion-item ha la classe .is-editing (aggiunta via JS),
-     forza il colore del suo titolo a rimanere quello di default, anche in hover. */
-  .accordion-item.is-editing .accordion-button:hover {
-    color: rgb(25, 25, 25) !important;
-  }
+/* Quando un .accordion-item ha la classe .is-editing (aggiunta via JS),
+    forza il colore del suo titolo a rimanere quello di default, anche in hover. */
+[data-simply-edit] .accordion-button:hover {
+  color: rgb(25, 25, 25) !important;
+}
+
+/*
+  * Override per SimplyEdit:
+  * Rimuove gli spazi bianchi extra sopra e sotto la barra degli strumenti
+  * quando la edit-mode è attiva.
+*/
+body[data-simply-edit] #simply-main-toolbar {
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+/*
+  * Adegua l'altezza della barra interna e dei pulsanti
+  * per un aspetto più compatto.
+*/
+body[data-simply-edit] #simply-main-toolbar .simply-toolbar,
+body[data-simply-edit] #simply-main-toolbar .simply-toolbar button {
+  min-height: 55px;
+  height: 55px;
+}
+
+body[data-simply-edit] #simply-main-toolbar .simply-toolbar button > i,
+body[data-simply-edit] #simply-main-toolbar .simply-toolbar button > span.fa-stack {
+    line-height: 28px;
+}
+
+/*
+  * Sposta il tuo header in modo che si posizioni esattamente
+  * sotto la nostra barra degli strumenti compattata.
+*/
+body[data-simply-edit] #header.fixed-top {
+  position: relative;
+}
+/* stile bottone per entrare in #simply-edit */
+#edit-mode-button {
+  position: fixed;
+  bottom: 85px; /* Aumentato per fare spazio al bottone scroll-top */
+  right: 10px;
+  z-index: 999;
+  background-color: var(--accent-color, #0d6efd);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+#edit-mode-button:hover {
+  background-color: #0a58ca; /* Scurisce il blu di default di Bootstrap */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+/* Nasconde il pulsante quando SimplyEdit è attivo */
+body[data-simply-edit] #edit-mode-button {
+  display: none;
+}
+
+/*
+  * Impedisce la modifica del menu "Research" generato dinamicamente,
+  * che non avrebbe senso essendo di sola lettura.
+*/
+body[data-simply-edit] [data-simply-data="researchPages"] {
+  pointer-events: none;
+}
+
+/*
+  * Riattiva la funzionalità dei link all'interno del menu dinamico
+  * per permettere la navigazione anche in modalità modifica.
+*/
+body[data-simply-edit] [data-simply-data="researchPages"] a {
+  pointer-events: auto;
+}
+
+/* 1. Riposiziona il menu contestuale degli item della nav in modo che appaia sotto */
+body[data-simply-edit] #header [data-simply-list-item]:before {
+  top: 100%; /* posizionato sotto elemento */
+  margin-top: 5px; 
+  margin-left: -20px; 
+}
+
+/* 2. Disabilita il click sul link del logo in modalità modifica */
+body[data-simply-edit] header .logo{
+  pointer-events: none;
+}
+
+/* 2.1 Riabilita il click sull'immagine del logo per renderla selezionabile */
+header .logo {
+  pointer-events: auto;
+}
+
+/*
+  * Override per le sezioni di SimplyEdit:
+  * Rimuove il padding ereditato dalle regole globali del sito,
+  * che causa spazi bianchi anomali attorno ai menu contestuali.
+*/
+section.simply-section {
+  padding: 0 !important;
+}
