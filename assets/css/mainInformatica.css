@@ -2737,6 +2737,16 @@ header .logo {
   pointer-events: auto;
 }
 
+/* 2. Disabilita il click sul link login/logout in modalità modifica */
+body[data-simply-edit] #footer .footer-links a{
+  pointer-events: none;
+}
+
+/* 2.1 Riabilita il click sul link login/logout per renderla selezionabile */
+#footer .footer-links a {
+  pointer-events: auto;
+}
+
 /*
   * Override per le sezioni di SimplyEdit:
   * Rimuove il padding ereditato dalle regole globali del sito,

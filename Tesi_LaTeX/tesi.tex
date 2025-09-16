@@ -1,0 +1,61 @@
+\documentclass[11pt, a4paper]{report}
+
+% --- Pacchetti Essenziali ---
+\usepackage[utf8]{inputenc} % Codifica dei caratteri
+\usepackage[T1]{fontenc}    % Codifica dei font
+\usepackage{graphicx}       % Per inserire immagini
+\usepackage{geometry}       % Per definire i margini
+\usepackage{hyperref}       % Per link e riferimenti cliccabili
+\usepackage{times}          % Usa il font Times New Roman
+
+% --- Impostazioni Pagina ---
+\geometry{a4paper, top=3cm, bottom=3cm, left=3cm, right=3cm} % Margini
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Sviluppo di un sistema di content management basato su Git},
+    pdfpagemode=FullScreen,
+}
+
+% --- Frontespizio ---
+\title{
+    {\Huge Sviluppo di un sistema di content management leggero basato su Git e tecnologie web moderne} \\
+    \vspace{1.5cm}
+    {\Large Tesi di Laurea in Informatica}
+}
+\author{Il Tuo Nome}
+\date{\today}
+
+% --- Inizio del Documento ---
+\begin{document}
+
+\maketitle
+
+% --- Abstract (opzionale ma consigliato) ---
+\begin{abstract}
+    % Scrivi qui un breve riassunto (150-250 parole) del progetto.
+    % Spiega il problema, la soluzione proposta e i risultati principali.
+    % Esempio: "La gestione dei contenuti web oscilla tra sistemi CMS complessi e la modifica manuale di file statici. Questa tesi esplora una soluzione ibrida, sviluppando un sistema di content management leggero che sfrutta un editor WYSIWYG in-browser (SimplyEdit) per modificare contenuti disaccoppiati (JSON) e un server Node.js per automatizzare il versioning su Git. Il sistema implementa inoltre funzionalità avanzate come la creazione di pagine dinamiche, un sistema di autenticazione e l'integrazione con servizi esterni tramite scraping. Il risultato è un prototipo funzionale che dimostra la validità di un approccio Git-based per la gestione di siti web dinamici, sicuri e manutenibili."
+\end{abstract}
+
+\tableofcontents % Indice dei contenuti
+
+\cleardoublepage
+
+% --- Inclusione dei Capitoli ---
+\include{introduzione}
+\include{stato_arte}
+\include{architettura}
+\include{implementazione}
+\include{risultati}
+\include{conclusioni}
+
+\cleardoublepage
+
+% --- Bibliografia ---
+\bibliographystyle{plain} % Stile della bibliografia
+\bibliography{bibliografia} % Nome del file .bib
+
+\end{document}

@@ -2,6 +2,95 @@
  * Configurazione Globale per SimplyEdit
  */
 
+ // --- GESTIONE AUTENTICAZIONE ---
+document.addEventListener('DOMContentLoaded', function() {
+  const editModeButton = document.getElementById('edit-mode-button');
+
+  // Controlla se l'utente è autenticato
+  fetch('/check-auth')
+    .then(response => response.json())
+    .then(data => {
+      if (data.isAuthenticated) {
+        // Mostra il pulsante di modifica se l'utente è loggato
+        if(editModeButton) editModeButton.style.display = 'flex';
+      } else {
+        // Nascondi il pulsante se non è loggato
+        if(editModeButton) editModeButton.style.display = 'none';
+      }
+    });
+
+  // Controlla se l'utente sta cercando di entrare in edit mode manualmente
+  window.addEventListener('hashchange', function() {
+    if (window.location.hash === '#simply-edit') {
+      fetch('/check-auth')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.isAuthenticated) {
+            // Se non è loggato, reindirizza alla pagina di login
+            window.location.href = '/login.html';
+          }
+        });
+    }
+  });
+  // Esegue il controllo anche al caricamento iniziale della pagina
+  if (window.location.hash === '#simply-edit') {
+      fetch('/check-auth')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.isAuthenticated) {
+            window.location.href = '/login.html';
+          }
+        });
+  }
+});
+
+document.addEventListener('simply-content-loaded', function() {
+  // Ora che SimplyEdit ha caricato il footer, possiamo modificarlo.
+  fetch('/check-auth')
+      .then(response => response.json())
+      .then(data => {
+          const authLink = document.querySelector('#footer .footer-links a');
+          if (authLink) {
+              if (data.isAuthenticated) {
+                  authLink.textContent = 'Logout';
+                  authLink.href = '#';
+                  authLink.onclick = function(e) {
+                    e.preventDefault();
+                    if (confirm('Sei sicuro di voler terminare la sessione di modifica?')) {
+                      fetch('/logout', { method: 'POST' })
+                      .then(() => {
+                          alert('Logout effettuato con successo.');
+                          window.location.href = window.location.pathname + window.location.search; // Naviga via dall'edit mode
+                      });
+                    }
+                  };
+              } else {
+                  authLink.textContent = 'Accedi';
+                  authLink.href = '/login.html';
+                  authLink.onclick = null;
+              }
+          }
+      });
+  });
+
+// --- PERSONALIZZAZIONE TOOLBAR DI SIMPLYEDIT ---
+document.addEventListener('simply-toolbars-loaded', function() {
+  if (!window.editor) return;
+
+  // Rinomina il pulsante di default "Logout" in "Exit"
+  const defaultExitButton = document.querySelector('#simply-main-toolbar button[data-simply-action="simply-logout"]');
+  if (defaultExitButton) {
+    const icon = defaultExitButton.querySelector('i');
+    // Pulisci il contenuto del pulsante per sicurezza
+    while(defaultExitButton.firstChild) {
+        defaultExitButton.removeChild(defaultExitButton.firstChild);
+    }
+    // Ricomponi con icona e nuovo testo
+    if(icon) defaultExitButton.appendChild(icon);
+    defaultExitButton.appendChild(document.createTextNode(' Exit Edit'));
+  }
+})
+
 // 1. Definizione delle impostazioni globali (es. template di pagina)
 var simplySettings = {
   pageTemplates: {
@@ -18,6 +107,33 @@ document.addEventListener('simply-storage-init', function() {
   }
 
   console.log('Aggiungo la funzione custom saveTemplate al motore di storage.');
+
+
+  /* --- NUOVO: Aggiungi pulsante e azione di Logout ---
+  editor.addAction('simply-logout', function() {
+    if (confirm('Sei sicuro di voler effettuare il logout?')) {
+      fetch('/logout', { method: 'POST' })
+        .then(() => {
+          // Rimuovi #simply-edit e ricarica la pagina
+          window.location.href = window.location.pathname;
+        });
+    }
+  });
+
+  // Aggiungi il pulsante alla toolbar principale
+  const mainToolbar = editor.toolbars['simply-main-toolbar'];
+  if (mainToolbar && mainToolbar.init) {
+      const originalInit = mainToolbar.init;
+      mainToolbar.init = function(config) {
+          originalInit(config); // Esegui l'init originale
+          const ul = document.querySelector('#simply-main-toolbar .simply-buttons');
+          if (ul) {
+              const logoutButton = document.createElement('li');
+              logoutButton.innerHTML = <button data-simply-action="simply-logout" title="Logout"><i class="fa fa-sign-out"></i> Logout</button>;
+              ul.appendChild(logoutButton);
+          }
+      }
+  }*/ 
 
   // Aggiunge la capacità di creare un file da un template
   editor.storage.saveTemplate = function(templatePath, callback) {

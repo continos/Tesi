@@ -8,6 +8,30 @@ const session = require('express-session');
 const app = express();
 const port = 3000;
 
+// --- Configurazione Sessioni ---
+app.use(session({
+  secret: '£|GP5]k4T8D8V8', 
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false } // true se Https
+}));
+
+// --- Utente per l'autenticazione ---
+const user = {
+  username: 'admin',
+  password: 'password' // In un'app reale, uso password complessa "hashed"!
+};
+
+// --- Protezione rotte ---
+// Questo middleware controlla se l'utente è loggato prima di procedere.
+const isAuthenticated = (req, res, next) => {
+  if (req.session.isAuthenticated) {
+    return next(); // L'utente è autenticato, procedi
+  }
+  // L'utente non è autenticato, nega l'accesso
+  res.status(401).send('Accesso negato. Effettuare il login.');
+};
+
 app.use(express.json());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
@@ -18,6 +42,34 @@ app.use(express.text({ type: 'text/plain', limit: '10mb' }));
 
 // Serve i file statici (html, css, js, immagini) dalla cartella del progetto
 app.use(express.static(__dirname));
+
+// --- ROTTE DI AUTENTICAZIONE ---
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === user.username && password === user.password) {
+    req.session.isAuthenticated = true;
+    console.log('Login riuscito per utente:', username);
+    res.status(200).send('Login riuscito');
+  } else {
+    console.log('Tentativo di login fallito per utente:', username);
+    res.status(401).send('Credenziali non valide');
+  }
+});
+
+app.post('/logout', (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).send('Logout fallito');
+    }
+    res.clearCookie('connect.sid'); // Pulisce il cookie di sessione
+    console.log('Logout eseguito.');
+    res.status(200).send('Logout riuscito');
+  });
+});
+
+app.get('/check-auth', (req, res) => {
+  res.json({ isAuthenticated: !!req.session.isAuthenticated });
+});
 
 /* Rotta per l'API che elenca le pagine di ricerca
 app.get('/api/research-pages', (req, res) => {
@@ -43,7 +95,7 @@ app.get('/api/research-pages', (req, res) => {
 });*/
 
 // Rotta per creare una nuova pagina da un template
-app.post('/create-page-from-template', (req, res) => {
+app.post('/create-page-from-template', isAuthenticated, (req, res) => {
   const { template, path: newPagePath } = req.body;
   const templateFullPath = path.join(__dirname, 'templates', template);
   const newPageFullPath = path.join(__dirname, newPagePath);
@@ -84,7 +136,7 @@ app.post('/create-page-from-template', (req, res) => {
 });
 
 // Nuova rotta per creare una pagina VUOTA (usata dalla Sitemap)
-app.post('/create-blank-page', (req, res) => {
+app.post('/create-blank-page', isAuthenticated, (req, res) => {
   const { path: newPagePath } = req.body;
   const templateFullPath = path.join(__dirname, 'templates', 'blank-template.html');
   const newPageFullPath = path.join(__dirname, newPagePath);
@@ -126,14 +178,14 @@ app.post('/create-blank-page', (req, res) => {
 });
 
 
-// Rotta fittizia per gestire il check di connessione di SimplyEdit
+/* Rotta fittizia per gestire il check di connessione di SimplyEdit
 app.post('/login', (req, res) => {
   console.log('Richiesta di connessione da SimplyEdit ricevuta. Rispondo OK.');
   res.status(200).send('OK');
-});
+});*/
 
 // Rotta per gestire il salvataggio del file data.json
-app.put('/data/data.json', (req, res) => {
+app.put('/data/data.json', isAuthenticated, (req, res) => {
   const filePath = path.join(__dirname, 'data', 'data.json');
   // Il corpo della richiesta (req.body) è il testo del file inviato da SimplyEdit
   const content = req.body;

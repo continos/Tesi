@@ -1,0 +1,117 @@
+\chapter{Alcune regole fondamentali}
+\label{chap:fond}
+
+\begin{minipage}{12cm}\textit{Se lo si desidera, utilizzare questo spazio per inserire un breve riassunto di ci\`o che verr\`a detto in questo capitolo. Inserire solo i punti salienti.}
+\end{minipage}
+
+\vspace*{1cm}
+
+\section{Come iniziare}
+\label{sec:iniziare}
+
+La tesi va scritta partendo dall'indice. Dopo aver avviato il lavoro,
+lo studente deve fare uno sforzo di qualche giorno per scrivere  un
+indice quanto pi\`u accurato e strutturato possibile della
+relazione. L'indice va poi discusso col relatore, possibilmente prima
+di incominciare a scrivere, in quanto esso influisce fortemente sul
+tono da tenere nella scrittura.
+
+L'indice pu\`o essere preparato con l'ausilio di LaTeX semplicmente
+impostando le varie sezioni e affidandosi al comando
+\verb1\tableofcontents1 che genera automaticamente l'indice in cima
+alla tesi. Successivamente, durante la scrittura, i vari capitoli
+vuoti verranno rimepiti.
+
+ATTENZIONE a non cadere nell'errore di sottostimare il proprio lavoro
+e iniziare a scrivere cose scopiazzate qua e l\`a. La relazione deve
+corrispondere ad una descrizione dettagliata del lavoro fatto (\`e
+questa la cosa pi\`u importante da documentare, in aiuto del relatore
+e in aiuto dei tesisti che eventualmente proseguiranno il
+lavoro). Tutto ci\`o che non riguarda il lavoro fatto sar\`a una parte
+introduttiva scritta alla fine, anche di corsa, e di scarso
+interesse. A volte gli studenti fanno l'errore di cominciare a
+scrivere un lungo trattato su cose che non sono farina del loro
+sacco. Quando arrivano alla vera e proria descrizione del loro lavoro,
+ormai la tesi \`e gi\`a troppo lunga e sacrificano proprio quella
+parte, la pi\`u importante, per mancanza di tempo e di
+energie. Quindi: cominciate {\rm sempre} a scrivere dalla parte
+centrale dell'indice della tesi, e poi man mano aggiungete le parti
+introduttive. La tesi non viene scritta di getto dall'inizio alla
+fine, come in una operazione di copiatura, ma nasce dalla sua parte
+centrale, quella pi\`u importante, e poi man mano si gonfia come un
+palloncino, eventualmente vedendo, durante la propria crescita, delle
+revisioni dell'indice e dei cambi strutturali (quali lo swap di due
+capitoli o lo spostamento di un intero capitolo in appendice)
+nell'interesse della chiarezza e dell'organicit\`a del documento.
+
+
+\section{Questioni di impostazione}
+\label{sec:impostazione}
+
+In questa sezione vengono commentate alcune questioni estetiche e di
+forma legate alla tesi.
+
+\subsection{La terza persona}
+
+La tesi va scritta usando la terza persona, per quanto possibile, tranne casi veramente eccezionale. In inglese \`e piuttosto standard usare la prima persona (plurale) in testi tecnici. In italiano no.
+
+\subsection{La lingua}
+
+L'impostazione della lingua (italiana) \`e fondamentale perch\'e le parole vengano spezzate correttamente dal LaTeX quando deve andare a capo. Tale impostazione funziona soltanto se il LaTeX che si utilizza \`e corredato dei corrispondenti files di stile.
+
+\subsection{La punteggiatura}
+\label{sec:puntegg}
+
+La punteggiatura va {\bf sempre} attaccata alla parola precedente e
+staccata (con uno spazio) dalla parola seguente (a parte le virgolette
+aperte per le quali vale la regola opposta).
+
+\subsection{Gli accenti}
+\label{sec:accenti}
+
+In LaTeX non \`e possibile scrivere un carattere accentato semplicemente riportandolo nel codice TeX. Per farlo si deve usare un comando particolare: \verb1\`1. Ad esempio \verb1\`e1 produrr\`a \`e.\\
+
+NOTA!!! Il carattere `` ` '' \`e diverso dal carattere `` ' ''! Col primo si ottiene \`e, col secondo \'e!\\
+In Linux questo ``accento obliquo'' \`e ottenibile utilizzando la combinazione di tasti ALTGR+'. In ambiente Windows si consiglia di utilizzare la Mappa Caratteri.\\
+
+{\bf ATTENZIONE AGLI ACCENTI}: Da un punto di vista grammaticale,
+tutte le parole accentate italiano 
+hanno accento grave, ovvero dall'alto verso il basso, eccezion fatta
+per la lettera `` e '' che pu\`o avere sia accento acuto che grave a
+seconda della parola. Pi\`u specificatamente, le `` e '' accentate sono
+quasi tutte acute, a parte due parole: `` \`e '' e `` cio\`e '' (infatti
+perch\'e, poich\'e, affinch\'e, etc. hanno tutte l'accento
+acuto). Un'ultima osservazione va fatta per la lettera `` i ''
+accentata: la si ottiene con la sequenza \verb1\`{\i}1 che d\`a il
+seguente risutato: \`{\i}.
+
+\subsection{Le virgolette}
+
+Le virgolette aperte si ottengono con la sequenza \verb1``1 mentre
+quelle chiuse si ottengono con la sequenza \verb1''1 oppure con il
+carattere \verb1"1.
+
+\subsection{Posizione delle figure}
+
+Il LaTeX posiziona le figure automaticamente, questo significa che
+esse non appariranno sempre dove ci aspettiamo di vederle. \`E dunque
+fondamentale riferirsi alle figure con il comando
+\verb1In figura~\ref{fig:mylabel}1 che fa riferimento ad una label
+specificata dentro la figura tramite il comando
+\verb1\label{fig:mylabel}1 e che consente di riferirsi alla figura con
+il suo numero e senza riferimenti legati al layout del testo (tipo:
+``qui sotto'' oppure `` in cima alla pagina'', oppure ``nella pagina
+seguente'', etc.)
+
+\subsection{Caption e note a pi\'e di pagina}
+
+Le note a pi\'e di pagina 
+si ottengono semplicemente digitando 
+\verb1\footnote{Questo \`e il testo.}1 attaccato alla lettera
+precedente (questo \`e ci\`o che 
+risulta\footnote{Questo \`e il  testo.}).
+
+Sia per le note che per le (o legende) delle figure, \`e necessario
+sempre partire con la lettera maiuscola e terminare con un punto.
+
+

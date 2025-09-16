@@ -36,7 +36,7 @@
 		},
 		"footerLoginLink": {
 			"innerHTML": "Accedi",
-			"href": "#"
+			"href": "/login.html"
 		},
 		"logo": {
 			"src": "/assets/img/logoTv.png",

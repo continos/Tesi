@@ -1,0 +1,25 @@
+\chapter{Conclusioni e Sviluppi Futuri}
+\label{chap:conclusioni}
+
+\section{Sintesi del Lavoro Svolto}
+% Riassumi brevemente il percorso: sei partito dall'esigenza di un CMS leggero e Git-based,
+% hai analizzato le tecnologie, scelto uno stack (SimplyEdit, Node.js), e hai costruito un prototipo funzionante.
+% Elenca le funzionalità chiave che hai implementato con successo.
+
+\section{Valutazione dei Risultati}
+% Valuta criticamente il tuo lavoro.
+% Il sistema soddisfa tutti i requisiti iniziali? Sì.
+% Quali sono i principali vantaggi di questo approccio? (es. sicurezza, performance, semplicità del backend, tracciabilità delle modifiche).
+
+\section{Limitazioni Attuali}
+% Sii onesto riguardo ai limiti del prototipo. Questo dimostra maturità accademica.
+% - **Autenticazione:** Il sistema di login è basilare, con utente e password in chiaro nel codice. Non è adatto per la produzione.
+% - **Gestione della Concorrenza:** Il sistema non gestisce il caso in cui due utenti modifichino la stessa pagina contemporaneamente. L'ultimo che salva sovrascrive il lavoro dell'altro. Non c'è un meccanismo di locking.
+% - **Gestione dei Conflitti Git:** Se per qualche motivo il file `data.json` venisse modificato manualmente sul server, il commit automatico potrebbe fallire per un conflitto. Il server attuale non ha una logica per gestire i conflitti di merge.
+
+\section{Sviluppi Futuri}
+% Basandoti sulle limitazioni, proponi delle possibili estensioni del lavoro.
+% - **Sistema di Utenti Completo:** Integrare un database (es. SQLite per rimanere leggeri) per gestire più utenti con ruoli e permessi diversi.
+% - **Locking dei Contenuti:** Implementare un meccanismo per cui quando un utente entra in modifica su una pagina, questa viene "bloccata" per gli altri.
+% - **Interfaccia di Diff:** Prima di effettuare il commit, mostrare all'utente un'interfaccia `diff` che fa vedere le modifiche effettuate, simile a `git diff`, e permettere di scrivere un messaggio di commit personalizzato.
+% - **Integrazione RDF:** Implementare la parte opzionale della traccia originale, usando i dati strutturati per generare RDF per docenti e aule.

@@ -1,0 +1,45 @@
+\chapter{Introduzione}
+\label{chap:introduzione}
+
+\section{Contesto: La Gestione dei Contenuti nel Web Moderno}
+La gestione dei contenuti per il web rappresenta da sempre un campo in continua evoluzione, caratterizzato da un ampio spettro di soluzioni tecnologiche. A un estremo si collocano i siti web statici, costruiti con HTML, CSS e JavaScript, che offrono massime prestazioni, elevata sicurezza e semplicità di hosting, ma la cui manutenzione e aggiornamento dei contenuti richiedono necessariamente l'intervento di uno sviluppatore. All'estremo opposto si trovano i Content Management System (CMS) monolitici, come WordPress, Joomla e Drupal. Questi sistemi hanno democratizzato la creazione di siti web, fornendo potenti interfacce di amministrazione che permettono anche a utenti non tecnici di gestire i contenuti in autonomia. Tuttavia, questa facilità d'uso ha un costo: i CMS tradizionali sono spesso architetture complesse che dipendono da uno stack tecnologico specifico (e.g., server PHP, database MySQL), introducendo un significativo overhead in termini di performance, manutenzione e, soprattutto, sicurezza.
+
+Tra questi due estremi esiste uno spazio per soluzioni intermedie, destinate a progetti che necessitano di aggiornamenti dinamici dei contenuti ma che non giustificano la complessità e i costi di manutenzione di un CMS completo. L'esigenza è quella di combinare la leggerezza e la sicurezza dei siti statici con un'esperienza di editing dei contenuti che sia semplice e accessibile.
+
+\section{Obiettivi della Tesi}
+L'obiettivo di questo lavoro di tesi è la progettazione e lo sviluppo di un sistema per la gestione di siti web con contenuti dinamici che superi la rigidità dei siti statici senza introdurre la complessità e le dipendenze infrastrutturali di un CMS tradizionale. Per raggiungere tale scopo, il progetto si è posto i seguenti requisiti fondamentali:
+
+\begin{itemize}
+    \item Realizzazione di un sito web con contenuti dinamici senza l'uso di piattaforme CMS complesse come WordPress, Joomla o Drupal.
+    \item Implementazione di un'interfaccia di editing WYSIWYG per la modifica dei contenuti direttamente in pagina.
+    \item Integrazione con servizi REST esterni per l'arricchimento dei contenuti.
+    \item Implementazione di un sistema di version control (Git) integrato che tracci automaticamente tutte le modifiche.
+    \item Sviluppo di funzionalità opzionali come l'integrazione con sistemi esterni per la visualizzazione delle pubblicazioni dei docenti.
+\end{itemize}
+
+\section{La Soluzione Proposta}
+Per rispondere ai requisiti delineati, è stata progettata e sviluppata un'architettura basata sull'editor SimplyEdit integrato con un backend leggero basato su Node.js che funge da intermediario con il file system e un repository Git.
+
+Il percorso di sviluppo ha inizialmente esplorato l'utilizzo di TinyMCE come editor WYSIWYG, ma successivamente è emersa la superiorità di SimplyEdit per questo specifico caso d'uso, grazie alla sua architettura più aderente ai requisiti del progetto e alla migliore integrazione con il paradigma di salvataggio basato su Git.
+
+Il cuore del sistema si basa sull'interazione tra questi componenti principali:
+\begin{enumerate}
+    \item Un client web moderno, che sfrutta la libreria SimplyEdit per fornire un'esperienza di editing WYSIWYG direttamente sulla pagina, implementando un approccio basato su JSON che permette di disaccoppiare completamente il contenuto dalla sua presentazione.
+    \item Un server backend basato su Node.js e Express.js, il cui ruolo è fornire le API necessarie al funzionamento del sistema, ricevere i contenuti aggiornati dall'editor, persisterli sul file system e automatizzare il processo di commit sul repository Git locale.
+    \item Un sistema di integrazione con servizi esterni, implementato attraverso tecniche di web scraping con Cheerio, per arricchire il sito con contenuti dinamici (come le pubblicazioni dei docenti).
+\end{enumerate}
+
+Questo approccio trasforma di fatto il repository Git nel vero database del sito, trattando ogni salvataggio come una versione atomica e tracciabile della storia dei contenuti, con tutti i vantaggi che ne derivano in termini di cronologia, recupero di versioni precedenti e potenziale integrazione con pipeline di CI/CD.
+
+\section{Caso di Studio}
+Per dimostrare la validità e la flessibilità dell'approccio proposto, il sistema è stato applicato a un caso di studio pratico: la re-implementazione di un sito web ispirato a quello del Dipartimento di Informatica dell'Università di Roma "Tor Vergata". Per la realizzazione dell'interfaccia è stato adottato il template Bootstrap moderno "Nova", adattandone la struttura per renderla compatibile con il sistema di editing dinamico di SimplyEdit. 
+
+\section{Struttura della Tesi}
+La presente tesi è strutturata come segue:
+\begin{itemize}
+    \item[\textbf{Capitolo 2}] Analisi delle Tecnologie e Stato dell'Arte: Viene analizzato lo stato dell'arte delle tecnologie per la gestione dei contenuti, confrontando l'approccio proposto con le soluzioni esistenti e giustificando le scelte tecnologiche effettuate, con particolare focus sull'evoluzione dalla valutazione di TinyMCE all'adozione di SimplyEdit come editor principale.
+    \item[\textbf{Capitolo 3}] Progettazione e Architettura del Sistema: Viene descritta in dettaglio l'architettura del sistema, illustrando i componenti principali e i flussi di dati, con particolare attenzione all'integrazione di SimplyEdit con il backend Node.js e il sistema di versioning Git.
+    \item[\textbf{Capitolo 4}] Dettagli Implementativi: Vengono presentati i dettagli implementativi delle funzionalità più significative, mostrando l'integrazione di SimplyEdit, il sistema di salvataggio automatico su Git, e l'integrazione con i servizi esterni per il recupero delle pubblicazioni.
+    \item[\textbf{Capitolo 5}] Risultati e Caso di Studio: Vengono mostrati i risultati ottenuti attraverso il caso di studio, con evidenza visiva del sito funzionante, dell'esperienza di editing con SimplyEdit e del workflow di versioning su Git, oltre ai risultati dell'integrazione con i servizi esterni.
+    \item[\textbf{Capitolo 6}] Conclusioni e Sviluppi Futuri: Vengono tratte le conclusioni, valutando criticamente il lavoro svolto, discutendone le limitazioni e proponendo possibili sviluppi futuri, inclusi eventuali miglioramenti all'integrazione con SimplyEdit.
+\end{itemize}

@@ -1,0 +1,46 @@
+\contentsline {chapter}{\numberline {1}Introduzione}{3}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Contesto: La Gestione dei Contenuti nel Web Moderno}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Obiettivi della Tesi}{3}{section.1.2}%
+\contentsline {section}{\numberline {1.3}La Soluzione Proposta}{4}{section.1.3}%
+\contentsline {section}{\numberline {1.4}Caso di Studio}{4}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Struttura della Tesi}{4}{section.1.5}%
+\contentsline {chapter}{\numberline {2}Analisi delle Tecnologie e Stato dell'Arte}{6}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Panoramica delle Soluzioni Esistenti}{6}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Sistemi di Content Management System (CMS) Tradizionali}{6}{subsection.2.1.1}%
+\contentsline {subsection}{\numberline {2.1.2}Generatori di Siti Statici (SSG)}{6}{subsection.2.1.2}%
+\contentsline {subsection}{\numberline {2.1.3}Headless CMS}{7}{subsection.2.1.3}%
+\contentsline {section}{\numberline {2.2}Analisi e Scelta degli Strumenti}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}La Scelta dell'Editor WYSIWYG}{7}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}La Scelta della Piattaforma Backend}{8}{subsection.2.2.2}%
+\contentsline {section}{\numberline {2.3}Posizionamento del Progetto}{8}{section.2.3}%
+\contentsline {chapter}{\numberline {3}Progettazione e Architettura del Sistema}{10}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Architettura Generale}{10}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Gestione dei Contenuti Dinamici}{10}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Disaccoppiamento Contenuto-Presentazione}{10}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Editing dei Contenuti Online (WYSIWYG)}{11}{subsection.3.2.2}%
+\contentsline {section}{\numberline {3.3}Integrazione con il Sistema di Version Control (Git)}{11}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Il Flusso di Salvataggio e Commit Automatico}{11}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Autenticazione e Sicurezza}{12}{subsection.3.3.2}%
+\contentsline {section}{\numberline {3.4}Connessione a Servizi Esterni}{12}{section.3.4}%
+\contentsline {subsection}{\numberline {3.4.1}Recupero Dati da Sorgente Esterna}{12}{subsection.3.4.1}%
+\contentsline {section}{\numberline {3.5}Gestione delle Pagine del Sito}{13}{section.3.5}%
+\contentsline {chapter}{\numberline {4}Dettagli Implementativi}{14}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Implementazione del Backend Node.js}{14}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Gestione delle Richieste e Routing}{14}{subsection.4.1.1}%
+\contentsline {subsection}{\numberline {4.1.2}Sistema di Autenticazione con Express-session}{15}{subsection.4.1.2}%
+\contentsline {section}{\numberline {4.2}Automatizzazione del Versioning su Git}{16}{section.4.2}%
+\contentsline {section}{\numberline {4.3}Scraping di Dati Esterni con Cheerio}{17}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Personalizzazione del Client SimplyEdit}{18}{section.4.4}%
+\contentsline {subsection}{\numberline {4.4.1}Gestione dello Stato di Autenticazione}{18}{subsection.4.4.1}%
+\contentsline {subsection}{\numberline {4.4.2}Override delle Funzionalità di Storage}{19}{subsection.4.4.2}%
+\contentsline {chapter}{\numberline {5}Risultati e Caso di Studio}{21}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Il Sito Web Risultante}{21}{section.5.1}%
+\contentsline {section}{\numberline {5.2}L'Esperienza di Editing}{21}{section.5.2}%
+\contentsline {section}{\numberline {5.3}Il Workflow di Versioning in Azione}{21}{section.5.3}%
+\contentsline {section}{\numberline {5.4}Ricerca di Pubblicazioni Esterne}{21}{section.5.4}%
+\contentsline {section}{\numberline {5.5}Sistema di Autenticazione}{21}{section.5.5}%
+\contentsline {chapter}{\numberline {6}Conclusioni e Sviluppi Futuri}{22}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Sintesi del Lavoro Svolto}{22}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Valutazione dei Risultati}{22}{section.6.2}%
+\contentsline {section}{\numberline {6.3}Limitazioni Attuali}{22}{section.6.3}%
+\contentsline {section}{\numberline {6.4}Sviluppi Futuri}{22}{section.6.4}%

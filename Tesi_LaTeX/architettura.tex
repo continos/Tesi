@@ -1,0 +1,99 @@
+\chapter{Progettazione e Architettura del Sistema}
+\label{chap:architettura}
+
+Questo capitolo descrive l'architettura del sistema sviluppato, illustrando come i diversi componenti interagiscono per soddisfare i requisiti di un CMS leggero basato su Git. L'architettura è stata progettata per essere modulare, sicura e facilmente estensibile, seguendo il principio di separazione delle concerni tra interfaccia utente, logica di business e persistenza dei dati.
+
+\section{Architettura Generale}
+Il sistema segue un'architettura client-server con i seguenti componenti principali:
+
+\begin{itemize}
+    \item \textbf{Frontend}: Costituito da pagine HTML standard, fogli di stile CSS e codice JavaScript. Il componente chiave è la libreria SimplyEdit, che si occupa di rendere le sezioni della pagina modificabili e di gestire l'interfaccia utente per l'editing. Il frontend è responsabile della presentazione dei contenuti e dell'esperienza di editing.
+    
+    \item \textbf{Backend}: Implementato in Node.js con il framework Express.js, è responsabile della gestione delle richieste, della persistenza dei dati, dell'integrazione con Git e della connessione ai servizi esterni.
+    
+    \item \textbf{File System}: Utilizzato per la persistenza dei contenuti (file \texttt{data.json}) e dei template HTML.
+    
+    \item \textbf{Repository Git}: Utilizzato come sistema di versioning per tracciare tutte le modifiche ai contenuti.
+\end{itemize}
+
+L'interazione tra questi componenti è orchestrata tramite chiamate API REST. Il flusso dei dati è disaccoppiato dalla presentazione: i contenuti testuali e strutturali sono conservati in un file \texttt{data.json}, mentre i file \texttt{.html} agiscono come template di visualizzazione. La Figura \ref{fig:architettura} illustra il diagramma dell'architettura e le interazioni tra i componenti.
+
+\section{Gestione dei Contenuti Dinamici}
+\subsection{Disaccoppiamento Contenuto-Presentazione}
+Il requisito di un sito "dinamico" è stato soddisfatto adottando un'architettura di contenuti disaccoppiata, tipica degli approcci Headless CMS. Invece di avere i contenuti cablati all'interno dei file HTML, essi vengono centralizzati in un unico file \texttt{data.json}. Questo file agisce come un mini-database e contiene tutti i testi, i link e i riferimenti alle immagini del sito, organizzati per pagina.
+
+SimplyEdit legge questo file al caricamento della pagina e popola dinamicamente i template HTML. Questo approccio offre due vantaggi principali:
+\begin{enumerate}
+    \item \textbf{Manutenibilità}: Le modifiche strutturali o di layout al sito richiedono di intervenire solo sui file \texttt{.html}, senza toccare i contenuti.
+    \item \textbf{Riutilizzabilità}: Un singolo dato (es. il titolo di una pagina) può essere definito una sola volta nel \texttt{data.json} e riutilizzato in più punti del sito (es. nel titolo della pagina, nell'header e nel menu di navigazione), garantendo coerenza.
+\end{enumerate}
+
+\subsection{Editing dei Contenuti Online (WYSIWYG)}
+L'editing visuale è demandato a SimplyEdit. Tramite l'uso di attributi HTML5 \texttt{data-*}, si definiscono le aree della pagina che possono essere modificate:
+\begin{itemize}
+    \item \texttt{data-simply-field="nomeCampo"}: designa un singolo elemento (un titolo, un paragrafo, un'immagine) come campo editabile.
+    \item \texttt{data-simply-list="nomeLista"}: designa un'area che può contenere una lista di elementi ripetibili (es. una lista di "topic" o di membri dello staff). Al suo interno, un tag \texttt{<template>} definisce la struttura HTML di ogni singolo elemento della lista.
+\end{itemize}
+
+Quando l'utente modifica un contenuto, SimplyEdit aggiorna la sua rappresentazione interna dello stato dei dati. Al momento del salvataggio, l'intera struttura dati aggiornata viene serializzata in formato JSON e inviata al backend attraverso una richiesta API.
+
+\section{Integrazione con il Sistema di Version Control (Git)}
+Questo è il cuore architetturale del progetto, che risponde al requisito di tracciabilità e versioning.
+
+\subsection{Il Flusso di Salvataggio e Commit Automatico}
+Il sistema è stato progettato per trattare ogni salvataggio come un commit atomico nel repository Git. Il flusso dettagliato è il seguente:
+\begin{enumerate}
+    \item L'utente, dopo aver effettuato le modifiche, preme il pulsante "Save" nella toolbar di SimplyEdit.
+    \item Il client invia una richiesta \texttt{PUT} all'endpoint \texttt{/data/data.json} del server Node.js. Il corpo della richiesta contiene la versione aggiornata e completa del file \texttt{data.json}.
+    \item Il server riceve la richiesta e, dopo aver validato la struttura JSON e sanitizzato i contenuti per prevenire attacchi XSS, sovrascrive il file \texttt{data/data.json} presente sul file system.
+    \item Immediatamente dopo il successo della scrittura su disco, il server, tramite il modulo \texttt{child\_process} di Node.js, esegue in sequenza i comandi:
+    \begin{verbatim}
+    git add data/data.json
+    git commit -m "Update content - [TIMESTAMP]"
+    \end{verbatim}
+    \item Solo al termine di queste operazioni, il server risponde al client con un messaggio di successo. In caso di errore in qualsiasi fase, il server invia una risposta di errore appropriata.
+\end{enumerate}
+
+Questo garantisce che il repository Git sia sempre un riflesso fedele e aggiornato dei contenuti del sito, creando una cronologia completa di ogni modifica.
+
+\subsection{Autenticazione e Sicurezza}
+Per evitare che chiunque possa modificare i contenuti e generare commit, l'accesso alle API di scrittura è stato protetto. È stato implementato un sistema di sessioni tramite il middleware \texttt{express-session}:
+\begin{itemize}
+    \item Un utente deve prima autenticarsi tramite una pagina di login che invia una richiesta \texttt{POST} a un endpoint \texttt{/login}.
+    \item Se le credenziali sono corrette (attualmente verificate tramite un semplice controllo hardcoded per scopi dimostrativi), il server crea una sessione per l'utente.
+    \item Tutte le rotte "sensibili" (come \texttt{PUT /data/data.json} e le rotte per la creazione di pagine) sono protette da un middleware \texttt{isAuthenticated} che controlla l'esistenza di una sessione valida prima di consentire l'esecuzione dell'operazione.
+    \item La sessione ha una scadenza predefinita e viene invalidata al logout esplicito dell'utente.
+\end{itemize}
+
+\section{Connessione a Servizi Esterni}
+Per soddisfare il requisito di integrazione con servizi esterni, è stata implementata la funzionalità di ricerca delle pubblicazioni. L'architettura scelta è quella di un proxy API:
+
+\subsection{Recupero Dati da Sorgente Esterna}
+\begin{enumerate}
+    \item Il client non contatta direttamente il sito esterno (\texttt{art.torvergata.it}), per evitare problemi legati alle policy CORS (Cross-Origin Resource Sharing) del browser.
+    \item Viene invece esposto un endpoint sul nostro server Node.js: \texttt{GET /api/search-publications}.
+    \item Quando questo endpoint viene chiamato dal client, è il server stesso che si fa carico di interrogare il sito esterno tramite una richiesta HTTP.
+    \item Il server recupera la pagina HTML dei risultati, la processa utilizzando la libreria Cheerio (un'implementazione di jQuery per il server) per effettuare lo scraping, ed estrae le informazioni rilevanti (titolo, autori, link).
+    \item Infine, il server formatta i dati estratti in un array di oggetti JSON e li restituisce al client, che si occuperà solo di visualizzarli.
+\end{enumerate}
+
+Questa architettura a proxy centralizza la logica di scraping lato server, rendendo il client più leggero e evitando problemi di sicurezza legati alle restrizioni CORS.
+
+\section{Gestione delle Pagine del Sito}
+Oltre alla modifica dei contenuti, il sistema permette la creazione di nuove pagine. Anche questa funzionalità è gestita tramite endpoint dedicati sul server (\texttt{POST /create-blank-page} e \texttt{POST /create-page-from-template}), protetti da autenticazione.
+
+Il processo di creazione di una nuova pagina segue questo flusso:
+\begin{enumerate}
+    \item L'utente seleziona l'opzione di creazione pagina dall'interfaccia di SimplyEdit.
+    \item Il client, tramite codice JavaScript custom, intercetta questa azione e invia una richiesta all'endpoint appropriato sul server.
+    \item Il server crea il nuovo file HTML:
+    \begin{itemize}
+        \item Per pagine vuote: genera un file HTML minimale con la struttura base e le aree editabili predefinite.
+        \item Per pagine da template: copia il template specificato e lo personalizza in base ai parametri ricevuti.
+    \end{itemize}
+    \item Il server aggiorna il file di navigazione (se necessario) per includere la nuova pagina nel menu.
+    \item Il server esegue un commit Git per registrare la creazione della nuova pagina.
+    \item Il client reindirizza l'utente alla nuova pagina creata.
+\end{enumerate}
+
+Questa funzionalità dimostra come il sistema possa essere esteso per supportare operazioni più complesse oltre alla semplice modifica dei contenuti, mantenendo sempre il tracciamento delle modifiche attraverso Git.
