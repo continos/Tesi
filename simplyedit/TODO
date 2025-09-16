@@ -1,0 +1,51 @@
+- configuratie maken (welke toolbars/plugins, welke storage, config van de storage, extra image stylen/classes, text stijlen)
+- mogelijkheid voor github login ipv huidige key? (is voor oauth meer voor nodig, zie https://github.com/prose/gatekeeper)
+
+Integratie met CMS (voor later dus):
+- Iets van een server die de merge van html en data serverside doet
+
+Voor later:
+- template wisselen voor een listitem;
+- meta: title en description tellers voor lengtes, Google preview
+- meta: twitter, facebook metadata toevoegen
+
+---------
+Bugs:
+- als een slip reorder start, moeten de toolbars weg
+- drop event voor images werkt alleen voor data-vedor-field images
+- sortable: als je een lijst in lijst toevoegt wordt slip niet beperkt tot de sublists;
+- na drag van buitenste lijst zijn de kinderen niet meer draggable
+
+Done:
+[v] Meerdere templates per lijst
+[v] Support toevoegen voor huidige (floating) toolbars
+[v] NLS strings voor toolbars (of hardcoded)
+[v] Text selection toolbar toevoegen en werkend maken:
+[v] IE toont de toolbars niet, omdat hij weigert de scripts van de toolbars uit te voeren.
+[v] Weergave support voor IE vanaf versie 8
+[v] in image properties kun je niet op alt/title klikken, dan verdwijt de toolbar
+[v] font in image properties alt/title staat verkeerd
+[v] init code van de image toolbaar naar de toolbar zelf
+[v] textStyle selectbox init niet correct;
+[v] er is een timing issue met muze.js; de toolbar init moet pas worden gedaan nadat muze javascript is ingeladen.
+[v] prevent ready event fire tot de content binnen is
+[v] Hyperlinks voor text (update code ook in de toolbar)
+[v] Hyperlinks voor images
+[v] Code source
+[v] image align wordt nog met attribuut 'align' gedaan;
+[v] text align wordt met attribuut style="text-align: iets" gedaan
+[v] text only velden (door iets van een content type mee te geven)
+[v] Weergave "Saving" dialoogje
+[v] Toolbar voor lijsten (add, delete)
+[v] Weergave van een lege lijst fixen dat je er dingen in kunt zetten
+[v] Image insert
+[v] Lijsten in lijsten ?
+[v] select handle voor lijsten
+[v] Keuze voor template insert dialoogje -> vedor expand op de 'add' met namen van de templates in de toolbar;
+[v] Meta title/megatags
+[v] symbol plugin
+[v] dropbox image plugin proof of concept
+[v] github template save
+[v] browse knop voor image url, hyperlink url
+[v] Link insert plugin?
+[v] Sitemap / site management / pagina aanmaken etc;
