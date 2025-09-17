@@ -6,14 +6,14 @@
 				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg",
 				"title": "Artificial Intelligence & Big Data",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "research/artificial-intelligence-big-data.html"
+				"href": "/Tesi/research/artificial-intelligence-big-data.html"
 			},
 			{
 				"data-simply-template": "image-right",
 				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg",
 				"title": "Distributed Computing & Complex Networks",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "/research/distributed-computing-complex-networks.html"
+				"href": "/Tesi/research/distributed-computing-complex-networks.html"
 			},
 			{
 				"data-simply-template": "image-left",
@@ -36,17 +36,17 @@
 		},
 		"footerLoginLink": {
 			"innerHTML": "Accedi",
-			"href": "/login.html"
+			"href": "/Tesi/login.html"
 		},
 		"logo": {
-			"src": "/assets/img/logoTv.png",
+			"src": "/Tesi/assets/img/logoTv.png",
 			"alt": "Informatica - Universit\u00e0 di Roma Tor Vergata"
 		},
 		"header": [
 			{
 				"item": {
 					"innerHTML": "Home",
-					"href": "/index.html"
+					"href": "/Tesi/index.html"
 				},
 				"data-simply-template": "item"
 			},
@@ -59,14 +59,14 @@
 					{
 						"item": {
 							"innerHTML": "Artificial Intelligence & Big Data",
-							"href": "/research/artificial-intelligence-big-data.html"
+							"href": "/Tesi/research/artificial-intelligence-big-data.html"
 						},
 						"data-simply-template": "item"
 					},
 					{
 						"item": {
 							"innerHTML": "Distributed Computing & Complex Networks",
-							"href": "/research/distributed-computing-complex-networks.html"
+							"href": "/Tesi/research/distributed-computing-complex-networks.html"
 						},
 						"data-simply-template": "item"
 					}
@@ -76,7 +76,7 @@
 			{
 				"item": {
 					"innerHTML": "Publications",
-					"href": "/publications.html"
+					"href": "/Tesi/publications.html"
 				},
 				"data-simply-template": "item"
 			},
@@ -106,14 +106,14 @@
 			{
 				"item": {
 					"innerHTML": "People",
-					"href": "/people.html"
+					"href": "/Tesi/people.html"
 				},
 				"data-simply-template": "item"
 			},
 			{
 				"item": {
 					"innerHTML": "News",
-					"href": "/blog-e-news.html"
+					"href": "/Tesi/blog-e-news.html"
 				},
 				"data-simply-template": "item"
 			},
