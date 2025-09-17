@@ -358,3 +358,50 @@ document.addEventListener('simply-toolbars-loaded', function() {
   });
 });*/
 
+// --- GESTIONE AUTENTICAZIONE E OVERRIDE DELLO STORAGE ---
+document.addEventListener('simply-storage-init', function() {
+  if (!window.editor) return;
+
+  // Funzione per attendere che la libreria dello storage 'github' sia caricata e pronta
+  function waitForGithubStorage(callback) {
+    if (editor.storage.github) {
+      callback();
+    } else {
+      setTimeout(() => waitForGithubStorage(callback), 100);
+    }
+  }
+
+  waitForGithubStorage(() => {
+    const storageType = editor.storage.getType();
+    if (storageType !== 'github') {
+      return;
+    }
+
+    console.log("Storage GitHub rilevato. Applico le personalizzazioni.");
+
+    // --- INIZIO MODIFICA CHIAVE ---
+    // Sovrascriviamo la funzione 'load' originale dello storage github
+    // con la nostra versione che usa l'API invece di raw.githubusercontent.com
+    console.log("Sovrascrivo la funzione 'load' dello storage GitHub.");
+    editor.storage.github.file.load = function(callback) {
+        console.log("Eseguo la funzione LOAD sovrascritta tramite API GitHub.");
+
+        if (!this.repo) {
+            console.error("Connessione al repository non ancora stabilita. Riprovo a breve.");
+            setTimeout(() => { this.load(callback); }, 200);
+            return;
+        }
+
+        this.repo.read(this.repoBranch, this.dataFile, function(err, data) {
+            if (err) {
+                console.log("File data.json non trovato sul repository. Inizio con un dataset vuoto.", err);
+                callback("{}");
+            } else {
+                console.log("File data.json caricato con successo dall'API.");
+                callback(data);
+            }
+        });
+    };
+  });
+});
+    // --- FINE MODIFICA CHIAVE ---

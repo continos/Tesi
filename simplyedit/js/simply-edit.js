@@ -2936,7 +2936,6 @@
 				load : function(callback) {
 					var http = new XMLHttpRequest();
 					var url = "https://raw.githubusercontent.com/" + this.repoUser + "/" + this.repoName + "/" + this.repoBranch + "/" + this.dataFile;
-					url += "?t=" + (new Date().getTime()); // cache busting per ottenere versionne più recente
 					if (editor.profile == "dev") {
 						url += "?t=" + (new Date().getTime());
 					}
