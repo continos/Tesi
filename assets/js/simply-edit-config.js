@@ -383,7 +383,7 @@ document.addEventListener('simply-storage-init', function() {
     // Sovrascriviamo la funzione 'load' originale dello storage github
     // con la nostra versione che usa l'API invece di raw.githubusercontent.com
     console.log("Sovrascrivo la funzione 'load' dello storage GitHub.");
-    editor.storage.github.file.load = function(callback) {
+    editor.storage.github.load = function(callback) {
         console.log("Eseguo la funzione LOAD sovrascritta tramite API GitHub.");
 
         if (!this.repo) {
