@@ -14,7 +14,7 @@ window.githubApiStorage = {
   repoUser: null,
   repoName: null,
   repoBranch: 'gh-pages',
-  dataFile: 'data/data.json',
+  dataFile: 'data.json',
 
   /**
    * Inizializzazione: legge la configurazione dal tag <script>
