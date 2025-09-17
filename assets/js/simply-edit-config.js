@@ -91,7 +91,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
   }
 })*/
 
-/* 1. Definizione delle impostazioni globali (es. template di pagina)
+// 1. Definizione delle impostazioni globali (es. template di pagina)
 var simplySettings = {
   pageTemplates: {
     templates: [
@@ -99,7 +99,7 @@ var simplySettings = {
     ]
   }
 };
-
+/*
 // 2. Estensione delle funzionalità di SimplyEdit (es. creazione pagine da template)
 document.addEventListener('simply-storage-init', function() {
   if (!window.editor || editor.storage.saveTemplate) {
