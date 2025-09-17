@@ -73,10 +73,13 @@ window.githubApiStorage = {
             alert('Autenticazione fallita. Il token GitHub non è valido o è scaduto.');
             localStorage.removeItem('githubToken'); // Pulisce il token errato
             this.key = null;
+            // Pulisce l'URL per permettere un nuovo tentativo
+            history.replaceState(null, null, ' ');
             // NON chiamare la callback, bloccando l'accesso all'edit mode
           } else {
             // Altro tipo di errore (es. di rete)
             alert('Errore di connessione a GitHub: ' + err.error);
+            history.replaceState(null, null, ' ');
           }
           return; // Blocca l'esecuzione
         }
@@ -90,6 +93,7 @@ window.githubApiStorage = {
     } else {
         alert("Token di autenticazione per GitHub non fornito.");
         // L'utente ha annullato il prompt, non fare nulla
+        history.replaceState(null, null, ' ');
     }
   },
 
