@@ -24,9 +24,6 @@
   <!-- Main CSS File -->
   <link href="/Tesi/assets/css/mainInformatica.css" rel="stylesheet">
   
-  <!-- TinyMCE -->
-  <script src="https://cdn.tiny.cloud/1/jkk1wkgxk4g54w8og4nojznwwgdjbc725u92envtaovjb0eh/tinymce/8/tinymce.min.js" referrerpolicy="origin" crossorigin="anonymous"></script>
-
 
   <!-- =======================================================
   * Template Name: Nova
@@ -45,7 +42,7 @@
           <img src="/Tesi/assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"  data-simply-field="logo" data-simply-path="/"> 
         </a>
         <nav id="navmenu" class="navmenu">
-          <ul data-simply-list="header" data-simply-path="/Tesi/" data-simply-sortable>
+          <ul data-simply-list="header" data-simply-path="/" data-simply-sortable>
             <template data-simply-template="item">
               <li><a data-simply-field="item">Item</a></li>
             </template>
@@ -249,165 +246,6 @@
 
   <!-- Main JS File -->
   <script src="/Tesi/assets/js/main.js"></script>
-
-  <!-- Inizializza l'editor per questa pagina specifica 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Diciamo allo script di attivare l'editing sulla sezione #hero,
-      // usando la toolbar #herotoolbar e salvando sul file index.html
-      initializeEditableSection({
-        toolbarId: '#herotoolbar',
-        sectionId: '#hero',
-        filePath: 'index.html'
-      });
-    });
-  </script>-->
-  <!--<script src="assets/js/tinymce.js"></script>
-  <script>
-    // Config comune per inline + toolbar fissa
-    const commonInlineConfig = {
-      menubar: false,
-      inline: true,
-      plugins: [ 'save','link','lists', 'autolink' ],
-      // pulsante save appare nella toolbar fissa
-      toolbar: 'undo redo | bold italic underline | save',
-      // Rende il pulsante attivo solo quando ci sono modifiche
-      save_enablewhendirty: true,
-      fixed_toolbar_container: '#herotoolbar',
-      save_onsavecallback: (editor) => {
-        saveContent(editor);
-      }
-    };
-    const headingConfig = {
-      ...commonInlineConfig,
-      selector: '.tinymce-heading',
-      valid_elements: 'strong,em,span[style],a[href]',
-      valid_styles: { '*': 'font-size,font-family,color,text-decoration,text-align' },
-      powerpaste_word_import: 'clean',
-      powerpaste_html_import: 'clean',
-    };
-
-    const bodyConfig = {
-      ...commonInlineConfig,
-      selector: '.tinymce-body',
-      toolbar: [ 'undo redo | bold italic underline | fontfamily fontsize', 'forecolor backcolor | alignleft aligncenter alignright alignfull | numlist bullist outdent indent | save' ],
-      valid_elements: 'p[style],strong,em,span[style],a[href],ul,ol,li',
-      valid_styles: { '*': 'font-size,font-family,color,text-decoration,text-align' },
-      powerpaste_word_import: 'clean',
-      powerpaste_html_import: 'clean',
-    };
-
-    tinymce.init(headingConfig);
-    tinymce.init(bodyConfig);
-
-    function saveContent(editor){
-      // Clona solo la sezione hero e rimuovi data-aos
-      const hero = document.querySelector('#hero');
-      const heroClone = hero.cloneNode(true);
-      // Remove the "data-aos" attributes to prevent re-animation on next load
-      heroClone.querySelectorAll('[data-aos]').forEach(el => el.removeAttribute('data-aos'));
-       
-     
-      // mantieni il contenitore toolbar ma svuota i figli generati da TinyMCE
-      const toolbar = heroClone.querySelector('#herotoolbar');
-      if (toolbar) toolbar.innerHTML = '';
-
-       // Pulisci gli attributi TinyMCE prima di inviare
-      heroClone.querySelectorAll('.mce-content-body').forEach(el => {
-        el.classList.remove('mce-content-body', 'mce-edit-focus');
-        el.removeAttribute('contenteditable');
-        el.removeAttribute('spellcheck');
-        if (el.id && el.id.startsWith('mce_')) {
-          el.removeAttribute('id');
-        }
-        el.removeAttribute('style');
-      });
-
-      // Invia l’HTML della sezione (o dell’intera pagina se preferisci)
-      const finalHtml = heroClone.outerHTML;
-
-      fetch('/save', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          file: 'index.html',     // o il path che preferisci
-          content: finalHtml,     // oppure l'intero document.documentElement.outerHTML se vuoi tutta la pagina
-          scope: 'hero'           // opzionale, per far capire al server cosa stai salvando
-        })
-      })
-      .then(res => res.text())
-      .then(txt => {
-        // Reset dirty state e feedback utente
-        editor.setDirty(false);
-        if (txt.trim() === 'success') {
-           alert('Modifiche salvate con successo!');
-          // Ricarica la pagina per applicare completamente le modifiche
-          setTimeout(() => location.reload(), 1000);       
-        } else {
-          alert('Errore durante il salvataggio:\n' + txt);
-        }
-      })
-      .catch(err => {
-        alert('Errore di rete: ' + err.message);
-        console.error(err);
-      });
-    }
-
-    /* Save functionality
-    document.getElementById('save-button').addEventListener('click', (e) => {
-      e.preventDefault();
-
-      // De-initialize the editors to write content to DOM and remove editor UI
-      tinymce.remove();
-
-      // Clone the entire HTML document to manipulate it before saving
-      const docClone = document.documentElement.cloneNode(true);
-
-      // Remove the "data-aos" attributes to prevent re-animation on next load
-      docClone.querySelectorAll('[data-aos]').forEach(el => el.removeAttribute('data-aos'));
-
-      // Remove the save button from the clone
-      const saveButtonClone = docClone.querySelector('#save-button');
-      if (saveButtonClone) {
-        saveButtonClone.remove();
-      }
-      
-      // Find and remove the main script block that contains the editor logic
-      const scripts = docClone.getElementsByTagName('script');
-      const editorScript = Array.from(scripts).find(s => s.textContent.includes('tinymce.init'));
-      if (editorScript) {
-        editorScript.remove();
-      }
-
-      // Get the final, clean HTML
-      const finalHtml = '<!DOCTYPE html>\n' + docClone.outerHTML;
-
-      // Re-initialize the editors for the user
-      tinymce.init(headingConfig);
-      tinymce.init(bodyConfig);
-
-      // We will create this save.php file in the next step
-      fetch('/save', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: 'file=index.html&content=' + encodeURIComponent(finalHtml)
-      })
-      .then(response => response.text())
-      .then(text => {
-        if (text.trim() === 'success') {
-          alert('Pagina salvata!');
-        } else {
-          alert('Errore durante il salvataggio:\n' + text);
-        }
-      })
-      .catch(error => {
-        alert('Errore di rete. Assicurati che il server sia in esecuzione e che save.php esista.');
-        console.error('Save error:', error);
-      });
-    });*/
-  </script>-->
   <script src="/Tesi/assets/js/simply-edit-config.js"></script>
   <!--script src="simplyedit/js/simply-edit.js" data-api-key="mykey" data-simply-settings="simplySettings"></!--script-->
   <!-- Configurazione SimplyEdit per GitHub -->
@@ -418,7 +256,6 @@
     data-simply-repo-user="continos"
     data-simply-repo-name="Tesi"
     data-simply-repo-branch="gh-pages"
-    data-simply-endpoint="/Tesi/"
     data-simply-settings="simplySettings"
   ></script>
   <!-- Pulsante per attivare Edit Mode -->
