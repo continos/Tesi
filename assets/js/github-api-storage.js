@@ -59,18 +59,37 @@ window.githubApiStorage = {
     }
 
     if (this.key) {
-      localStorage.setItem('githubToken', this.key);
       this.github = new Github({
         token: this.key,
         auth: "oauth"
       });
       this.repo = this.github.getRepo(this.repoUser, this.repoName);
-      console.log('Custom Storage [githubApiStorage]: Connesso!');
-      if (callback) callback();
-      return true;
+
+      // --- VERIFICA DEL TOKEN ---
+      this.github.getUser().show(null, (err, user) => {
+        if (err) {
+          // Errore 401 significa token non valido
+          if (err.error === 401) {
+            alert('Autenticazione fallita. Il token GitHub non è valido o è scaduto.');
+            localStorage.removeItem('githubToken'); // Pulisce il token errato
+            this.key = null;
+            // NON chiamare la callback, bloccando l'accesso all'edit mode
+          } else {
+            // Altro tipo di errore (es. di rete)
+            alert('Errore di connessione a GitHub: ' + err.error);
+          }
+          return; // Blocca l'esecuzione
+        }
+        
+        // Se la chiamata ha successo, il token è valido
+        console.log(`Custom Storage [githubApiStorage]: Connesso come ${user.login}.`);
+        localStorage.setItem('githubToken', this.key);
+        if (callback) callback(); // Prosegui e attiva l'edit mode
+      });
+
     } else {
         alert("Token di autenticazione per GitHub non fornito.");
-        return false;
+        // L'utente ha annullato il prompt, non fare nulla
     }
   },
 
