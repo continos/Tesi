@@ -2,7 +2,7 @@
  * Configurazione Globale per SimplyEdit
  */
 
- // --- GESTIONE AUTENTICAZIONE ---
+ /* --- GESTIONE AUTENTICAZIONE ---
 document.addEventListener('DOMContentLoaded', function() {
   const editModeButton = document.getElementById('edit-mode-button');
 
@@ -89,9 +89,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
     if(icon) defaultExitButton.appendChild(icon);
     defaultExitButton.appendChild(document.createTextNode(' Exit Edit'));
   }
-})
+})*/
 
-// 1. Definizione delle impostazioni globali (es. template di pagina)
+/* 1. Definizione delle impostazioni globali (es. template di pagina)
 var simplySettings = {
   pageTemplates: {
     templates: [
@@ -107,33 +107,6 @@ document.addEventListener('simply-storage-init', function() {
   }
 
   console.log('Aggiungo la funzione custom saveTemplate al motore di storage.');
-
-
-  /* --- NUOVO: Aggiungi pulsante e azione di Logout ---
-  editor.addAction('simply-logout', function() {
-    if (confirm('Sei sicuro di voler effettuare il logout?')) {
-      fetch('/logout', { method: 'POST' })
-        .then(() => {
-          // Rimuovi #simply-edit e ricarica la pagina
-          window.location.href = window.location.pathname;
-        });
-    }
-  });
-
-  // Aggiungi il pulsante alla toolbar principale
-  const mainToolbar = editor.toolbars['simply-main-toolbar'];
-  if (mainToolbar && mainToolbar.init) {
-      const originalInit = mainToolbar.init;
-      mainToolbar.init = function(config) {
-          originalInit(config); // Esegui l'init originale
-          const ul = document.querySelector('#simply-main-toolbar .simply-buttons');
-          if (ul) {
-              const logoutButton = document.createElement('li');
-              logoutButton.innerHTML = <button data-simply-action="simply-logout" title="Logout"><i class="fa fa-sign-out"></i> Logout</button>;
-              ul.appendChild(logoutButton);
-          }
-      }
-  }*/ 
 
   // Aggiunge la capacità di creare un file da un template
   editor.storage.saveTemplate = function(templatePath, callback) {
@@ -212,31 +185,6 @@ document.addEventListener('simply-storage-init', function() {
   };
 });
 
-/* 3. Definizione e registrazione dei Data Source custom
-(function() {
-  // Definisce un data source custom per il menu di ricerca
-  var researchPagesSource = {
-    load: function(el, callback) {
-      fetch('/api/research-pages')
-        .then(response => response.json())
-        .then(data => {
-          callback(data); // Passa i dati a SimplyEdit per costruire la lista
-        })
-        .catch(error => {
-          console.error('Errore nel caricare le pagine di ricerca:', error);
-          callback([]); // In caso di errore, ritorna una lista vuota
-        });
-    }
-  };
-
-  // Registra il nuovo data source appena SimplyEdit è pronto
-  document.addEventListener('simply-content-loaded', function() {
-      if (window.editor) {
-          editor.addDataSource('researchPages', researchPagesSource);
-      }
-  });
-})();*/
-
 //4. Gestione comportamento accordion in modalità modifica
 document.addEventListener('DOMContentLoaded', function() {
     // Funzione per gestire il comportamento degli accordion
@@ -312,12 +260,101 @@ document.addEventListener('DOMContentLoaded', function() {
             subtree: true
         });
     }
+});*/
+
+// --- GESTIONE CREAZIONE PAGINE (ADATTATA PER LO STORAGE GITHUB) ---
+document.addEventListener('simply-toolbars-loaded', function() {
+  if (!window.editor) return;
+
+  // Funzione per attendere che lo storage di GitHub sia inizializzato
+  function waitForGithubRepo(callback) {
+    if (editor.storage && editor.storage.repo) {
+      callback();
+    } else {
+      setTimeout(() => waitForGithubRepo(callback), 100);
+    }
+  }
+
+  waitForGithubRepo(() => {
+    // Aggiunge la capacità di creare un file da un template
+    editor.storage.saveTemplate = function(templatePath, callback) {
+      let newPagePath = window.location.pathname;
+      
+      /* Rimuovi il nome del repo dal path per GitHub Pages se presente
+      if (newPagePath.startsWith('/Tesi/')) {
+        newPagePath = newPagePath.substring('/Tesi'.length);
+      }
+      if (newPagePath.startsWith('/')) {
+        newPagePath = newPagePath.substring(1);
+      }*/
+
+      fetch('/Tesi/templates/' + templatePath)
+        .then(response => {
+          if (!response.ok) throw new Error('Template non trovato: ' + templatePath);
+          return response.text();
+        })
+        .then(templateContent => {
+          editor.storage.repo.write(
+            editor.storage.repoBranch,
+            newPagePath,
+            templateContent,
+            `Create new page from template (${newPagePath})`,  // Backtick corretto
+            (err) => {
+              if (err) {
+                console.error('Errore GitHub:', err);
+                alert('Errore: Impossibile creare la pagina su GitHub.');
+                return;
+              }
+              if (callback) callback();
+            }
+          );
+        })
+        .catch(error => {
+          console.error('Errore fetch template:', error);
+          alert('Errore: Impossibile caricare il template.');
+        });
+    };
+
+    // Sovrascrive la funzione di default per la creazione di una nuova pagina
+    editor.storage.page.save = function(url) {
+      let newPagePath = new URL(url, window.location.origin).pathname;
+      
+      // Rimuovi il nome del repo dal path per GitHub Pages se presente
+      if (newPagePath.startsWith('/Tesi/')) {
+        newPagePath = newPagePath.substring('/Tesi'.length);
+      }
+      if (newPagePath.startsWith('/')) {
+        newPagePath = newPagePath.substring(1);
+      }
+
+      fetch('/Tesi/templates/blank-template.html')
+        .then(response => {
+          if (!response.ok) throw new Error('Blank template non trovato.');
+          return response.text();
+        })
+        .then(templateContent => {
+          editor.storage.repo.write(
+            editor.storage.repoBranch,
+            newPagePath,
+            templateContent,
+            `Create blank page (${newPagePath})`,  // Backtick corretto
+            (err) => {
+              if (err && err.error !== 422) { // Ignora l'errore se il file esiste già
+                console.error('Errore GitHub:', err);
+                alert('Errore: Impossibile creare la pagina su GitHub.');
+                return;
+              }
+              // Reindirizza all'URL corretto su GitHub Pages
+              const finalUrl = new URL('/Tesi/' + newPagePath, window.location.origin);
+              document.location.href = finalUrl.href + '#simply-edit';
+            }
+          );
+        })
+        .catch(error => {
+          console.error('Errore fetch template:', error);
+          alert('Errore: Impossibile caricare il template.');
+        });
+    };
+  });
 });
 
-/* 5. Sincronizzazione del titolo della pagina
-document.addEventListener('simply-content-loaded', function() {
-  if (window.editor && editor.pageData && editor.pageData.pageTitle) {
-    console.log('Sincronizzo il titolo della pagina con:', editor.pageData.pageTitle);
-    document.title = editor.pageData.pageTitle;
-  }
-});*/
