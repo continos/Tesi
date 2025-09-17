@@ -3,31 +3,59 @@
 		"homeResearchItems": [
 			{
 				"data-simply-template": "image-left",
-				"image":{ "src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg"},
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg",
+					"class": "img-fluid",
+					"alt": "Artificial Intelligence & Big Data",
+					"title": null
+				},
 				"title": "Artificial Intelligence & Big Data",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"link": { "href": "/Tesi/research/artificial-intelligence-big-data.html"}
+				"link": {
+					"href": "/Tesi/research/artificial-intelligence-big-data.html"
+				}
 			},
 			{
 				"data-simply-template": "image-right",
-				"image":{ "src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg"},
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg",
+					"class": "img-fluid",
+					"alt": "Distributed Computing & Complex Networks",
+					"title": null
+				},
 				"title": "Distributed Computing & Complex Networks",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"link": {"href": "/Tesi/research/distributed-computing-complex-networks.html"}
+				"link": {
+					"href": "/Tesi/research/distributed-computing-complex-networks.html"
+				}
 			},
 			{
 				"data-simply-template": "image-left",
-				"image":{ "src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg"},
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg",
+					"class": "img-fluid",
+					"alt": "Software Systems",
+					"title": null
+				},
 				"title": "Software Systems",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"link":{"href": "https://www-2020.cs.uniroma2.it/software-systems/"}
+				"link": {
+					"href": "https://www-2020.cs.uniroma2.it/software-systems/"
+				}
 			},
 			{
 				"data-simply-template": "image-right",
-				"image":{ "src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg"},
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg",
+					"class": "img-fluid",
+					"alt": "Systems & Data Security",
+					"title": null
+				},
 				"title": "Systems & Data Security",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"link":{"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"}
+				"link": {
+					"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
+				}
 			}
 		],
 		"footerLogo": {
