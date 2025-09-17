@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });*/
 
-// --- GESTIONE CREAZIONE PAGINE (ADATTATA PER LO STORAGE GITHUB) ---
+/* --- GESTIONE CREAZIONE PAGINE (ADATTATA PER LO STORAGE GITHUB) ---
 document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor) return;
 
@@ -286,7 +286,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       }
       if (newPagePath.startsWith('/')) {
         newPagePath = newPagePath.substring(1);
-      }*/
+      }/
 
       fetch('/Tesi/templates/' + templatePath)
         .then(response => {
@@ -356,5 +356,5 @@ document.addEventListener('simply-toolbars-loaded', function() {
         });
     };
   });
-});
+});*/
 
