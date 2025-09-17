@@ -358,7 +358,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
   });
 });*/
 
-// --- GESTIONE AUTENTICAZIONE E OVERRIDE DELLO STORAGE ---
+/* --- GESTIONE AUTENTICAZIONE E OVERRIDE DELLO STORAGE ---
 document.addEventListener('simply-storage-init', function() {
   if (!window.editor) return;
 
@@ -404,4 +404,4 @@ document.addEventListener('simply-storage-init', function() {
     };
   });
 });
-    // --- FINE MODIFICA CHIAVE ---
+    // --- FINE MODIFICA CHIAVE ---*/
