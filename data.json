@@ -593,11 +593,5 @@
 				"data-simply-template": "peopleGrid"
 			}
 		]
-	},
-	"/research/software-systems.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/system-softwares/": {
-		"data-simply-page-template": "research-template.html"
 	}
 }
