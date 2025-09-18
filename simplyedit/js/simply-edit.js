@@ -3148,12 +3148,49 @@
 							});
 							this.repo = this.github.getRepo(this.repoUser, this.repoName);
 						}
-						if (typeof callback === "function") {
-							callback();
-						}
+						// --- VERIFICA DEL TOKEN (aggiunta personalizzata) ---
+						this.github.getUser().show(null, (err, user) => {
+							if (err) {
+								// Errore 401 significa token non valido
+								if (err.error === 401) {
+									alert('Autenticazione fallita. Il token GitHub non è valido o è scaduto.');
+									localStorage.removeItem('githubToken');
+									localStorage.removeItem('storageKey');
+									this.key = null;
+									
+									// Pulisce l'URL per tornare alla vista normale
+									if (window.location.hash === '#simply-edit') {
+										history.replaceState(null, null, window.location.pathname + window.location.search);
+									}
+									
+									// NON chiamare la callback, bloccando l'accesso all'edit mode
+									return;
+								} else {
+									// Altro tipo di errore (es. di rete)
+									alert('Errore di connessione a GitHub: ' + err.error);
+									if (window.location.hash === '#simply-edit') {
+										history.replaceState(null, null, window.location.pathname + window.location.search);
+									}
+									return;
+								}
+							}
+							
+							// Se la chiamata ha successo, il token è valido
+							console.log(`Connesso a GitHub come ${user.login}`);
+							
+							// Chiama la callback originale per continuare il flusso
+							if (typeof callback === "function") {
+								callback();
+							}
+						});
 						return true;
 					} else {
-						return editor.storage.connect(callback);
+						// L'utente ha annullato il prompt
+						if (window.location.hash === '#simply-edit') {
+							history.replaceState(null, null, window.location.pathname + window.location.search);
+						}
+						return false;
+						//return editor.storage.connect(callback);
 					}
 				},
 				disconnect : function(callback) {
