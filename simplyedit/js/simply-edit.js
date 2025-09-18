@@ -3296,7 +3296,7 @@
 							return;
 						}
 						if (data) {
-							repo.write(this.repoBranch, dataPath, data, pageTemplate + " (copy)", callback);
+							repo.write(this.repoBranch, dataPath.substring(1), data, pageTemplate + " (copy)", callback);
 						}
 					});
 				},
