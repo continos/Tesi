@@ -92,7 +92,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
 })*/
 
 // 1. Definizione delle impostazioni globali (es. template di pagina)
-var simplySettings = {
+var customSettings = {
   pageTemplates: {
     templates: [
       { name: 'Blank Page', template: 'blank-template.html'},
