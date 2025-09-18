@@ -3129,6 +3129,8 @@
 				},
 				connect : function(callback) {
 					if (typeof Github === "undefined") {
+						// La libreria Github non è ancora caricata, riprova tra poco.
+          				setTimeout(() => this.connect(callback), 100);
 						return false;
 					}
 
@@ -3148,49 +3150,40 @@
 							});
 							this.repo = this.github.getRepo(this.repoUser, this.repoName);
 						}
-						// --- VERIFICA DEL TOKEN (aggiunta personalizzata) ---
+						// --- VERIFICA DEL TOKEN ---
 						this.github.getUser().show(null, (err, user) => {
 							if (err) {
+								let message = 'Errore di connessione a GitHub.'
 								// Errore 401 significa token non valido
 								if (err.error === 401) {
-									alert('Autenticazione fallita. Il token GitHub non è valido o è scaduto.');
-									localStorage.removeItem('githubToken');
+									message = 'Autenticazione fallita. Il token GitHub non è valido o è scaduto.';
 									localStorage.removeItem('storageKey');
-									this.key = null;
-									
-									// Pulisce l'URL per tornare alla vista normale
-									if (window.location.hash === '#simply-edit') {
-										history.replaceState(null, null, window.location.pathname + window.location.search);
-									}
-									
-									// NON chiamare la callback, bloccando l'accesso all'edit mode
-									return;
-								} else {
-									// Altro tipo di errore (es. di rete)
-									alert('Errore di connessione a GitHub: ' + err.error);
-									if (window.location.hash === '#simply-edit') {
-										history.replaceState(null, null, window.location.pathname + window.location.search);
-									}
-									return;
+									editor.storage.key = null;
 								}
+								alert(message);
+								// Blocca l'accesso alla modalità di modifica
+								if (window.location.hash === '#simply-edit') {
+									history.replaceState(null, null, window.location.pathname + window.location.search);
+								}
+								return; // NON chiamo la callback in caso di errore
 							}
 							
 							// Se la chiamata ha successo, il token è valido
 							console.log(`Connesso a GitHub come ${user.login}`);
 							
-							// Chiama la callback originale per continuare il flusso
+							// Chiamo la callback originale per continuare il caricamento dell'editor
 							if (typeof callback === "function") {
 								callback();
 							}
 						});
 						return true;
 					} else {
-						// L'utente ha annullato il prompt
+						// Chiave non valida
+						alert('Il token fornito non è valido.');
 						if (window.location.hash === '#simply-edit') {
 							history.replaceState(null, null, window.location.pathname + window.location.search);
 						}
 						return false;
-						//return editor.storage.connect(callback);
 					}
 				},
 				disconnect : function(callback) {
@@ -3202,7 +3195,8 @@
 					return true;
 				},
 				validateKey : function(key) {
-					return true;
+					// Il token deve esistere e non essere vuoto
+					return key && key.trim() != '';
 				},
 				file : {
 					save : function(path, data, callback) {
@@ -3284,13 +3278,23 @@
 					});
 				},
 				saveTemplate : function(pageTemplate, callback) {
+					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
+      				// Il percorso della nuova pagina è l'URL corrente
 					var dataPath = location.pathname.split(/\//, 3)[2];
 					if (dataPath.match(/\/$/)) {
 						dataPath += "index.html";
 					}
 
+					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
+
 					var repo = this.repo;
+					// Leggo il contenuto del template dal repository
 					repo.read(this.repoBranch, pageTemplate, function(err, data) {
+						if (err) {
+							alert(`Errore: impossibile leggere il template '${pageTemplate}' dal repository.`);
+							console.error("Errore lettura template da GitHub:", err);
+							return;
+						}
 						if (data) {
 							repo.write(this.repoBranch, dataPath, data, pageTemplate + " (copy)", callback);
 						}

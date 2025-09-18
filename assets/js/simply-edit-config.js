@@ -95,6 +95,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
 var simplySettings = {
   pageTemplates: {
     templates: [
+      { name: 'Blank Page', template: 'blank-template.html'},
       { name: 'Research Page', template: 'research-template.html' }
     ]
   }

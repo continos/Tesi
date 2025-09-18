@@ -127,7 +127,6 @@ window.githubApiStorage = {
         localStorage.setItem('githubToken', this.key);
         if (callback) callback(); // Prosegui e attiva l'edit mode
       });
-
     } else {
         alert("Token di autenticazione per GitHub non fornito.");
         // L'utente ha annullato il prompt, non fare nulla
