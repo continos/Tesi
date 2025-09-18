@@ -3280,10 +3280,10 @@
 				saveTemplate : function(pageTemplate, callback) {
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
-					var dataPath = location.pathname.split(/\//, 3)[2];
+					var dataPath = location.pathname/*.split(/\//, 3)[2];
 					if (dataPath.match(/\/$/)) {
 						dataPath += "index.html";
-					}
+					}*/
 
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
