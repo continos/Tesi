@@ -593,17 +593,5 @@
 				"data-simply-template": "peopleGrid"
 			}
 		]
-	},
-	"/research/pera.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/zio.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/prova.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/maro/": {
-		"data-simply-page-template": "research-template.html"
 	}
 }
