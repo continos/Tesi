@@ -602,5 +602,8 @@
 	},
 	"/Tesi/": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/research/pera.html/": {
+		"data-simply-page-template": "research-template.html"
 	}
 }
