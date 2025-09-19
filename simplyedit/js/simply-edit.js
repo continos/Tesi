@@ -3293,11 +3293,11 @@
 						dataPath += '.html';
 					}
 
-					// 3. Ricostruisci il percorso base per il repo
+					/* 3. Ricostruisci il percorso base per il repo
 					var repoBasePath = '/Tesi';
 					if (!dataPath.startsWith(repoBasePath)) {
 						dataPath = repoBasePath + dataPath;
-					}
+					}*/
 					// --- FINE BLOCCO DI SANIFICAZIONE ---
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
