@@ -596,5 +596,8 @@
 	},
 	"/research/prova.html/": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/research/system-softwares.html/": {
+		"data-simply-page-template": "research-template.html"
 	}
 }
