@@ -3302,7 +3302,20 @@
 						if (data) {
 							// Rimuovi lo slash iniziale per la chiamata API
 							var finalPath = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
-							repo.write(this.repoBranch, finalPath, data, pageTemplate + " (copy)", callback);
+							repo.write(branch, finalPath, data, "Create page from " + pageTemplate, function(writeErr) {
+								if (writeErr) {
+									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
+									console.error('Errore durante repo.write:', writeErr);
+									// NON chiamiamo la callback, interrompendo la navigazione
+									return;
+								}
+
+								// SUCCESSO! Ora possiamo chiamare la callback per navigare.
+								console.log(`File ${finalPath} scritto con successo su GitHub.`);
+								if (callback) {
+									callback();
+								}
+							});
 						}
 					});
 				},
