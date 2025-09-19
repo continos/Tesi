@@ -3280,15 +3280,25 @@
 				saveTemplate : function(pageTemplate, callback) {
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
-					/*var dataPath = location.pathname.split(/\//, 3)[2];
-					if (dataPath.match(/\/$/)) {
-						dataPath += "index.html";
-					}*/
+					
 					var dataPath = window.location.pathname;
+					// --- INIZIO BLOCCO DI SANIFICAZIONE PERCORSO ---
+					// 1. Rimuovi eventuali slash finali
+					if (dataPath.endsWith('/')) {
+						dataPath = dataPath.slice(0, -1);
+					}
+
+					// 2. Assicurati che il percorso finisca con .html
+					if (!dataPath.endsWith('.html')) {
+						dataPath += '.html';
+					}
+
+					// 3. Ricostruisci il percorso base per il repo
 					var repoBasePath = '/Tesi';
 					if (!dataPath.startsWith(repoBasePath)) {
 						dataPath = repoBasePath + dataPath;
 					}
+					// --- FINE BLOCCO DI SANIFICAZIONE ---
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
 					var repo = this.repo;
