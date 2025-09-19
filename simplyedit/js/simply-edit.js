@@ -3302,6 +3302,7 @@
 						if (data) {
 							// Rimuovi lo slash iniziale per la chiamata API
 							var finalPath = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
+							var encodedData = btoa(data);
 							repo.write(this.repoBranch, finalPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
 									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
