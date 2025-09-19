@@ -3285,7 +3285,10 @@
 						dataPath += "index.html";
 					}*/
 					var dataPath = window.location.pathname;
-
+					var repoBasePath = '/Tesi';
+					if (!dataPath.startsWith(repoBasePath)) {
+						dataPath = repoBasePath + dataPath;
+					}
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
 					var repo = this.repo;
@@ -3297,7 +3300,9 @@
 							return;
 						}
 						if (data) {
-							repo.write(this.repoBranch, dataPath.substring(1), data, pageTemplate + " (copy)", callback);
+							// Rimuovi lo slash iniziale per la chiamata API
+							var finalPath = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
+							repo.write(this.repoBranch, finalPath, data, pageTemplate + " (copy)", callback);
 						}
 					});
 				},
