@@ -3280,16 +3280,17 @@
 				saveTemplate : function(pageTemplate, callback) {
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
-					var dataPath = location.pathname/*.split(/\//, 3)[2];
+					/*var dataPath = location.pathname.split(/\//, 3)[2];
 					if (dataPath.match(/\/$/)) {
 						dataPath += "index.html";
 					}*/
+					var dataPath = window.location.pathname;
 
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
 					var repo = this.repo;
 					// Leggo il contenuto del template dal repository
-					repo.read(this.repoBranch, pageTemplate, function(err, data) {
+					repo.read(this.repoBranch, 'templates/' + pageTemplate, function(err, data) {
 						if (err) {
 							alert(`Errore: impossibile leggere il template '${pageTemplate}' dal repository.`);
 							console.error("Errore lettura template da GitHub:", err);
