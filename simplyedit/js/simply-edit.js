@@ -3410,6 +3410,7 @@
 										} else if (status === 'success') {
 											bodyEl.innerHTML = "Deploy completato con successo! Reindirizzamento in corso...";
 											setTimeout(() => {
+												console.log("Deploy riuscito, eseguo la callback finale.");
 												if (callback) callback(); // Esegue il reindirizzamento
 											}, 2000);
 										} else {
