@@ -3377,25 +3377,25 @@
 									return;
 								}
 								// La scrittura è andata a buon fine, ora inizia il polling
-								setTimeout(function poll() {
-									repo.checkDeployStatus(function(status) {
+								 setTimeout(function poll() {
+									this.repo.checkDeployStatus(function(status) {
 										const bodyEl = dialog.querySelector('.simply-dialog-body');
-										if (status === 'in_progress') {
-											bodyEl.innerHTML += "."; // Aggiunge un puntino per mostrare attività
-											setTimeout(poll, 15000); // Aspetta 15 secondi e ricontrolla
+										// Se è 'in_progress' o 'queued', continuiamo ad aspettare
+										if (status === 'in_progress' || status === 'queued') {
+											bodyEl.innerHTML += ".";
+											setTimeout(poll, 15000);
 										} else if (status === 'success') {
-											bodyEl.innerHTML = "Deploy completato con successo! Reindirizzamento in corso...";
+											bodyEl.innerHTML = "Deploy completato con successo! Reindirizzamento in	corso...";
 											setTimeout(() => {
-												console.log("Deploy riuscito, eseguo la callback finale.");
-												if (callback) callback(); // Esegue il reindirizzamento
+												if (callback) callback();
 											}, 2000);
-										} else {
-											bodyEl.innerHTML = "Errore durante il deploy. Controlla la tab 'Actions' del tuo repository GitHub.";
-											// Aggiungi un bottone per chiudere manualmente
-											dialog.querySelector('.simply-toolbar .simply-buttons').innerHTML = '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
+										} else { // 'failure' o 'error'
+											bodyEl.innerHTML = "Errore durante il deploy. Controlla la tab 'Actions' del tuo repository GitHub per maggiori dettagli.";
+											const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
+											toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
 										}
 									});
-								}, 10000); // Inizia il primo controllo dopo 10 secondi
+								}, 15000); // Aumentiamo il primo controllo a 15 secondi per dare tempo al workflow di partire
 							});
 						}
 					});
