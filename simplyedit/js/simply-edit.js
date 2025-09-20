@@ -3377,8 +3377,8 @@
 									return;
 								}
 								// La scrittura è andata a buon fine, ora inizia il polling
-								 setTimeout(function poll() {
-									this.repo.checkDeployStatus(function(status) {
+								setTimeout(function poll() {
+									repo.checkDeployStatus(function(status) {
 										const bodyEl = dialog.querySelector('.simply-dialog-body');
 										// Se è 'in_progress' o 'queued', continuiamo ad aspettare
 										if (status === 'in_progress' || status === 'queued') {
