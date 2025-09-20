@@ -198,18 +198,29 @@
       this.checkDeployStatus = function(cb) {
         var url = repoPath + '/actions/runs?branch=' + that.repoBranch + '&per_page=1';
         _request('GET', url, null, function(err, res) {
-            if (err || !res || !res.workflow_runs || res.workflow_runs.length === 0) {
-                console.error("Error checking workflow status:", err);
+            if (err) {
+                console.error("Errore API nel recuperare lo stato del workflow:", err);
                 return cb('error');
             }
-            var lastRun = res.workflow_runs[0];
+
+            // Caso 1: L'API risponde ma non ci sono ancora "run" (o non per questo branch)
+            if (!res || !res.workflow_runs || res.workflow_runs.length === 0) {
+                console.log("Nessun workflow run trovato, probabilmente non è ancora partito. Riprovo...");
+                return cb('queued'); // Usiamo uno stato custom "queued"
+            }
+
+            const lastRun = res.workflow_runs[0];
+            console.log(`Stato ultimo deploy: ${lastRun.status}, Conclusione: ${lastRun.conclusion}`);
+
+            // Caso 2: Il run è completato
             if (lastRun.status === 'completed') {
-                cb(lastRun.conclusion);
+                cb(lastRun.conclusion); // 'success', 'failure', etc.
             } else {
-                cb('in_progress');
+            // Caso 3: Il run è in corso o in attesa
+                cb('in_progress'); // 'in_progress', 'queued', etc.
             }
         });
-      };
+    };
       this.deleteRepo = function (cb) {
         _request("DELETE", repoPath, options, cb);
       };
