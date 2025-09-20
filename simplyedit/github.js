@@ -195,6 +195,21 @@
       var that = this;
       var repoPath = "/repos/" + user + "/" + repo;
       var currentTree = { branch: null, sha: null };
+      this.checkDeployStatus = function(cb) {
+        var url = repoPath + '/actions/runs?branch=' + that.repoBranch + '&per_page=1';
+        _request('GET', url, null, function(err, res) {
+            if (err || !res || !res.workflow_runs || res.workflow_runs.length === 0) {
+                console.error("Error checking workflow status:", err);
+                return cb('error');
+            }
+            var lastRun = res.workflow_runs[0];
+            if (lastRun.status === 'completed') {
+                cb(lastRun.conclusion);
+            } else {
+                cb('in_progress');
+            }
+        });
+      };
       this.deleteRepo = function (cb) {
         _request("DELETE", repoPath, options, cb);
       };

@@ -3323,30 +3323,6 @@
 					callback('{}');
 					});
 				},
-				checkDeployStatus: function(callback) {
-					const owner = this.repoUser;
-					const repo = this.repoName;
-					const apiUrl = `https://api.github.com/repos/${owner}/${repo}/actions/runs?branch=gh-pages&per_page=1`;
-
-					console.log("Controllo stato deploy...");
-
-					_request("GET", apiUrl, null, function(err, res) {
-						if (err || !res || !res.workflow_runs || res.workflow_runs.length === 0) {
-							console.error("Errore nel recuperare lo stato del workflow:", err);
-							callback('error');
-							return;
-						}
-
-						const lastRun = res.workflow_runs[0];
-						console.log(`Stato ultimo deploy: ${lastRun.status}, Conclusione: ${lastRun.conclusion}`);
-
-						if (lastRun.status === 'completed') {
-							callback(lastRun.conclusion); // 'success', 'failure', etc.
-						} else {
-							callback('in_progress'); // Ancora in esecuzione
-						}
-					});
-				},
 				saveTemplate : function(pageTemplate, callback) {
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
@@ -3402,7 +3378,7 @@
 								}
 								// La scrittura è andata a buon fine, ora inizia il polling
 								setTimeout(function poll() {
-									editor.storage.checkDeployStatus(function(status) {
+									repo.checkDeployStatus(function(status) {
 										const bodyEl = dialog.querySelector('.simply-dialog-body');
 										if (status === 'in_progress') {
 											bodyEl.innerHTML += "."; // Aggiunge un puntino per mostrare attività
