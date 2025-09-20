@@ -3259,7 +3259,7 @@
 
 						// 4. Costruisci l'URL finale completo
 						const finalUrl = new URL(newPagePath, window.location.origin).href;
-
+						console.log('Sono nel customGithub page.save');
 						// 5. Usa history.pushState per aggiornare l'URL del browser
 						history.pushState(null, null, finalUrl + "#simply-edit");
 						
