@@ -656,5 +656,8 @@
 	},
 	"/Tesi/research/new-page.html": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/Tesi/research/yoymym.html": {
+		"data-simply-page-template": "research-template.html"
 	}
 }
