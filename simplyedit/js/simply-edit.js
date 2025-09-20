@@ -3327,15 +3327,16 @@
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
 					
-					var dataPath = window.location.pathname;
-					const repoName = '/' + this.repoName; // Ottiene '/Tesi'
-					// Pulisci il percorso per l'API di GitHub
-					let githubPath = dataPath;
-					if (githubPath.startsWith(repoName)) {
-						githubPath = githubPath.substring(repoName.length);
-					}
-					if (githubPath.startsWith('/')) {
-						githubPath = githubPath.substring(1);
+					// pageTemplate è il contenuto HTML del template scelto
+					let fullPath = window.location.pathname; // Es: /Tesi/research/nuova-pagina.html
+
+					// Pulisce il percorso per l'API di GitHub
+					let githubPath = fullPath;
+					const repoPrefix = '/' + this.repoName; // Es: /Tesi
+
+					if (githubPath.startsWith(repoPrefix + '/')) {
+						githubPath = githubPath.substring(repoPrefix.length + 1); // Rimuove /Tesi/ ->
+				research/nuova-pagina.html
 					}
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
