@@ -3324,7 +3324,20 @@
 								// SUCCESSO! Ora possiamo chiamare la callback per navigare.
 								console.log(`File ${finalPath} scritto con successo su GitHub.`);
 								if (callback) {
-									callback();
+									 // 1. Costruisci l'URL di destinazione corretto per GitHub Pages
+									var repoBasePath = '/Tesi';
+									var correctHref = window.location.origin + repoBasePath + dataPath;
+
+									// 2. Crea un oggetto fittizio che simula l'evento di navigazione
+									var fakeEventTarget = {
+										href: correctHref
+									};
+
+									console.log('Chiamo la callback di navigazione con href corretto:', correctHref);
+
+									// 3. Esegui la callback originale, passandole l'oggetto finto.
+									//    La funzione followLink userà il nostro href corretto.
+									callback(fakeEventTarget);
 								}
 							});
 						}
