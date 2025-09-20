@@ -3359,7 +3359,7 @@
 								}
 
 								// SUCCESSO! Ora possiamo chiamare la callback per navigare.
-								console.log(`File ${finalPath} scritto con successo su GitHub.`);
+								console.log(`File ${githubPath} scritto con successo su GitHub.`);
 								if (callback) {
 									/* 1. Costruisci l'URL di destinazione corretto per GitHub Pages
 									var repoBasePath = '/Tesi';
