@@ -3335,7 +3335,7 @@
 					const repoPrefix = '/' + this.repoName; // Es: /Tesi
 
 					if (githubPath.startsWith(repoPrefix + '/')) {
-						githubPath = githubPath.substring(repoPrefix.length + 1); // Rimuove /Tesi/ -> research/nuova-pagina.html
+						githubPath = githubPath.substring(repoPrefix.length + 1); // Rimuove /Tesi/ da Tesi/research/nuova-pagina.html
 					}
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
