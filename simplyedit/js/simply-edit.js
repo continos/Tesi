@@ -3239,13 +3239,13 @@
 					save : function(url) {
 						// 1. Estrai il percorso pulito dall'URL ricevuto
 						let newPagePath = new URL(url, window.location.origin).pathname;
-
-						// 2. Assicurati che il percorso inizi con /Tesi/
-						if (!newPagePath.startsWith('/Tesi/')) {
+						const repoName = '/' + editor.storage.repoName; // Ottiene '/Tesi'
+						// 2. Assicura che il percorso inizi con /<repoName>/
+						if (!newPagePath.startsWith(repoName + '/')) {
 							if (newPagePath.startsWith('/')) {
-								newPagePath = '/Tesi' + newPagePath;
+								newPagePath = repoName + newPagePath;
 							} else {
-								newPagePath = '/Tesi/' + newPagePath;
+								newPagePath = repoName + '/' + newPagePath;
 							}
 						}
 
@@ -3328,23 +3328,14 @@
       				// Il percorso della nuova pagina è l'URL corrente
 					
 					var dataPath = window.location.pathname;
-					// --- INIZIO BLOCCO DI SANIFICAZIONE PERCORSO ---
-					// 1. Rimuovi eventuali slash finali
-					if (dataPath.endsWith('/')) {
-						dataPath = dataPath.slice(0, -1);
+					// Pulisci il percorso per l'API di GitHub
+					let githubPath = dataPath;
+					if (githubPath.startsWith(repoName)) {
+						githubPath = githubPath.substring(repoName.length);
 					}
-
-					// 2. Assicurati che il percorso finisca con .html
-					if (!dataPath.endsWith('.html')) {
-						dataPath += '.html';
+					if (githubPath.startsWith('/')) {
+						githubPath = githubPath.substring(1);
 					}
-
-					/* 3. Ricostruisci il percorso base per il repo
-					var repoBasePath = '/Tesi';
-					if (!dataPath.startsWith(repoBasePath)) {
-						dataPath = repoBasePath + dataPath;
-					}*/
-					// --- FINE BLOCCO DI SANIFICAZIONE ---
 					console.log(`Creo pagina ${dataPath} usando il template ${pageTemplate}`);
 
 					var repo = this.repo;
@@ -3357,9 +3348,8 @@
 						}
 						if (data) {
 							// Rimuovi lo slash iniziale per la chiamata API
-							var finalPath = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
 							var encodedData = btoa(data);
-							repo.write(this.repoBranch, finalPath, data, "Create page from " + pageTemplate, function(writeErr) {
+							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
 									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
 									console.error('Errore durante repo.write:', writeErr);
@@ -3370,7 +3360,7 @@
 								// SUCCESSO! Ora possiamo chiamare la callback per navigare.
 								console.log(`File ${finalPath} scritto con successo su GitHub.`);
 								if (callback) {
-									 // 1. Costruisci l'URL di destinazione corretto per GitHub Pages
+									/* 1. Costruisci l'URL di destinazione corretto per GitHub Pages
 									var repoBasePath = '/Tesi';
 									var correctHref = window.location.origin + repoBasePath + dataPath;
 
@@ -3383,7 +3373,8 @@
 
 									// 3. Esegui la callback originale, passandole l'oggetto finto.
 									//    La funzione followLink userà il nostro href corretto.
-									callback(fakeEventTarget);
+									callback(fakeEventTarget);*/
+									callback();
 								}
 							});
 						}
