@@ -3328,6 +3328,7 @@
       				// Il percorso della nuova pagina è l'URL corrente
 					
 					var dataPath = window.location.pathname;
+					const repoName = '/' + this.repoName; // Ottiene '/Tesi'
 					// Pulisci il percorso per l'API di GitHub
 					let githubPath = dataPath;
 					if (githubPath.startsWith(repoName)) {
