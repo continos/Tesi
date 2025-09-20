@@ -623,5 +623,8 @@
 	},
 	"/Tesi/research/uffa.html": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/Tesi/research/uffino.html": {
+		"data-simply-page-template": "research-template.html"
 	}
 }
