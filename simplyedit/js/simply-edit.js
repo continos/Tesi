@@ -3235,24 +3235,33 @@
 						editor.storage.repo.delete(editor.storage.repoBranch, path, callback);
 					}
 				},
-				/*page : {
+				page : {
 					save : function(url) {
-						// 1. COSTRUZIONE E SANIFICAZIONE DEI PERCORSI
-						 let newPagePath = new URL(url, window.location.origin).pathname;
+						// 1. Estrai il percorso pulito dall'URL ricevuto
+						let newPagePath = new URL(url, window.location.origin).pathname;
 
-						// Aggiungi il prefisso /Tesi/ se non presente
-						const repoBasePath = '/Tesi';
-						if (!newPagePath.startsWith(repoBasePath + '/')) {
-							const cleanPath = newPagePath.startsWith('/') ? newPagePath.substring(1) : newPagePath;
-							newPagePath = repoBasePath + '/' + cleanPath;
+						// 2. Assicurati che il percorso inizi con /Tesi/
+						if (!newPagePath.startsWith('/Tesi/')) {
+							if (newPagePath.startsWith('/')) {
+								newPagePath = '/Tesi' + newPagePath;
+							} else {
+								newPagePath = '/Tesi/' + newPagePath;
+							}
 						}
 
-						// Assicurati che finisca con .html
+						// 3. Aggiungi .html se non presente
 						if (!newPagePath.endsWith('.html')) {
+							if (newPagePath.endsWith('/')) {
+								newPagePath = newPagePath.slice(0, -1);
+							}
 							newPagePath += '.html';
 						}
-						// Ora newPagePath è /Tesi/research/prova.html
-						history.pushState(null, null, newPagePath + "#simply-edit");
+
+						// 4. Costruisci l'URL finale completo
+						const finalUrl = new URL(newPagePath, window.location.origin).href;
+
+						// 5. Usa history.pushState per aggiornare l'URL del browser
+						history.pushState(null, null, finalUrl + "#simply-edit");
 						
 						document.body.innerHTML = editor.data.originalBody.innerHTML;
 						document.body.removeAttribute("data-simply-edit");
@@ -3271,7 +3280,7 @@
 						};
 						openTemplateDialog();
 					}
-				},*/
+				},
 				save : function(data, callback) {
 					return editor.storage.file.save("data.json", data, callback);
 				},
