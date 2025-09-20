@@ -3323,6 +3323,30 @@
 					callback('{}');
 					});
 				},
+				checkDeployStatus: function(callback) {
+					const owner = this.repoUser;
+					const repo = this.repoName;
+					const apiUrl = `https://api.github.com/repos/${owner}/${repo}/actions/runs?branch=gh-pages&per_page=1`;
+
+					console.log("Controllo stato deploy...");
+
+					_request("GET", apiUrl, null, function(err, res) {
+						if (err || !res || !res.workflow_runs || res.workflow_runs.length === 0) {
+							console.error("Errore nel recuperare lo stato del workflow:", err);
+							callback('error');
+							return;
+						}
+
+						const lastRun = res.workflow_runs[0];
+						console.log(`Stato ultimo deploy: ${lastRun.status}, Conclusione: ${lastRun.conclusion}`);
+
+						if (lastRun.status === 'completed') {
+							callback(lastRun.conclusion); // 'success', 'failure', etc.
+						} else {
+							callback('in_progress'); // Ancora in esecuzione
+						}
+					});
+				},
 				saveTemplate : function(pageTemplate, callback) {
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
@@ -3348,8 +3372,15 @@
 							return;
 						}
 						if (data) {
-							// Rimuovi lo slash iniziale per la chiamata API
-							var encodedData = btoa(data);
+							// Mostra un messaggio di attesa all'utente
+							const dialog = editor.plugins.dialog.create({
+								title: "Creazione Pagina",
+								body: "Pagina creata con successo! Avvio del deploy su GitHub Pages...<br><br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...",
+								buttons: [] // Nessun bottone, chiuderemo via codice
+							});
+							editor.plugins.dialog.open(dialog);
+
+							const self = this; // Salva il contesto per usarlo nel timeout
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
 									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
@@ -3358,25 +3389,30 @@
 									return;
 								}
 
-								// SUCCESSO! Ora possiamo chiamare la callback per navigare.
+								/* SUCCESSO! Ora possiamo chiamare la callback per navigare.
 								console.log(`File ${githubPath} scritto con successo su GitHub.`);
 								if (callback) {
-									/* 1. Costruisci l'URL di destinazione corretto per GitHub Pages
-									var repoBasePath = '/Tesi';
-									var correctHref = window.location.origin + repoBasePath + dataPath;
-
-									// 2. Crea un oggetto fittizio che simula l'evento di navigazione
-									var fakeEventTarget = {
-										href: correctHref
-									};
-
-									console.log('Chiamo la callback di navigazione con href corretto:', correctHref);
-
-									// 3. Esegui la callback originale, passandole l'oggetto finto.
-									//    La funzione followLink userà il nostro href corretto.
-									callback(fakeEventTarget);*/
 									callback();
-								}
+								}*/
+								// La scrittura è andata a buon fine, ora inizia il polling
+								setTimeout(function poll() {
+									self.checkDeployStatus(function(status) {
+										const bodyEl = dialog.querySelector('.simply-dialog-body');
+										if (status === 'in_progress') {
+											bodyEl.innerHTML += "."; // Aggiunge un puntino per mostrare attività
+											setTimeout(poll, 15000); // Aspetta 15 secondi e ricontrolla
+										} else if (status === 'success') {
+											bodyEl.innerHTML = "Deploy completato con successo! Reindirizzamento in corso...";
+											setTimeout(() => {
+												if (callback) callback(); // Esegue il reindirizzamento
+											}, 2000);
+										} else {
+											bodyEl.innerHTML = "Errore durante il deploy. Controlla la tab 'Actions' del tuo repository GitHub.";
+											// Aggiungi un bottone per chiudere manualmente
+											dialog.querySelector('.simply-toolbar .simply-buttons').innerHTML = '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
+										}
+									});
+								}, 10000); // Inizia il primo controllo dopo 10 secondi
 							});
 						}
 					});
