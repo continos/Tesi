@@ -3372,12 +3372,24 @@
 							return;
 						}
 						if (data) {
-							// Mostra un messaggio di attesa all'utente
-							const dialog = editor.plugins.dialog.create({
-								title: "Creazione Pagina",
-								body: "Pagina creata con successo! Avvio del deploy su GitHub Pages...<br><br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...",
-								buttons: [] // Nessun bottone, chiuderemo via codice
-							});
+							// 1. Crea l'elemento HTML per il dialog
+							const dialog = document.createElement('section');
+							dialog.id = 'deploy-status-dialog';
+							dialog.className = 'simply-dialog simply-modal';
+							dialog.innerHTML = `
+								<div class="simply-toolbar">
+									<ul class="simply-buttons">
+										<li><h1 style="font-size: 16px; margin-left: 10px;">Creazione Pagina</h1></li>
+									</ul>
+								</div>
+								<div class="simply-dialog-body" style="padding: 20px; font-size: 14px; line-height: 1.5;">
+									Pagina creata con successo! Avvio del deploy su GitHub Pages...<br><br>
+									Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...
+								</div>
+							`;
+
+							// 2. Aggiungi il dialog al contenitore di SimplyEdit e aprilo
+							editor.toolbarsContainer.appendChild(dialog);
 							editor.plugins.dialog.open(dialog);
 
 							const self = this; // Salva il contesto per usarlo nel timeout
@@ -3388,12 +3400,6 @@
 									// NON chiamiamo la callback, interrompendo la navigazione
 									return;
 								}
-
-								/* SUCCESSO! Ora possiamo chiamare la callback per navigare.
-								console.log(`File ${githubPath} scritto con successo su GitHub.`);
-								if (callback) {
-									callback();
-								}*/
 								// La scrittura è andata a buon fine, ora inizia il polling
 								setTimeout(function poll() {
 									self.checkDeployStatus(function(status) {
