@@ -653,5 +653,8 @@
 	},
 	"/Tesi/research/brturbd.html": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/Tesi/research/new-page.html": {
+		"data-simply-page-template": "research-template.html"
 	}
 }
