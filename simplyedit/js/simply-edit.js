@@ -3237,8 +3237,8 @@
 				},
 				page : {
 					save : function(url) {
-						 // 1. COSTRUZIONE E SANIFICAZIONE DEI PERCORSI
-						let newPagePath = new URL(url).pathname; // Es: "/research/prova"
+						// 1. COSTRUZIONE E SANIFICAZIONE DEI PERCORSI
+						let newPagePath = new URL(url, window.location.origin).pathname;
 
 						// Aggiungi il prefisso /Tesi/ se non presente
 						const repoBasePath = '/Tesi';
