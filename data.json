@@ -635,5 +635,8 @@
 	},
 	"/Tesi/research/ziopera.html": {
 		"data-simply-page-template": "research-template.html"
+	},
+	"/Tesi/research/agagaga.html": {
+		"data-simply-page-template": "blank-template.html"
 	}
 }
