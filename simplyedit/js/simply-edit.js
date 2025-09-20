@@ -3392,7 +3392,7 @@
 							editor.toolbarsContainer.appendChild(dialog);
 							editor.plugins.dialog.open(dialog);
 
-							const self = this; // Salva il contesto per usarlo nel timeout
+							
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
 									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
@@ -3402,7 +3402,7 @@
 								}
 								// La scrittura è andata a buon fine, ora inizia il polling
 								setTimeout(function poll() {
-									self.checkDeployStatus(function(status) {
+									editor.storage.checkDeployStatus(function(status) {
 										const bodyEl = dialog.querySelector('.simply-dialog-body');
 										if (status === 'in_progress') {
 											bodyEl.innerHTML += "."; // Aggiunge un puntino per mostrare attività
