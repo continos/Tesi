@@ -3098,7 +3098,7 @@
 
 					this.sitemap = storage.default.sitemap;
 					this.listSitemap = storage.default.listSitemap;
-					this.page = storage.default.page;
+					//this.page = storage.default.page;
 					this.escape = storage.default.escape;
 
 					if (editor.responsiveImages) {
