@@ -3235,10 +3235,10 @@
 						editor.storage.repo.delete(editor.storage.repoBranch, path, callback);
 					}
 				},
-				page : {
+				/*page : {
 					save : function(url) {
 						// 1. COSTRUZIONE E SANIFICAZIONE DEI PERCORSI
-						let newPagePath = new URL(url, window.location.origin).pathname;
+						 let newPagePath = new URL(url, window.location.origin).pathname;
 
 						// Aggiungi il prefisso /Tesi/ se non presente
 						const repoBasePath = '/Tesi';
@@ -3271,7 +3271,7 @@
 						};
 						openTemplateDialog();
 					}
-				},
+				},*/
 				save : function(data, callback) {
 					return editor.storage.file.save("data.json", data, callback);
 				},
