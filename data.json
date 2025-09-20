@@ -593,27 +593,5 @@
 				"data-simply-template": "peopleGrid"
 			}
 		]
-	},
-	"/research/prova/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/prova.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/zio.html/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/maro/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/zi/": {
-		"pageTitle": "New Research Page - Informatica",
-		"mainHeading": "New Research Page",
-		"breadcrumb": "New Research Page",
-		"news-content": "\n        <p>Qui verranno visualizzate le ultime notizie. Per ora, questo \ufffd un segnaposto.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi tutte le News</a>\n      ",
-		"publications-subtitle": "New Research Page",
-		"publications-content": "\n        <p>Spiacente nessuna pubblicazione corrispondente ai criteri di ricerca.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi le Pubblicazioni</a>\n      ",
-		"topics": [],
-		"data-simply-page-template": "research-template.html"
 	}
 }
