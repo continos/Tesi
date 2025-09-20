@@ -3235,6 +3235,43 @@
 						editor.storage.repo.delete(editor.storage.repoBranch, path, callback);
 					}
 				},
+				page : {
+					save : function(url) {
+						 // 1. COSTRUZIONE E SANIFICAZIONE DEI PERCORSI
+						let newPagePath = new URL(url).pathname; // Es: "/research/prova"
+
+						// Aggiungi il prefisso /Tesi/ se non presente
+						const repoBasePath = '/Tesi';
+						if (!newPagePath.startsWith(repoBasePath + '/')) {
+							const cleanPath = newPagePath.startsWith('/') ? newPagePath.substring(1) : newPagePath;
+							newPagePath = repoBasePath + '/' + cleanPath;
+						}
+
+						// Assicurati che finisca con .html
+						if (!newPagePath.endsWith('.html')) {
+							newPagePath += '.html';
+						}
+						// Ora newPagePath è /Tesi/research/prova.html
+						history.pushState(null, null, newPagePath + "#simply-edit");
+						
+						document.body.innerHTML = editor.data.originalBody.innerHTML;
+						document.body.removeAttribute("data-simply-edit");
+
+						editor.data.load();
+						var openTemplateDialog = function() {
+							if (editor.actions['simply-template']) {
+								if (!document.getElementById("simply-template")) {
+									window.setTimeout(openTemplateDialog, 200);
+									return;
+								}
+								editor.actions['simply-template']();
+							} else {
+								alert("This page does not exist yet. Save it to create it!");
+							}
+						};
+						openTemplateDialog();
+					}
+				},
 				save : function(data, callback) {
 					return editor.storage.file.save("data.json", data, callback);
 				},
