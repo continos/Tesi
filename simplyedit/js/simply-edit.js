@@ -82,7 +82,22 @@
 				if (field && field.storedPath && !field.offsetParent) {
 					return field.storedPath;
 				}
-				return location.pathname;
+				// modifica per customGithub
+				let path = location.pathname;
+
+				// Se siamo su GitHub, puliamo il percorso dal nome del repository
+				if (window.location.hostname.includes('github.io') && editor.storage.repoName) {
+					const repoPrefix = '/' + editor.storage.repoName;
+					if (path.startsWith(repoPrefix)) {
+						path = path.substring(repoPrefix.length);
+						if (!path.startsWith('/')) {
+							path = '/' + path; // Assicurati che inizi con uno slash
+						}
+					}
+				}
+
+				return path; // Restituisci il percorso pulito
+				//return location.pathname;
 			},
 			apply : function(data, target) {
 				if (typeof data === "undefined") {
@@ -3255,17 +3270,6 @@
 								newPagePath = newPagePath.slice(0, -1);
 							}
 							newPagePath += '.html';
-						}
-
-						// 3.1. Calcola il percorso corretto per data.json
-						let correctDataPath = newPagePath.substring(repoName.length);
-
-						// 3.2. Crea PREVENTIVAMENTE la voce corretta nell'oggetto dati.
-						// In questo modo, quando SimplyEdit si ricaricherà, la troverà già
-						// e non proverà a crearne una sua usando il pathname sbagliato.
-						if (typeof editor.currentData[correctDataPath] === 'undefined') {
-							console.log(`Pre-creo la voce dati per il percorso corretto: ${correctDataPath}`);
-							editor.currentData[correctDataPath] = {};
 						}
 
 						// 4. Costruisci l'URL finale completo
