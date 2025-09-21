@@ -711,20 +711,20 @@
 		var subpath;
 		// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
 		if (editor.storage.deletePages) {
-			if(!confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?"));
-			let itemsToDelete = [];
-			targetList.forEach(item => {
-				itemsToDelete.push(item.getAttribute("data-value"));
-			});
+			if(!confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
+				let itemsToDelete = [];
+				targetList.forEach(item => {
+					itemsToDelete.push(item.getAttribute("data-value"));
+				});
 
-			editor.storage.deletePages(itemsToDelete, function() {
-				// Callback: eseguita dopo che deletePages ha finito
-				targetList.forEach(item => item.parentNode.removeChild(item));
-				editor.plugins.browse.dialog.updateToolbar();
-				editor.data.save(); // Salva il data.json aggiornato
-				alert("Eliminazione completata. Le modifiche saranno visibili dopo il deploy.");
-			});
-
+				editor.storage.deletePages(itemsToDelete, function() {
+					// Callback: eseguita dopo che deletePages ha finito
+					targetList.forEach(item => item.parentNode.removeChild(item));
+					editor.plugins.browse.dialog.updateToolbar();
+					editor.data.save(); // Salva il data.json aggiornato
+					alert("Eliminazione completata. Le modifiche saranno visibili dopo il deploy.");
+				});
+			}
 		} else {
 			if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
 				if (confirm("Delete all selected pages? This action cannot be reversed and is final after you save.")) {
