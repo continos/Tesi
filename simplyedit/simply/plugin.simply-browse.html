@@ -709,6 +709,7 @@
 	editor.addAction("simply-browse-delete", function(el) {
 		var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
 		var subpath;
+		console.log(`lo storage type è: ${editor.storage[storageType]}`)
 		// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
 		if (editor.storage[storageType] && editor.storage[storageType] === 'customGithub') {
 			console.log('dentro custom delete');
