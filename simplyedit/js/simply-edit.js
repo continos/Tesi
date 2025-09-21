@@ -3378,7 +3378,7 @@
 								}
 								// La scrittura è andata a buon fine, ora inizia il polling dell'URL
 								const finalUrl = new URL(fullPath, window.location.origin).href;
-								setTimeout(function poll() {
+								setTimeout(function pollPage() {
 									const bodyEl = dialog.querySelector('.simply-dialog-body');
 
 									// Usiamo una richiesta HEAD che è più leggera di GET
