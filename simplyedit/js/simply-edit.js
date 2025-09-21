@@ -3213,6 +3213,58 @@
 					// Il token deve esistere e non essere vuoto
 					return key && key.trim() != '';
 				},
+				deletePages: function(itemsToDelete, callback) {
+					let filesToDelete = [];
+					let keysToDeleteInDataJson = [];
+					const repoPrefix = '/' + this.repoName;
+
+					console.log("Funzione custom deletePages avviata per:", itemsToDelete);
+
+					// Raccogli tutti i percorsi e le chiavi
+					itemsToDelete.forEach(itemPath => {
+						// Pulisci il percorso per usarlo come chiave
+						let keyPath = itemPath.replace(this.dataEndpoint, '');
+						if (keyPath.endsWith('/')) {
+							keyPath = keyPath.slice(0, -1);
+						}
+
+						// Controlla se è una cartella (basato sulla presenza dello slash finale nell'URL originale)
+						if (itemPath.endsWith('/')) {
+							for (const key in editor.currentData) {
+								if (key.startsWith(keyPath + '/')) {
+									keysToDeleteInDataJson.push(key);
+									let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
+									filesToDelete.push(githubPath);
+								}
+							}
+						} else {
+							keysToDeleteInDataJson.push(keyPath);
+							let githubPath = keyPath.startsWith(repoPrefix) ? keyPath.substring(repoPrefix.length) : keyPath;
+							filesToDelete.push(githubPath);
+						}
+					});
+
+					filesToDelete = [...new Set(filesToDelete)];
+					keysToDeleteInDataJson = [...new Set(keysToDeleteInDataJson)];
+
+					console.log("File fisici da eliminare:", filesToDelete);
+					console.log("Chiavi JSON da eliminare:", keysToDeleteInDataJson);
+
+					// Esegui eliminazioni
+					filesToDelete.forEach(filePath => {
+						let cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+						this.file.delete(cleanPath, (res) => { / Gestione opzionale errori / });
+					});
+
+					keysToDeleteInDataJson.forEach(key => {
+						delete editor.currentData[key];
+					});
+
+					// Esegui la callback (che sarà la funzione per salvare data.json e aggiornare la UI)
+					if (callback) {
+						callback();
+					}
+				},
 				file : {
 					save : function(path, data, callback) {
 						if (path.match(/\/$/)) {
