@@ -104,9 +104,9 @@
 		left: 5px;
 		padding: 3px 10px 3px 6px;
 		border: 1px solid #999
-		font-size: 12px;
+		/*font-size: 12px;
 		border-radius: 0;
-		font-weight: normal;
+		font-weight: normal;*/
 	}
 	#simply-browse .simply-add-folder > button.simply-cancel,
 	#simply-browse .simply-add-page > button.simply-cancel {
@@ -711,36 +711,36 @@
 		editor.addAction("simply-browse-delete", function(el) {
 			// --- INIZIO CODICE DI DEBUG ---
 
-          let storageType = 'N/A';
-          if (editor.storage && typeof editor.storage.getType === 'function') {
-              storageType = editor.storage.getType();
-          }
+			let storageType = 'N/A';
+			if (editor.storage && typeof editor.storage.getType === 'function') {
+				storageType = editor.storage.getType();
+			}
 
-          let hasDeletePages = 'No';
-          if (editor.storage && typeof editor.storage.deletePages === 'function') {
-              hasDeletePages = 'Yes';
-          }
+			let hasDeletePages = 'No';
+			if (editor.storage && typeof editor.storage.deletePages === 'function') {
+				hasDeletePages = 'Yes';
+			}
 
-          const debugMessage = `
-              --- DEBUG SIMPLYEDIT ---
-              Timestamp: ${new Date().toLocaleTimeString()}
+			const debugMessage = `
+				--- DEBUG SIMPLYEDIT ---
+				Timestamp: ${new Date().toLocaleTimeString()}
 
-              Valore di editor.storage.getType():
-              ${storageType}
+				Valore di editor.storage.getType():
+				${storageType}
 
-              Il tipo è 'customGithub'?: ${storageType === 'customGithub'}
+				Il tipo è 'customGithub'?: ${storageType === 'customGithub'}
 
-              Esiste editor.storage.deletePages?:
-              ${hasDeletePages}
-              --------------------------
-          `;
+				Esiste editor.storage.deletePages?:
+				${hasDeletePages}
+				--------------------------
+			`;
 
-          alert(debugMessage);
+			alert(debugMessage);
 
-          // Per ora, preveniamo l'esecuzione di qualsiasi logica di cancellazione
-          return;
+			// Per ora, preveniamo l'esecuzione di qualsiasi logica di cancellazione
+			return;
 
-          // --- FINE CODICE DI DEBUG ---
+			// --- FINE CODICE DI DEBUG ---
 			var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
 			var subpath;
 			// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
