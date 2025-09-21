@@ -706,88 +706,85 @@
 		var target = el.parentNode.querySelector("input");
 		muze.event.fire(target, "click");
 	});
-	// aggiungo l'event listener per far si che faccio delete solo con lo storage caricato
-	document.addEventListener('simply-storage-init', function() {
-		editor.addAction("simply-browse-delete", function(el) {
-			// --- INIZIO CODICE DI DEBUG ---
+	editor.addAction("simply-browse-delete", function(el) {
+		// --- INIZIO CODICE DI DEBUG ---
 
-			let storageType = 'N/A';
-			if (editor.storage && typeof editor.storage.getType === 'function') {
-				storageType = editor.storage.getType();
+		let storageType = 'N/A';
+		if (editor.storage && typeof editor.storage.getType === 'function') {
+			storageType = editor.storage.getType();
+		}
+
+		let hasDeletePages = 'No';
+		if (editor.storage && typeof editor.storage.deletePages === 'function') {
+			hasDeletePages = 'Yes';
+		}
+
+		const debugMessage = `
+			--- DEBUG SIMPLYEDIT ---
+			Timestamp: ${new Date().toLocaleTimeString()}
+
+			Valore di editor.storage.getType():
+			${storageType}
+
+			Il tipo è 'customGithub'?: ${storageType === 'customGithub'}
+
+			Esiste editor.storage.deletePages?:
+			${hasDeletePages}
+			--------------------------
+		`;
+
+		alert(debugMessage);
+
+		// Per ora, preveniamo l'esecuzione di qualsiasi logica di cancellazione
+		return;
+
+		// --- FINE CODICE DI DEBUG ---
+		var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
+		var subpath;
+		// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
+		if (editor.storage.getType && editor.storage.getType() === 'customGithub') {
+			if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
+				let itemsToDelete = [];
+				targetList.forEach(item => {
+					itemsToDelete.push(item.getAttribute("data-value"));
+				});
+
+				editor.storage.deletePages(itemsToDelete, function() {
+					// Callback: eseguita dopo che deletePages ha finito
+					targetList.forEach(item => item.parentNode.removeChild(item));
+					editor.plugins.browse.dialog.updateToolbar();
+					editor.data.save(); // Salva il data.json aggiornato
+					alert("Eliminazione completata. Le modifiche saranno visibili dopo il deploy.");
+				});
 			}
-
-			let hasDeletePages = 'No';
-			if (editor.storage && typeof editor.storage.deletePages === 'function') {
-				hasDeletePages = 'Yes';
-			}
-
-			const debugMessage = `
-				--- DEBUG SIMPLYEDIT ---
-				Timestamp: ${new Date().toLocaleTimeString()}
-
-				Valore di editor.storage.getType():
-				${storageType}
-
-				Il tipo è 'customGithub'?: ${storageType === 'customGithub'}
-
-				Esiste editor.storage.deletePages?:
-				${hasDeletePages}
-				--------------------------
-			`;
-
-			alert(debugMessage);
-
-			// Per ora, preveniamo l'esecuzione di qualsiasi logica di cancellazione
-			return;
-
-			// --- FINE CODICE DI DEBUG ---
-			var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
-			var subpath;
-			// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
-			if (editor.storage.getType && editor.storage.getType() === 'customGithub') {
-				if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
-					let itemsToDelete = [];
-					targetList.forEach(item => {
-						itemsToDelete.push(item.getAttribute("data-value"));
-					});
-
-					editor.storage.deletePages(itemsToDelete, function() {
-						// Callback: eseguita dopo che deletePages ha finito
-						targetList.forEach(item => item.parentNode.removeChild(item));
-						editor.plugins.browse.dialog.updateToolbar();
-						editor.data.save(); // Salva il data.json aggiornato
-						alert("Eliminazione completata. Le modifiche saranno visibili dopo il deploy.");
-					});
+		} else {
+			if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
+				if (confirm("Delete all selected pages? This action cannot be reversed and is final after you save.")) {
+					for (var i=0; i<targetList.length; i++) {
+						subpath = targetList[i].getAttribute("data-value").replace(editor.storage.dataEndpoint, "");
+						(function(targetButton) {
+							delete editor.currentData[subpath];
+							targetButton.parentNode.removeChild(targetButton);
+						}(targetList[i]));
+					}
 				}
 			} else {
-				if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
-					if (confirm("Delete all selected pages? This action cannot be reversed and is final after you save.")) {
-						for (var i=0; i<targetList.length; i++) {
-							subpath = targetList[i].getAttribute("data-value").replace(editor.storage.dataEndpoint, "");
-							(function(targetButton) {
-								delete editor.currentData[subpath];
+				if (confirm("Delete all selected folders and files?")) {
+					for (var i=0; i<targetList.length; i++) {
+						if (targetList[i].querySelector("img")) {
+							subpath = targetList[i].querySelector("img").getAttribute("src").replace(editor.storage.endpoint, "");
+						} else {
+							subpath = targetList[i].getAttribute("data-value").replace(editor.storage.endpoint, "");
+						}
+						(function(targetButton) {
+							editor.storage.file.delete(subpath, function() {
 								targetButton.parentNode.removeChild(targetButton);
-							}(targetList[i]));
-						}
-					}
-				} else {
-					if (confirm("Delete all selected folders and files?")) {
-						for (var i=0; i<targetList.length; i++) {
-							if (targetList[i].querySelector("img")) {
-								subpath = targetList[i].querySelector("img").getAttribute("src").replace(editor.storage.endpoint, "");
-							} else {
-								subpath = targetList[i].getAttribute("data-value").replace(editor.storage.endpoint, "");
-							}
-							(function(targetButton) {
-								editor.storage.file.delete(subpath, function() {
-									targetButton.parentNode.removeChild(targetButton);
-								});
-							}(targetList[i]));
-						}
+							});
+						}(targetList[i]));
 					}
 				}
 			}
-		});
+		}
 	});
 
 	editor.addAction("simply-browse-handle-upload", function(el) {
