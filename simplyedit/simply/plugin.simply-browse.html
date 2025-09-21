@@ -710,7 +710,7 @@
 		var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
 		var subpath;
 		// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
-		if (editor.storage.getType && editor.storage.getType(editor.storage.dataEndpoint) === 'customGithub') {
+		if (editor.storage[storageType] && editor.storage[storageType] === 'customGithub') {
 			if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
 				let itemsToDelete = [];
 				targetList.forEach(item => {
