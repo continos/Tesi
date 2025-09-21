@@ -3257,6 +3257,17 @@
 							newPagePath += '.html';
 						}
 
+						// 3.1. Calcola il percorso corretto per data.json
+						let correctDataPath = newPagePath.substring(repoName.length);
+
+						// 3.2. Crea PREVENTIVAMENTE la voce corretta nell'oggetto dati.
+						// In questo modo, quando SimplyEdit si ricaricherà, la troverà già
+						// e non proverà a crearne una sua usando il pathname sbagliato.
+						if (typeof editor.currentData[correctDataPath] === 'undefined') {
+							console.log(`Pre-creo la voce dati per il percorso corretto: ${correctDataPath}`);
+							editor.currentData[correctDataPath] = {};
+						}
+
 						// 4. Costruisci l'URL finale completo
 						const finalUrl = new URL(newPagePath, window.location.origin).href;
 						console.log('Sono nel customGithub page.save');
