@@ -711,6 +711,7 @@
 		var subpath;
 		// Se stiamo usando lo storage custom, usiamo la sua logica di cancellazione
 		if (editor.storage[storageType] && editor.storage[storageType] === 'customGithub') {
+			console.log('dentro custom delete');
 			if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
 				let itemsToDelete = [];
 				targetList.forEach(item => {
@@ -726,6 +727,7 @@
 				});
 			}
 		} else {
+			console.log('dentro default delete');
 			if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
 				if (confirm("Delete all selected pages? This action cannot be reversed and is final after you save.")) {
 					for (var i=0; i<targetList.length; i++) {
