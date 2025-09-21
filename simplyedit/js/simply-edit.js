@@ -3371,31 +3371,39 @@
 							
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
-									alert('ERRORE: La scrittura del file su GitHub è fallita. Controlla	la console per i dettagli.');
-									console.error('Errore durante repo.write:', writeErr);
-									// NON chiamiamo la callback, interrompendo la navigazione
+									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (err.error || 'sconosciuto');
+									const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
+									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
 									return;
 								}
-								// La scrittura è andata a buon fine, ora inizia il polling
+								// La scrittura è andata a buon fine, ora inizia il polling dell'URL
+								const finalUrl = new URL(fullPath, window.location.origin).href;
 								setTimeout(function poll() {
-									repo.checkDeployStatus(function(status) {
-										const bodyEl = dialog.querySelector('.simply-dialog-body');
-										// Se è 'in_progress' o 'queued', continuiamo ad aspettare
-										if (status === 'in_progress' || status === 'queued') {
+									const bodyEl = dialog.querySelector('.simply-dialog-body');
+
+									// Usiamo una richiesta HEAD che è più leggera di GET
+									fetch(finalUrl, { method: 'HEAD', cache: 'no-store' })
+										.then(response => {
+											if (response.ok) {
+												// Successo! La pagina è online.
+												bodyEl.innerHTML = "Pagina online! Reindirizzamento in corso...";
+												setTimeout(() => {
+													// Non chiamiamo la callback, ma facciamo il reload diretto
+													// per essere sicuri di caricare la nuova pagina.
+													window.location.reload();
+												}, 1500);
+											} else {
+												// La pagina non è ancora pronta (es. 404)
+												bodyEl.innerHTML += ".";
+												setTimeout(pollPage, 10000); // Aspetta 10 secondi e ricontrolla
+											}
+										})
+										.catch(() => {
+											// Errore di rete, continuiamo a provare
 											bodyEl.innerHTML += ".";
-											setTimeout(poll, 15000);
-										} else if (status === 'success') {
-											bodyEl.innerHTML = "Deploy completato con successo! Reindirizzamento in	corso...";
-											setTimeout(() => {
-												if (callback) callback();
-											}, 2000);
-										} else { // 'failure' o 'error'
-											bodyEl.innerHTML = "Errore durante il deploy. Controlla la tab 'Actions' del tuo repository GitHub per maggiori dettagli.";
-											const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
-											toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
-										}
-									});
-								}, 15000); // Aumentiamo il primo controllo a 15 secondi per dare tempo al workflow di partire
+											setTimeout(pollPage, 10000);
+										});
+								}, 15000); // Inizia il primo controllo dopo 15 secondi
 							});
 						}
 					});
