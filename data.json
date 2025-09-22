@@ -607,6 +607,5 @@
 		"data-simply-page-template": "blank-template.html",
 		"pageTitle": "Nuova Pagina",
 		"sections": []
-	},
-	"/cartella1/cartella2/cartella3/": {}
+	}
 }
