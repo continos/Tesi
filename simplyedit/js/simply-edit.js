@@ -3317,6 +3317,9 @@
 						}
 
 						// 3. Aggiungi .html se non presente
+						if (newPagePath.endsWith('/')) {
+							newPagePath = newPagePath.slice(0, -1);
+						}
 						if (!newPagePath.endsWith('.html')) {
 							if (newPagePath.endsWith('/')) {
 								newPagePath = newPagePath.slice(0, -1);

@@ -2414,8 +2414,7 @@
 			var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
 			var subpath;
 			console.log(`si è nel repo: ${editor.storage.repoName}`)
-			console.log(`si è nello s torage: ${editor.storage.storageType}`)
-			// Se stiamo usando lo storage github, usiamo la sua logica di cancellazione
+			// logica custom per il repo del progetto di Tesi
 			if (editor.storage && editor.storage.repoName === 'Tesi') {
 				console.log('dentro custom delete');
 				if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
