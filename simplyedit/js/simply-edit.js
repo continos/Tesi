@@ -3551,7 +3551,7 @@
 							
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
-									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (err.error || 'sconosciuto');
+									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
 									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
 									return;
