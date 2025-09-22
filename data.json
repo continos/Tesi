@@ -600,5 +600,10 @@
 		"pageTitle": "Nuova Pagina",
 		"sections": []
 	},
-	"/cartella1/cartella2/": {}
+	"/cartella1/cartella2/": {},
+	"/cartella1/cartella2/file2.html": {
+		"pageTitle": "Nuova Pagina",
+		"sections": [],
+		"data-simply-page-template": "blank-template.html"
+	}
 }
