@@ -2416,19 +2416,26 @@
 			console.log(`si è nel repo: ${editor.storage.repoName}`)
 			// logica custom per il repo del progetto di Tesi
 			if (editor.storage && editor.storage.repoName === 'Tesi') {
-				console.log('dentro custom delete');
+				console.log('Avvio logica di cancellazione custom per GitHub');
 				if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
 					let itemsToDelete = [];
 					targetList.forEach(item => {
 						itemsToDelete.push(item.getAttribute("data-value"));
 					});
 
-					editor.storage.deletePages(itemsToDelete, function() {
-						// Callback: eseguita dopo che deletePages ha finito
+					// La nuova funzione deletePages restituisce una Promise
+					editor.storage.deletePages(itemsToDelete)
+					.then(result => {
+						// Successo: tutti i file sono stati cancellati, e data.json è stato salvato.
+						console.log(result.message);
 						targetList.forEach(item => item.parentNode.removeChild(item));
 						editor.plugins.browse.dialog.updateToolbar();
-						editor.data.save(); // Salva il data.json aggiornato
-						alert("Eliminazione completata. Le modifiche saranno visibili dopo il deploy.");
+						alert("Eliminazione completata. Le modifiche saranno visibili dopo il prossimo deploy di GitHub Pages.");
+					})
+					.catch(error => {
+						// Errore: qualcosa è andato storto, ma lo stato è rimasto consistente.
+						console.error(error.message, error.error);
+						alert("ERRORE: " + error.message + "\nL'operazione è stata interrotta per mantenere la consistenza dei dati.");
 					});
 				}
 			} else {

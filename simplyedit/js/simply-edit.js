@@ -3213,8 +3213,72 @@
 					// Il token deve esistere e non essere vuoto
 					return key && key.trim() != '';
 				},
-				deletePages: function(itemsToDelete, callback) {
-					let filesToDelete = [];
+				deletePages: function(itemsToDelete) {
+					return new Promise((resolve, reject) => {
+						let filesToDelete = [];
+						let keysToDeleteInDataJson = [];
+						const repoPrefix = '/' + this.repoName;
+
+						console.log("Funzione custom deletePages avviata per:", itemsToDelete);
+
+						// Raccogli tutti i percorsi e le chiavi
+						itemsToDelete.forEach(itemPath => {
+							let keyPath = itemPath.replace(this.dataEndpoint, '');
+							if (keyPath.endsWith('/')) {
+								keyPath = keyPath.slice(0, -1);
+							}
+
+							if (itemPath.endsWith('/')) { // È una cartella
+								for (const key in editor.currentData) {
+									if (key.startsWith(keyPath + '/')) {
+										keysToDeleteInDataJson.push(key);
+										let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
+										if (githubPath) filesToDelete.push(githubPath);
+									}
+								}
+							} else { // È un file
+								keysToDeleteInDataJson.push(keyPath);
+								let githubPath = keyPath.startsWith(repoPrefix) ? keyPath.substring(repoPrefix.length) : keyPath;
+								if (githubPath) filesToDelete.push(githubPath);
+							}
+						});
+
+						filesToDelete = [...new Set(filesToDelete)];
+						keysToDeleteInDataJson = [...new Set(keysToDeleteInDataJson)];
+
+						console.log("File fisici da eliminare:", filesToDelete);
+						console.log("Chiavi JSON da eliminare:", keysToDeleteInDataJson);
+
+						// Crea un array di promise per l'eliminazione dei file
+						const deletePromises = filesToDelete.map(filePath => {
+							let cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+							return this.file.delete(cleanPath);
+						});
+
+						// Aspetta che tutti i file fisici siano stati eliminati
+						Promise.all(deletePromises)
+						.then(results => {
+							console.log('Tutti i file fisici sono stati eliminati con successo da GitHub.');
+
+							// Ora che i file sono stati cancellati, rimuovi le chiavi da data.json
+							keysToDeleteInDataJson.forEach(key => {
+								delete editor.currentData[key];
+							});
+							console.log('Chiavi JSON rimosse localmente.');
+
+							// Salva il file data.json aggiornato
+							editor.data.save();
+
+							// Risolvi la promise principale per indicare successo alla UI
+							resolve({ message: "Eliminazione completata e data.json aggiornato." });
+						})
+						.catch(error => {
+							// Se anche una sola eliminazione fallisce, l'intero processo si blocca	qui
+							console.error('Errore durante l\'eliminazione di uno o più file su GitHub:', error);
+							reject({ message: 'Eliminazione fallita. Lo stato del repository e di data.json è rimasto consistente.', error: error });
+						});
+					});
+					/*let filesToDelete = [];
 					let keysToDeleteInDataJson = [];
 					const repoPrefix = '/' + this.repoName;
 
@@ -3263,7 +3327,7 @@
 					// Esegui la callback (che sarà la funzione per salvare data.json e aggiornare la UI)
 					if (callback) {
 						callback();
-					}
+					}*/
 				},
 				file : {
 					save : function(path, data, callback) {
@@ -3315,8 +3379,33 @@
 							executeSave(path, data);
 						}
 					},
-					delete : function(path, callback) {
-						editor.storage.repo.delete(editor.storage.repoBranch, path, callback);
+					delete : function(path) {
+						return new Promise((resolve, reject) => {
+							// La libreria github.js richiede lo SHA del file per cancellarlo.
+							// Prima otteniamo lo SHA, poi cancelliamo.
+							editor.storage.repo.getSha(editor.storage.repoBranch, path, (err, sha) => {
+								if (err) {
+									// Se il file non esiste (404), è un successo ai fini della	cancellazione.
+									if (err.error === 404) {
+										console.log(`File ${path} non trovato su GitHub, considerato già eliminato.`);
+										return resolve({ message: `File ${path} non trovato.` });
+									}
+									// Per altri errori nel getSha, rifiuta la promise.
+									console.error(`GitHub API error getting SHA for ${path}:`, err);
+									return reject({ message: `Failed to get SHA for ${path}`, error: err });
+								}
+
+								// Se abbiamo lo SHA, procediamo con la cancellazione.
+								editor.storage.repo.delete(editor.storage.repoBranch, path, (err, res) => {
+									if (err) {
+										console.error(`GitHub API error deleting ${path}:`, err);
+										return reject({ message: `Failed to delete ${path}`, error: err });
+									}
+									console.log(`Successfully deleted ${path} from GitHub.`);
+									resolve(res);
+								});
+							});
+						});
 					}
 				},
 				page : {
