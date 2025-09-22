@@ -601,5 +601,6 @@
 	"/research/zioooo.html": {
 		"data-simply-page-template": "research-template.html"
 	},
-	"/cartella1/": {}
+	"/cartella1/": {},
+	"/cartella1/cartella2/": {}
 }
