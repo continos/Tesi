@@ -2469,65 +2469,65 @@
 			}
 			return false;
 		});
+		editor.addAction("simply-browse-handle-add-folder", function(el) {
+			var filename = el.parentNode.querySelector("input").value;
+			if (editor.storage && editor.storage.repoName === 'Tesi') {
+				var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
+
+				// Logica custom: Non tocca data.json, aggiorna solo la UI per mostrare la nuova cartella e permettere la navigazione.
+				(function(targetButton, url) {
+					targetButton.innerHTML = editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
+					let newButton = targetButton.querySelector("div");
+					targetButton.parentNode.insertBefore(newButton, targetButton);
+					targetButton.parentNode.removeChild(targetButton);
+				}(el.parentNode, url));
+			}
+			if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
+				var subpath = editor.plugins.browse.currentPath.replace(editor.storage.dataEndpoint, "");
+				var url = editor.plugins.browse.currentPath + "/" + editor.storage.escape(filename);
+
+				(function(targetButton, url) {
+					targetButton.innerHTML =  editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
+					newButton = targetButton.querySelector("div");
+					targetButton.parentNode.insertBefore(newButton, targetButton);
+					targetButton.parentNode.removeChild(targetButton);
+
+					if (typeof editor.currentData[subpath + "/" + filename + "/"] === "undefined") {
+						editor.currentData[subpath + "/" + filename + "/"] = {};
+					}
+				}(el.parentNode, url));
+
+			} else {
+				var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
+				var subpath = editor.plugins.browse.currentPath.replace(editor.storage.endpoint, "");
+
+				(function(targetButton, url) {
+					editor.storage.file.save(subpath + filename + '/', '', function(result) {
+						if (result.error) {
+							var errorEvent = editor.fireEvent("simply-file-save-error", document, result);
+							if (!errorEvent.defaultPrevented) {
+								targetButton.innerHTML = "<i class='fa fa-warning'></i>" + name + "</div>";
+								targetButton.setAttribute("data-simply-action", "simply-browse-error");
+								targetButton.message = "Add folder failed: " + errorEvent.data.message;
+								targetButton.classList.add("simply-error");
+							}
+							return;
+						}
+						targetButton.innerHTML =  editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
+						newButton = targetButton.querySelector("div");
+						targetButton.parentNode.insertBefore(newButton, targetButton);
+						targetButton.parentNode.removeChild(targetButton);
+					});
+				}(el.parentNode, url));
+			}
+		});
 	});
 
 	editor.addAction("simply-browse-handle-upload", function(el) {
 		editor.plugins.browse.handleFiles(el.files);
 	});
 
-	editor.addAction("simply-browse-handle-add-folder", function(el) {
-		var filename = el.parentNode.querySelector("input").value;
-		if (editor.storage && editor.storage.repoName === 'Tesi') {
-			var filename = el.parentNode.querySelector("input").value;
-			var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
-
-			// Logica custom: Non tocca data.json, aggiorna solo la UI per mostrare la nuova cartella e permettere la navigazione.
-			(function(targetButton, url) {
-				targetButton.innerHTML = editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
-				let newButton = targetButton.querySelector("div.simply-button");
-				targetButton.parentNode.insertBefore(newButton, targetButton);
-				targetButton.parentNode.removeChild(targetButton);
-			}(el.parentNode, url));
-		}
-		if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
-			var subpath = editor.plugins.browse.currentPath.replace(editor.storage.dataEndpoint, "");
-			var url = editor.plugins.browse.currentPath + "/" + editor.storage.escape(filename);
-
-			(function(targetButton, url) {
-				targetButton.innerHTML =  editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
-				newButton = targetButton.querySelector("div");
-				targetButton.parentNode.insertBefore(newButton, targetButton);
-				targetButton.parentNode.removeChild(targetButton);
-
-				if (typeof editor.currentData[subpath + "/" + filename + "/"] === "undefined") {
-					editor.currentData[subpath + "/" + filename + "/"] = {};
-				}
-			}(el.parentNode, url));
-
-		} else {
-			var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
-			var subpath = editor.plugins.browse.currentPath.replace(editor.storage.endpoint, "");
-
-			(function(targetButton, url) {
-				editor.storage.file.save(subpath + filename + '/', '', function(result) {
-					if (result.error) {
-						var errorEvent = editor.fireEvent("simply-file-save-error", document, result);
-						if (!errorEvent.defaultPrevented) {
-							targetButton.innerHTML = "<i class='fa fa-warning'></i>" + name + "</div>";
-							targetButton.setAttribute("data-simply-action", "simply-browse-error");
-							targetButton.message = "Add folder failed: " + errorEvent.data.message;
-							targetButton.classList.add("simply-error");
-						}
-						return;
-					}
-					targetButton.innerHTML =  editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
-					newButton = targetButton.querySelector("div");
-					targetButton.parentNode.insertBefore(newButton, targetButton);
-					targetButton.parentNode.removeChild(targetButton);
-				});
-			}(el.parentNode, url));
-		}
-	});
+	
 	editor.addAction("simply-browse-cancel-add-folder", function(el) {
 		var target = el.parentNode;
 		target.parentNode.removeChild(target);
