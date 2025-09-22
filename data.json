@@ -671,8 +671,5 @@
 	},
 	"/research/zioooo.html": {
 		"data-simply-page-template": "research-template.html"
-	},
-	"/ziopera.html.html": {
-		"data-simply-page-template": "blank-template.html"
 	}
 }
