@@ -3291,12 +3291,12 @@
 							err => {
 								// Questa è la callback che viene eseguita DOPO la chiamata all'API di GitHub.
 								let result = {};
-								if (err) {
-									result = {message : "SAVE FAILED: Could not store.", error: true};
+								if (err === null) {
+									result = { path: path, response: "Saved." };
 								} else if (err.error == 401) {
 									result = {message : "Authorization failed.", error: true};
 								} else {
-									result = { path: path, response: "Saved." };
+									result = {message : "SAVE FAILED: Could not store.", error: true};
 								}
 
 								// Eseguiamo la callback originale per notificare SimplyEdit e chiudere il dialog.
