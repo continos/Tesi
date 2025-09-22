@@ -602,5 +602,8 @@
 		"data-simply-page-template": "research-template.html"
 	},
 	"/cartella1/": {},
-	"/cartella1/cartella2/": {}
+	"/cartella1/cartella2/": {},
+	"/cartella1/cartella2/file1.html": {
+		"data-simply-page-template": "blank-template.html"
+	}
 }
