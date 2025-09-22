@@ -604,6 +604,9 @@
 	"/cartella1/": {},
 	"/cartella1/cartella2/": {},
 	"/cartella1/cartella2/file1.html": {
-		"data-simply-page-template": "blank-template.html"
-	}
+		"data-simply-page-template": "blank-template.html",
+		"pageTitle": "Nuova Pagina",
+		"sections": []
+	},
+	"/cartella1/cartella2/cartella3/": {}
 }
