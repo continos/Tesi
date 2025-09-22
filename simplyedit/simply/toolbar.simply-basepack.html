@@ -2412,9 +2412,12 @@
 	editor.addAction("simply-browse-delete", function(el) {
 		var targetList = editor.toolbarsContainer.querySelectorAll("#simply-browse .simply-dialog-body .simply-selected");
 		var subpath;
-		console.log(`lo storage type è: ${editor.storage.getType(dataEndpoint)}`)
+		if (document.querySelector("[data-simply-storage]")) {
+					let storage = document.querySelector("[data-simply-storage]").getAttribute("data-simply-storage");
+				}
+		console.log(`si è nello storage: ${storage}`)
 		// Se stiamo usando lo storage github, usiamo la sua logica di cancellazione
-		if (editor.storage.getType && editor.storage.getType(dataEndpoint) === 'customGithub') {
+		if (storage && storage === 'customGithub') {
 			console.log('dentro custom delete');
 			if(confirm("ATTENZIONE: Stai per eliminare definitivamente i relativi file e le relative voci. Sei sicuro?")){
 				let itemsToDelete = [];
