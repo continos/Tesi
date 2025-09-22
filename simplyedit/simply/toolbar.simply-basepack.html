@@ -2473,7 +2473,7 @@
 			var filename = el.parentNode.querySelector("input").value;
 			if (editor.storage && editor.storage.repoName === 'Tesi') {
 				var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
-
+				console.log('Logica custom add folder');
 				// Logica custom: Non tocca data.json, aggiorna solo la UI per mostrare la nuova cartella e permettere la navigazione.
 				(function(targetButton, url) {
 					targetButton.innerHTML = editor.plugins.browse.dialog.getFolderButtonHtml({'url': url, 'name' : filename});
