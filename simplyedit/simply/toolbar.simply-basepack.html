@@ -2481,8 +2481,7 @@
 					targetButton.parentNode.insertBefore(newButton, targetButton);
 					targetButton.parentNode.removeChild(targetButton);
 				}(el.parentNode, url));
-			}
-			if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
+			} else if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
 				var subpath = editor.plugins.browse.currentPath.replace(editor.storage.dataEndpoint, "");
 				var url = editor.plugins.browse.currentPath + "/" + editor.storage.escape(filename);
 
