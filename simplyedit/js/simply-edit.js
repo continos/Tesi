@@ -3219,27 +3219,30 @@
 						let keysToDeleteInDataJson = [];
 						const repoPrefix = '/' + this.repoName;
 
-						console.log("Funzione custom deletePages avviata per:", itemsToDelete);
+						console.log("--- AVVIO PROCESSO DI CANCELLAZIONE ---");
+						console.log("Elementi selezionati per la cancellazione:", itemsToDelete);
+						console.log("Prime 5 chiavi in data.json:",	Object.keys(editor.currentData).slice(0, 5));
 
 						// Raccogli tutti i percorsi e le chiavi
 						itemsToDelete.forEach(itemPath => {
+							// Pulisce il percorso per ottenere la "base" della cartella o del file
 							let keyPath = itemPath.replace(this.dataEndpoint, '');
-							if (keyPath.endsWith('/')) {
-								keyPath = keyPath.slice(0, -1);
+
+							// Se è una cartella (es. /Tesi/), keyPath diventa /Tesi/
+							// Se è un file (es. /Tesi/page.html), keyPath diventa /Tesi/page.html
+							if (itemPath.endsWith('/') && !keyPath.endsWith('/')) {
+								keyPath += '/';
 							}
 
-							if (itemPath.endsWith('/')) { // È una cartella
-								for (const key in editor.currentData) {
-									if (key.startsWith(keyPath + '/')) {
-										keysToDeleteInDataJson.push(key);
-										let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
-										if (githubPath) filesToDelete.push(githubPath);
-									}
+							// Itera su tutte le chiavi in data.json per trovare corrispondenze
+							for (const key in editor.currentData) {
+								// Se abbiamo selezionato una cartella, cerchiamo tutte le chiavi che iniziano con quel percorso
+                  				// Se abbiamo selezionato un file, cerchiamo la chiave esatta
+								if (key.startsWith(keyPath)) {
+									keysToDeleteInDataJson.push(key);
+									let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
+									if (githubPath) filesToDelete.push(githubPath);
 								}
-							} else { // È un file
-								keysToDeleteInDataJson.push(keyPath);
-								let githubPath = keyPath.startsWith(repoPrefix) ? keyPath.substring(repoPrefix.length) : keyPath;
-								if (githubPath) filesToDelete.push(githubPath);
 							}
 						});
 
