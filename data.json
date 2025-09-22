@@ -594,11 +594,5 @@
 			}
 		],
 		"data-simply-page-template": "blank-template.html"
-	},
-	"/research/safsa/": {
-		"data-simply-page-template": "research-template.html"
-	},
-	"/research/zioooo.html": {
-		"data-simply-page-template": "research-template.html"
 	}
 }
