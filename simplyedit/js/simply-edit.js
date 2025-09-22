@@ -3240,8 +3240,9 @@
                   				// Se abbiamo selezionato un file, cerchiamo la chiave esatta
 								if (key.startsWith(keyPath)) {
 									keysToDeleteInDataJson.push(key);
-									let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
-									if (githubPath) filesToDelete.push(githubPath);
+									//let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
+									//if (githubPath) filesToDelete.push(githubPath);
+									if (key) filesToDelete.push(key);
 								}
 							}
 						});
