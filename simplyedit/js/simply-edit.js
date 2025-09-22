@@ -3268,7 +3268,8 @@
 				file : {
 					save : function(path, data, callback) {
 						if (path.match(/\/$/)) {
-							// github will create directories as needed.
+							// Se è una cartella, l'API di GitHub la crea implicitamente quando si scrive un file al suo interno.
+      						// Chiamiamo subito la callback per segnalare che l'operazione "virtuale" è completata.
 							var saveResult = {path : path, response: "Saved."};
 							return callback(saveResult);
 						}
@@ -3286,7 +3287,23 @@
 						};
 
 						var executeSave = function(path, data) {
-							editor.storage.repo.write(editor.storage.repoBranch, path, data, "Simply edit changes on " + new Date().toUTCString(), saveCallback);
+							editor.storage.repo.write(editor.storage.repoBranch, path, data, "Simply edit changes on " + new Date().toUTCString(), 
+							err => {
+								// Questa è la callback che viene eseguita DOPO la chiamata all'API di GitHub.
+								let result = {};
+								if (err) {
+									result = {message : "SAVE FAILED: Could not store.", error: true};
+								} else if (err.error == 401) {
+									result = {message : "Authorization failed.", error: true};
+								} else {
+									result = { path: path, response: "Saved." };
+								}
+
+								// Eseguiamo la callback originale per notificare SimplyEdit e chiudere il dialog.
+								if (callback) {
+									callback(result);
+								}
+							});
 						};
 						if (data instanceof File) {
 							var fileReader = new FileReader();
