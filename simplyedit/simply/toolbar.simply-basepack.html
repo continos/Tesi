@@ -2471,7 +2471,7 @@
 		});
 		editor.addAction("simply-browse-handle-add-folder", function(el) {
 			var filename = el.parentNode.querySelector("input").value;
-			if (editor.storage && editor.storage.repoName === 'Tesi') {
+			/*if (editor.storage && editor.storage.repoName === 'Tesi') {
 				var url = editor.plugins.browse.currentPath + editor.storage.escape(filename) + '/';
 				console.log('Logica custom add folder');
 				// Logica custom: Non tocca data.json, aggiorna solo la UI per mostrare la nuova cartella e permettere la navigazione.
@@ -2481,7 +2481,7 @@
 					targetButton.parentNode.insertBefore(newButton, targetButton);
 					targetButton.parentNode.removeChild(targetButton);
 				}(el.parentNode, url));
-			} else if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
+			} else*/ if (editor.plugins.browse.currentPath.indexOf(editor.storage.dataEndpoint) === 0) {
 				var subpath = editor.plugins.browse.currentPath.replace(editor.storage.dataEndpoint, "");
 				var url = editor.plugins.browse.currentPath + "/" + editor.storage.escape(filename);
 
