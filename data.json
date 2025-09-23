@@ -594,8 +594,5 @@
 			}
 		],
 		"data-simply-page-template": "blank-template.html"
-	},
-	"/cartella1/file1.html": {
-		"data-simply-page-template": "blank-template.html"
 	}
 }
