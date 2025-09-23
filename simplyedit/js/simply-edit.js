@@ -3270,8 +3270,20 @@
 							});
 							console.log('Chiavi JSON rimosse localmente.');
 
-							// Salva il file data.json aggiornato
-							editor.data.save();
+							// --- NUOVA LOGICA PER SALVATAGGIO SILENZIOSO ---
+							const originalBeforeSave = editor.actions['simply-beforesave'];
+							const originalAfterSave = editor.actions['simply-aftersave'];
+
+							// Disabilita temporaneamente i dialoghi di salvataggio
+							editor.actions['simply-beforesave'] = function() {};
+							editor.actions['simply-aftersave'] = function() {};
+
+							editor.data.save(); // Salva il data.json in modo silenzioso
+
+							// Ripristina immediatamente le azioni originali
+							editor.actions['simply-beforesave'] = originalBeforeSave;
+							editor.actions['simply-aftersave'] = originalAfterSave;
+							// --- FINE NUOVA LOGICA ---
 
 							// Risolvi la promise principale per indicare successo alla UI
 							resolve({ message: "Eliminazione completata e data.json aggiornato." });
