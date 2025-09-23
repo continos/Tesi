@@ -186,6 +186,17 @@ document.addEventListener('simply-storage-init', function() {
   };
 });*/
 
+// Script per gestire il click del bottone Edit Mode con il tag <base> attivo
+document.addEventListener('DOMContentLoaded', function() {
+  const editButton = document.getElementById('edit-mode-button');
+  if (editButton) {
+    editButton.addEventListener('click', function(e) {
+      e.preventDefault(); // Impedisce la navigazione standard del link
+      window.location.hash = 'simply-edit'; // Aggiunge solo l'hash all'URL corrente
+    });
+  }
+});
+
 //4. Gestione comportamento accordion in modalità modifica
 document.addEventListener('DOMContentLoaded', function() {
     // Funzione per gestire il comportamento degli accordion
