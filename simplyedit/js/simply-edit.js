@@ -3274,17 +3274,15 @@
 							});
 							console.log('Chiavi JSON rimosse localmente.');
 
-							 // 1. Prepara i dati aggiornati
-							editor.data.stash();
-							// 2. Salva i dati direttamente usando il motore di storage, bypassando	i dialoghi
-							editor.storage.save(localStorage.data, (result) => {
-								if (result.error) {
-									console.error("Salvataggio silenzioso di data.json fallito dopo	la cancellazione.", result.message);
-									// Possiamo anche rigettare la promise qui se vogliamo notificare l'utente
-									// reject({ message: "I file sono stati cancellati ma l'aggiornamento di data.json è fallito." });
-								} else {
-									console.log("Salvataggio silenzioso di data.json completato.");
-								}
+							editor.storage.connect(() => {
+								editor.data.stash();
+								editor.storage.save(localStorage.data, (result) => {
+									if (result.error) {
+										console.error("Salvataggio silenzioso di data.json fallito dopo la cancellazione.", result.message);
+									} else {
+										console.log("Salvataggio silenzioso di data.json completato.");
+									}
+								});
 							});
 
 							// Risolvi la promise principale per indicare successo alla UI
@@ -3296,56 +3294,6 @@
 							reject({ message: 'Eliminazione fallita. Lo stato del repository e di data.json è rimasto consistente.', error: error });
 						});
 					});
-					/*let filesToDelete = [];
-					let keysToDeleteInDataJson = [];
-					const repoPrefix = '/' + this.repoName;
-
-					console.log("Funzione custom deletePages avviata per:", itemsToDelete);
-
-					// Raccogli tutti i percorsi e le chiavi
-					itemsToDelete.forEach(itemPath => {
-						// Pulisci il percorso per usarlo come chiave
-						let keyPath = itemPath.replace(this.dataEndpoint, '');
-						if (keyPath.endsWith('/')) {
-							keyPath = keyPath.slice(0, -1);
-						}
-
-						// Controlla se è una cartella (basato sulla presenza dello slash finale nell'URL originale)
-						if (itemPath.endsWith('/')) {
-							for (const key in editor.currentData) {
-								if (key.startsWith(keyPath + '/')) {
-									keysToDeleteInDataJson.push(key);
-									let githubPath = key.startsWith(repoPrefix) ? key.substring(repoPrefix.length) : key;
-									filesToDelete.push(githubPath);
-								}
-							}
-						} else {
-							keysToDeleteInDataJson.push(keyPath);
-							let githubPath = keyPath.startsWith(repoPrefix) ? keyPath.substring(repoPrefix.length) : keyPath;
-							filesToDelete.push(githubPath);
-						}
-					});
-
-					filesToDelete = [...new Set(filesToDelete)];
-					keysToDeleteInDataJson = [...new Set(keysToDeleteInDataJson)];
-
-					console.log("File fisici da eliminare:", filesToDelete);
-					console.log("Chiavi JSON da eliminare:", keysToDeleteInDataJson);
-
-					// Esegui eliminazioni
-					filesToDelete.forEach(filePath => {
-						let cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
-						this.file.delete(cleanPath, (res) => { / Gestione opzionale errori / });
-					});
-
-					keysToDeleteInDataJson.forEach(key => {
-						delete editor.currentData[key];
-					});
-
-					// Esegui la callback (che sarà la funzione per salvare data.json e aggiornare la UI)
-					if (callback) {
-						callback();
-					}*/
 				},
 				file : {
 					save : function(path, data, callback) {
