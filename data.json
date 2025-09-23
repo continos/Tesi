@@ -439,6 +439,14 @@
 				"mainHeading": "Titolo Principale",
 				"breadcrumb": "Sottotitolo",
 				"data-simply-template": "pageTitle"
+			},
+			{
+				"sectionTitle": "Titolo Sezione",
+				"data-simply-template": "sectionTitle"
+			},
+			{
+				"sectionTitle": "Titolo Sezione",
+				"data-simply-template": "sectionTitle"
 			}
 		]
 	}
