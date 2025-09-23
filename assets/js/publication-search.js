@@ -25,17 +25,45 @@ function initializePublicationSearch() {
     loadingIndicator.style.display = 'block';
 
     try {
-      // L'URL del proxy CORS. Usiamo corsproxy.io come esempio.
       const proxyUrl = 'https://corsproxy.io/?';
-      // L'URL di destinazione, che ora chiamiamo direttamente.
       const targetUrl = `https://art.torvergata.it/simple-search?query=${encodeURIComponent(query)}&rpp=100`;
-
-      // La richiesta ora passa attraverso il proxy.
       const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
+
       if (!response.ok) {
         throw new Error('La ricerca ha restituito un errore.');
       }
-      const publications = await response.json();
+      //const publications = await response.json(); 
+      // Leggiamo la risposta come testo (HTML), non come JSON
+      const htmlString = await response.text();
+
+      // Usiamo DOMParser per analizzare la stringa HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlString, 'text/html');
+
+      const publications = [];
+      // Eseguiamo lo scraping direttamente qui nel client
+      doc.querySelectorAll('#tableView_body table tbody tr').forEach(row => {
+        const columns = row.querySelectorAll('td');
+        if (columns.length < 5) return; // Salta le righe non valide
+
+        const date = columns[0].textContent.trim();
+        const titleElement = columns[1].querySelector('a');
+        const title = titleElement ? titleElement.textContent.trim() : 'Titolo non disponibile';
+        const link = titleElement ? `https://art.torvergata.it${titleElement.getAttribute('href')}` : '#';
+        const authors = columns[2].textContent.trim();
+        const type = columns[3].textContent.trim();
+        const iconElement = columns[4].querySelector('i');
+
+        let fileIcon = 'unknown';
+        if (iconElement && iconElement.classList.contains('fa-minus')) fileIcon = 'minus';
+        else if (iconElement && iconElement.classList.contains('fa-lock')) fileIcon = 'lock';
+        else if (iconElement && iconElement.classList.contains('fa-file-alt')) fileIcon = 'file';
+
+        if (title !== 'Titolo non disponibile') {
+          publications.push({ title, link, authors, date, type, fileIcon });
+        }
+      });
+
 
       loadingIndicator.style.display = 'none';
 
