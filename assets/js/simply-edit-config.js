@@ -274,6 +274,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+ document.addEventListener('simply-data-saved', function() {
+    if (window.vdSelectionState) {
+      console.log('Salvataggio completato. Pulisco lo stato della selezione per prevenire errori.');
+      vdSelectionState.remove();
+    }
+  });
+
 /* --- GESTIONE CREAZIONE PAGINE (ADATTATA PER LO STORAGE GITHUB) ---
 document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor) return;
