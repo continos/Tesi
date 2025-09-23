@@ -25,7 +25,13 @@ function initializePublicationSearch() {
     loadingIndicator.style.display = 'block';
 
     try {
-      const response = await fetch(`/api/search-publications?query=${encodeURIComponent(query)}`);
+      // L'URL del proxy CORS. Usiamo corsproxy.io come esempio.
+      const proxyUrl = 'https://corsproxy.io/?';
+      // L'URL di destinazione, che ora chiamiamo direttamente.
+      const targetUrl = `https://art.torvergata.it/simple-search?query=${encodeURIComponent(query)}&rpp=100`;
+
+      // La richiesta ora passa attraverso il proxy.
+      const response = await fetch(`${proxyUrl}${encodeURIComponent(targetUrl)}`);
       if (!response.ok) {
         throw new Error('La ricerca ha restituito un errore.');
       }
