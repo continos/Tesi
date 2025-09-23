@@ -184,7 +184,7 @@ document.addEventListener('simply-storage-init', function() {
       alert('Errore: Impossibile creare la nuova pagina. Controlla la console del server.');
     });
   };
-});
+});*/
 
 //4. Gestione comportamento accordion in modalità modifica
 document.addEventListener('DOMContentLoaded', function() {
@@ -261,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
             subtree: true
         });
     }
-});*/
+});
 
 /* --- GESTIONE CREAZIONE PAGINE (ADATTATA PER LO STORAGE GITHUB) ---
 document.addEventListener('simply-toolbars-loaded', function() {
@@ -405,4 +405,4 @@ document.addEventListener('simply-storage-init', function() {
     };
   });
 });
-    // --- FINE MODIFICA CHIAVE ---*/
+// --- FINE MODIFICA CHIAVE ---*/
