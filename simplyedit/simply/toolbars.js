@@ -708,6 +708,11 @@
 				var ltop, lleft, rleft, rtop, top, left;
 
 				var range = sel; //.getRangeAt(0);
+				//fix per after save
+				if (range && range.startContainer && range.startContainer.nodeType === 9) { // 9 è il nodeType per DOCUMENT_NODE
+				console.warn("SimplyEdit: Rilevato un range non valido (a livello di Document). Operazione di posizionamento toolbar interrotta per prevenire errori.");
+				return null; // Interrompe l'esecuzione e previene il crash
+      			}
 				if ( !range ) {
 					return null;
 				}
