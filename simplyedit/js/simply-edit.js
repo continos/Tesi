@@ -3253,6 +3253,10 @@
 						console.log("File fisici da eliminare:", filesToDelete);
 						console.log("Chiavi JSON da eliminare:", keysToDeleteInDataJson);
 
+						if(filesToDelete === 0 && keysToDeleteInDataJson === 0){
+							return resolve({message: "Nessun file o chiave corrispondente trovata."});
+						}
+
 						// Crea un array di promise per l'eliminazione dei file
 						const deletePromises = filesToDelete.map(filePath => {
 							let cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
@@ -3270,20 +3274,18 @@
 							});
 							console.log('Chiavi JSON rimosse localmente.');
 
-							// --- NUOVA LOGICA PER SALVATAGGIO SILENZIOSO ---
-							const originalBeforeSave = editor.actions['simply-beforesave'];
-							const originalAfterSave = editor.actions['simply-aftersave'];
-
-							// Disabilita temporaneamente i dialoghi di salvataggio
-							editor.actions['simply-beforesave'] = function() {};
-							editor.actions['simply-aftersave'] = function() {};
-
-							editor.data.save(); // Salva il data.json in modo silenzioso
-
-							// Ripristina immediatamente le azioni originali
-							editor.actions['simply-beforesave'] = originalBeforeSave;
-							editor.actions['simply-aftersave'] = originalAfterSave;
-							// --- FINE NUOVA LOGICA ---
+							 // 1. Prepara i dati aggiornati
+							editor.data.stash();
+							// 2. Salva i dati direttamente usando il motore di storage, bypassando	i dialoghi
+							editor.storage.save(localStorage.data, (result) => {
+								if (result.error) {
+									console.error("Salvataggio silenzioso di data.json fallito dopo	la cancellazione.", result.message);
+									// Possiamo anche rigettare la promise qui se vogliamo notificare l'utente
+									// reject({ message: "I file sono stati cancellati ma l'aggiornamento di data.json è fallito." });
+								} else {
+									console.log("Salvataggio silenzioso di data.json completato.");
+								}
+							});
 
 							// Risolvi la promise principale per indicare successo alla UI
 							resolve({ message: "Eliminazione completata e data.json aggiornato." });
