@@ -228,11 +228,6 @@ document.addEventListener('click', function(e) {
 
   if (target && target.getAttribute('href') === '#') {
     e.preventDefault();
-  } else {
-    target = e.target.closest('i');
-    if (target && target.getAttribute('href') === '#'){
-      e.preventDefault();
-    }
   }
 
 });
