@@ -198,6 +198,46 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
+ * Gestione avanzata per i dropdown del menu di navigazione,
+ * per garantire la compatibilità con il rendering dinamico di SimplyEdit.
+ */
+document.addEventListener('simply-content-loaded', () => {
+  const navmenu = document.querySelector('.navmenu');
+  if (!navmenu) return;
+
+  function setupDropdownEventListeners() {
+    const dropdownToggles = navmenu.querySelectorAll('.toggle-dropdown:not([data-listener-attached])');
+
+    dropdownToggles.forEach(toggle => {
+      toggle.setAttribute('data-listener-attached', 'true'); // Marca subito per evitare doppioni
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        const parentLi = this.closest('.dropdown');
+        if (parentLi) {
+          parentLi.classList.toggle('active');
+          const submenu = parentLi.querySelector('ul');
+          if (submenu) {
+            submenu.classList.toggle('dropdown-active');
+          }
+        }
+      });
+    });
+  }
+
+  // Esegui la prima volta
+  setupDropdownEventListeners();
+
+  // Imposta un MutationObserver per gestire le modifiche future al menu
+  const observer = new MutationObserver((mutations) => {
+    // Quando il menu cambia, riesegui la configurazione sui nuovi elementi
+    setupDropdownEventListeners();
+  });
+  observer.observe(navmenu, { childList: true, subtree: true });
+});
+
+/**
  * Previene che si vada in Tesi/# quando clicco su href="#"
 */
 document.addEventListener('click', function(e) {
@@ -205,7 +245,13 @@ document.addEventListener('click', function(e) {
 
   if (target && target.getAttribute('href') === '#') {
     e.preventDefault();
+  } else {
+    target = e.target.closest('i');
+    if (target && target.getAttribute('href') === '#'){
+      e.preventDefault();
+    }
   }
+
 });
 
 //4. Gestione comportamento accordion in modalità modifica
