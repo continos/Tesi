@@ -316,7 +316,10 @@ h6 {
     display: none;
     list-style: none;
     position: absolute;
-    inset: 60px 20px 20px 20px;
+    top: 60px;      /* Rimuove inset per un controllo più fine */
+    right: 20px;
+    left: 20px;
+    bottom: auto;    /* Permette al menu di avere un'altezza naturale */
     padding: 10px 0;
     margin: 0;
     border-radius: 6px;
