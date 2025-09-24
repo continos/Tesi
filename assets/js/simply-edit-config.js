@@ -197,6 +197,17 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+/**
+ * Previene che si vada in Tesi/# quando clicco su href="#"
+*/
+document.addEventListener('click', function(e) {
+  const target = e.target.closest('a');
+
+  if (target && target.getAttribute('href') === '#') {
+    e.preventDefault();
+  }
+});
+
 //4. Gestione comportamento accordion in modalità modifica
 document.addEventListener('DOMContentLoaded', function() {
     // Funzione per gestire il comportamento degli accordion
