@@ -79,10 +79,7 @@
 				"data-simply-template": "item"
 			},
 			{
-				"item": {
-					"innerHTML": "Research",
-					"href": "#"
-				},
+				"item": "Research",
 				"submenu": [
 					{
 						"item": {
@@ -109,10 +106,7 @@
 				"data-simply-template": "item"
 			},
 			{
-				"item": {
-					"innerHTML": "Academics",
-					"href": "#"
-				},
+				"item": "Academics",
 				"submenu": [
 					{
 						"item": {
