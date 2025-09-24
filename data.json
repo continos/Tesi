@@ -40,7 +40,7 @@
 				"title": "Software Systems",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
 				"link": {
-					"href": "https://www-2020.cs.uniroma2.it/software-systems/"
+					"href": "#"
 				}
 			},
 			{
@@ -54,7 +54,7 @@
 				"title": "Systems & Data Security",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
 				"link": {
-					"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
+					"href": "#"
 				}
 			}
 		],
