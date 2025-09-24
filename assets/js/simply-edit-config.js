@@ -202,39 +202,22 @@ document.addEventListener('DOMContentLoaded', function() {
  * per garantire la compatibilità con il rendering dinamico di SimplyEdit.
  */
 document.addEventListener('simply-content-loaded', () => {
-  const navmenu = document.querySelector('.navmenu');
-  if (!navmenu) return;
+    // Riesegue la logica originale del template DOPO che SimplyEdit ha caricato i contenuti.
+    // Logica per i dropdown
+    document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
+      // Clona e sostituisci per rimuovere vecchi event listener
+      const newEl = navmenu.cloneNode(true);
+      navmenu.parentNode.replaceChild(newEl, navmenu);
 
-  function setupDropdownEventListeners() {
-    const dropdownToggles = navmenu.querySelectorAll('.toggle-dropdown:not([data-listener-attached])');
-
-    dropdownToggles.forEach(toggle => {
-      toggle.setAttribute('data-listener-attached', 'true'); // Marca subito per evitare doppioni
-      toggle.addEventListener('click', function(e) {
+      // Aggiungi il nuovo listener
+      newEl.addEventListener('click', function(e) {
         e.preventDefault();
-        e.stopImmediatePropagation();
-
         const parentLi = this.closest('.dropdown');
-        if (parentLi) {
-          parentLi.classList.toggle('active');
-          const submenu = parentLi.querySelector('ul');
-          if (submenu) {
-            submenu.classList.toggle('dropdown-active');
-          }
-        }
+        parentLi.classList.toggle('active');
+        parentLi.querySelector('ul').classList.toggle('dropdown-active');
+        e.stopImmediatePropagation();
       });
     });
-  }
-
-  // Esegui la prima volta
-  setupDropdownEventListeners();
-
-  // Imposta un MutationObserver per gestire le modifiche future al menu
-  const observer = new MutationObserver((mutations) => {
-    // Quando il menu cambia, riesegui la configurazione sui nuovi elementi
-    setupDropdownEventListeners();
-  });
-  observer.observe(navmenu, { childList: true, subtree: true });
 });
 
 /**
