@@ -3,31 +3,59 @@
 		"homeResearchItems": [
 			{
 				"data-simply-template": "image-left",
-				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg",
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-1024x545.jpeg",
+					"class": "img-fluid",
+					"alt": "Artificial Intelligence & Big Data",
+					"title": null
+				},
 				"title": "Artificial Intelligence & Big Data",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "research/artificial-intelligence-big-data.html"
+				"link": {
+					"href": "/research/artificial-intelligence-big-data.html"
+				}
 			},
 			{
 				"data-simply-template": "image-right",
-				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg",
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/25550-1024x585.jpg",
+					"class": "img-fluid",
+					"alt": "Distributed Computing & Complex Networks",
+					"title": null
+				},
 				"title": "Distributed Computing & Complex Networks",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "/research/distributed-computing-complex-networks.html"
+				"link": {
+					"href": "/research/distributed-computing-complex-networks.html"
+				}
 			},
 			{
 				"data-simply-template": "image-left",
-				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg",
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/closeup-female-typing-laptop-keyboard-1024x683.jpg",
+					"class": "img-fluid",
+					"alt": "Software Systems",
+					"title": null
+				},
 				"title": "Software Systems",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "https://www-2020.cs.uniroma2.it/software-systems/"
+				"link": {
+					"href": "#"
+				}
 			},
 			{
 				"data-simply-template": "image-right",
-				"image_src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg",
+				"image": {
+					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/90465-1024x683.jpg",
+					"class": "img-fluid",
+					"alt": "Systems & Data Security",
+					"title": null
+				},
 				"title": "Systems & Data Security",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
-				"href": "https://www-2020.cs.uniroma2.it/systems-data-security/"
+				"link": {
+					"href": "#"
+				}
 			}
 		],
 		"footerLogo": {
@@ -35,8 +63,12 @@
 			"alt": "Universit\u00e0 di Roma Tor Vergata"
 		},
 		"footerLoginLink": {
-			"innerHTML": "Accedi",
-			"href": "/login.html"
+			"innerHTML": "Logout",
+			"href": "#",
+			"class": null,
+			"alt": null,
+			"title": null,
+			"name": null
 		},
 		"logo": {
 			"src": "/assets/img/logoTv.png",
@@ -51,10 +83,7 @@
 				"data-simply-template": "item"
 			},
 			{
-				"item": {
-					"innerHTML": "Research",
-					"href": "#"
-				},
+				"item": "Research",
 				"submenu": [
 					{
 						"item": {
@@ -81,10 +110,7 @@
 				"data-simply-template": "item"
 			},
 			{
-				"item": {
-					"innerHTML": "Academics",
-					"href": "#"
-				},
+				"item": "Academics",
 				"submenu": [
 					{
 						"item": {
@@ -388,182 +414,11 @@
 						},
 						"personName": "Nome Cognome",
 						"personRole": "Ruolo"
-					},
-					{
-						"personImage": {
-							"src": "/assets/img/team/team-1.jpg",
-							"class": "img-fluid",
-							"alt": "",
-							"title": null,
-							"data-simply-src": null
-						},
-						"twitterLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-twitter-x\"></i>",
-							"name": null
-						},
-						"facebookLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-facebook\"></i>",
-							"name": null
-						},
-						"instagramLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-instagram\"></i>",
-							"name": null
-						},
-						"linkedinLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-linkedin\"></i>",
-							"name": null
-						},
-						"personName": "Nome Cognome",
-						"personRole": "Ruolo"
-					},
-					{
-						"personImage": {
-							"src": "/assets/img/team/team-1.jpg",
-							"class": "img-fluid",
-							"alt": "",
-							"title": null,
-							"data-simply-src": null
-						},
-						"twitterLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-twitter-x\"></i>",
-							"name": null
-						},
-						"facebookLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-facebook\"></i>",
-							"name": null
-						},
-						"instagramLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-instagram\"></i>",
-							"name": null
-						},
-						"linkedinLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-linkedin\"></i>",
-							"name": null
-						},
-						"personName": "Nome Cognome",
-						"personRole": "Ruolo"
-					},
-					{
-						"personImage": {
-							"src": "/assets/img/team/team-1.jpg",
-							"class": "img-fluid",
-							"alt": "",
-							"title": null,
-							"data-simply-src": null
-						},
-						"twitterLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-twitter-x\"></i>",
-							"name": null
-						},
-						"facebookLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-facebook\"></i>",
-							"name": null
-						},
-						"instagramLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-instagram\"></i>",
-							"name": null
-						},
-						"linkedinLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-linkedin\"></i>",
-							"name": null
-						},
-						"personName": "Nome Cognome",
-						"personRole": "Ruolo"
-					},
-					{
-						"personImage": {
-							"src": "/assets/img/team/team-1.jpg",
-							"class": "img-fluid",
-							"alt": "",
-							"title": null,
-							"data-simply-src": null
-						},
-						"twitterLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-twitter-x\"></i>",
-							"name": null
-						},
-						"facebookLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-facebook\"></i>",
-							"name": null
-						},
-						"instagramLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-instagram\"></i>",
-							"name": null
-						},
-						"linkedinLink": {
-							"href": "#",
-							"class": null,
-							"alt": null,
-							"title": null,
-							"innerHTML": "<i class=\"bi bi-linkedin\"></i>",
-							"name": null
-						},
-						"personName": "Nome Cognome",
-						"personRole": "Ruolo"
 					}
 				],
 				"data-simply-template": "peopleGrid"
 			}
-		]
+		],
+		"data-simply-page-template": "blank-template.html"
 	}
 }
