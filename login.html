@@ -61,35 +61,35 @@
   </main>
 </div>
 
-  <script>
-    document.getElementById('login-form').addEventListener('submit', function(event) {
-      event.preventDefault();
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-      const errorMessage = document.getElementById('error-message');
+<script>
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const errorMessage = document.getElementById('error-message');
 
-      fetch('/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      })
-      .then(response => {
-        if (response.ok) {
-          window.location.href = '/index.html';
-        } else {
-          errorMessage.textContent = 'Credenziali non valide. Riprova.';
-          errorMessage.style.display = 'block';
-        }
-      })
-      .catch(error => {
-        console.error('Errore di rete:', error);
-        errorMessage.textContent = 'Errore di connessione con il server.';
+    fetch('/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+    .then(response => {
+      if (response.ok) {
+        window.location.href = '/index.html';
+      } else {
+        errorMessage.textContent = 'Credenziali non valide. Riprova.';
         errorMessage.style.display = 'block';
-      });
+      }
+    })
+    .catch(error => {
+      console.error('Errore di rete:', error);
+      errorMessage.textContent = 'Errore di connessione con il server.';
+      errorMessage.style.display = 'block';
     });
-  </script>
+  });
+</script>
 
 </body>
 </html>
