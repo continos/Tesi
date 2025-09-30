@@ -3379,14 +3379,14 @@
 						// 1. Estrai il percorso pulito dall'URL ricevuto
 						let newPagePath = new URL(url, window.location.origin).pathname;
 						const repoName = '/' + editor.storage.repoName; // Ottiene '/Tesi'
-						/* 2. Assicura che il percorso inizi con /<repoName>/
+						// 2. Assicura che il percorso inizi con /<repoName>/
 						if (!newPagePath.startsWith(repoName + '/')) {
 							if (newPagePath.startsWith('/')) {
 								newPagePath = repoName + newPagePath;
 							} else {
 								newPagePath = repoName + '/' + newPagePath;
 							}
-						}*/
+						}
 
 						// 3. Aggiungi .html se non presente
 						if (newPagePath.endsWith('/')) {
