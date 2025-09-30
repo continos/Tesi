@@ -12,7 +12,7 @@
 				"title": "Artificial Intelligence & Big Data",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
 				"link": {
-					"href": "/Tesi/research/artificial-intelligence-big-data.html"
+					"href": "/research/artificial-intelligence-big-data.html"
 				}
 			},
 			{
@@ -26,7 +26,7 @@
 				"title": "Distributed Computing & Complex Networks",
 				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
 				"link": {
-					"href": "/Tesi/research/distributed-computing-complex-networks.html"
+					"href": "/research/distributed-computing-complex-networks.html"
 				}
 			},
 			{
@@ -64,17 +64,17 @@
 		},
 		"footerLoginLink": {
 			"innerHTML": "Accedi",
-			"href": "/Tesi/login.html"
+			"href": "/login.html"
 		},
 		"logo": {
-			"src": "/Tesi/assets/img/logoTv.png",
+			"src": "/assets/img/logoTv.png",
 			"alt": "Informatica - Universit\u00e0 di Roma Tor Vergata"
 		},
 		"header": [
 			{
 				"item": {
 					"innerHTML": "Home",
-					"href": "/Tesi/index.html"
+					"href": "/index.html"
 				},
 				"data-simply-template": "item"
 			},
@@ -84,14 +84,14 @@
 					{
 						"item": {
 							"innerHTML": "Artificial Intelligence & Big Data",
-							"href": "/Tesi/research/artificial-intelligence-big-data.html"
+							"href": "/research/artificial-intelligence-big-data.html"
 						},
 						"data-simply-template": "item"
 					},
 					{
 						"item": {
 							"innerHTML": "Distributed Computing & Complex Networks",
-							"href": "/Tesi/research/distributed-computing-complex-networks.html"
+							"href": "/research/distributed-computing-complex-networks.html"
 						},
 						"data-simply-template": "item"
 					}
@@ -101,7 +101,7 @@
 			{
 				"item": {
 					"innerHTML": "Publications",
-					"href": "/Tesi/publications.html"
+					"href": "/publications.html"
 				},
 				"data-simply-template": "item"
 			},
@@ -128,14 +128,14 @@
 			{
 				"item": {
 					"innerHTML": "People",
-					"href": "/Tesi/people.html"
+					"href": "/people.html"
 				},
 				"data-simply-template": "item"
 			},
 			{
 				"item": {
 					"innerHTML": "News",
-					"href": "/Tesi/blog-e-news.html"
+					"href": "/blog-e-news.html"
 				},
 				"data-simply-template": "item"
 			},
@@ -241,7 +241,7 @@
 				"people": [
 					{
 						"personImage": {
-							"src": "/Tesi/assets/img/team/team-1.jpg",
+							"src": "/assets/img/team/team-1.jpg",
 							"class": "img-fluid",
 							"alt": "",
 							"title": null,
@@ -284,7 +284,7 @@
 					},
 					{
 						"personImage": {
-							"src": "/Tesi/assets/img/team/team-1.jpg",
+							"src": "/assets/img/team/team-1.jpg",
 							"class": "img-fluid",
 							"alt": "",
 							"title": null,
@@ -327,7 +327,7 @@
 					},
 					{
 						"personImage": {
-							"src": "/Tesi/assets/img/team/team-1.jpg",
+							"src": "/assets/img/team/team-1.jpg",
 							"class": "img-fluid",
 							"alt": "",
 							"title": null,
@@ -370,7 +370,7 @@
 					},
 					{
 						"personImage": {
-							"src": "/Tesi/assets/img/team/team-1.jpg",
+							"src": "/assets/img/team/team-1.jpg",
 							"class": "img-fluid",
 							"alt": "",
 							"title": null,
