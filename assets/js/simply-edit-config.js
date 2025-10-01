@@ -2,7 +2,7 @@
  * Configurazione Globale per SimplyEdit
  */
 
- /* --- GESTIONE AUTENTICAZIONE ---
+// --- GESTIONE AUTENTICAZIONE ---
 document.addEventListener('DOMContentLoaded', function() {
   const editModeButton = document.getElementById('edit-mode-button');
 
@@ -89,7 +89,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     if(icon) defaultExitButton.appendChild(icon);
     defaultExitButton.appendChild(document.createTextNode(' Exit Edit'));
   }
-})*/
+})
 
 // 1. Definizione delle impostazioni globali (es. template di pagina)
 var customSettings = {
