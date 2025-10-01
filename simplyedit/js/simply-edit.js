@@ -3526,7 +3526,7 @@
 							return;
 						}
 						if (data) {
-							// 1. Crea l'elemento HTML per il dialog
+							/* 1. Crea l'elemento HTML per il dialog
 							const dialog = document.createElement('section');
 							dialog.id = 'deploy-status-dialog';
 							dialog.className = 'simply-dialog simply-modal';
@@ -3544,17 +3544,17 @@
 
 							// 2. Aggiungi il dialog al contenitore di SimplyEdit e aprilo
 							editor.toolbarsContainer.appendChild(dialog);
-							editor.plugins.dialog.open(dialog);
-
+							editor.plugins.dialog.open(dialog);*/
 							
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
-									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
+									/*dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
-									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
+									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';*/
+									alert('Errore durante la scrittura della pagina su GitHub: ' + (writeErr.error || 'sconosciuto'));
 									return;
 								}
-								// La scrittura è andata a buon fine, ora inizia il polling dell'URL
+								/* La scrittura è andata a buon fine, ora inizia il polling dell'URL
 								const finalUrl = new URL(fullPath, window.location.origin).href;
 								setTimeout(function pollPage() {
 									const bodyEl = dialog.querySelector('.simply-dialog-body');
@@ -3581,8 +3581,10 @@
 											bodyEl.innerHTML += ".";
 											setTimeout(pollPage, 10000);
 										});
-								}, 15000); // Inizia il primo controllo dopo 15 secondi
-							});
+								}, 15000); // Inizia il primo controllo dopo 15 secondi*/
+								alert('Pagina creata con successo! La pagina verrà ricaricata.');
+								window.location.reload();
+							});							
 						}
 					});
 				},
