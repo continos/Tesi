@@ -3175,7 +3175,9 @@
 							}						
 							this.github = new Github({
 								token: data.token,
-								auth: "oauth"
+								auth: "oauth",
+								// si forza l'endpoint corretto dell'API
+								endpoint: "https://api.github.com"
 							});
 							this.repo = this.github.getRepo(this.repoUser, this.repoName);
 							// Chiamo la callback originale per continuare il caricamento dell'editor
