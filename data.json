@@ -410,6 +410,49 @@
 						},
 						"personName": "Nome Cognome",
 						"personRole": "Ruolo"
+					},
+					{
+						"personImage": {
+							"src": "assets/img/team/team-1.jpg",
+							"class": "img-fluid",
+							"alt": "",
+							"title": null,
+							"data-simply-src": null
+						},
+						"twitterLink": {
+							"href": "#",
+							"class": null,
+							"alt": null,
+							"title": null,
+							"innerHTML": "<i class=\"bi bi-twitter-x\"></i>",
+							"name": null
+						},
+						"facebookLink": {
+							"href": "#",
+							"class": null,
+							"alt": null,
+							"title": null,
+							"innerHTML": "<i class=\"bi bi-facebook\"></i>",
+							"name": null
+						},
+						"instagramLink": {
+							"href": "#",
+							"class": null,
+							"alt": null,
+							"title": null,
+							"innerHTML": "<i class=\"bi bi-instagram\"></i>",
+							"name": null
+						},
+						"linkedinLink": {
+							"href": "#",
+							"class": null,
+							"alt": null,
+							"title": null,
+							"innerHTML": "<i class=\"bi bi-linkedin\"></i>",
+							"name": null
+						},
+						"personName": "Nome Cognome",
+						"personRole": "Ruolo"
 					}
 				],
 				"data-simply-template": "peopleGrid"
