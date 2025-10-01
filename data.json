@@ -24,7 +24,7 @@
 					"title": null
 				},
 				"title": "Distributed Computing & Complex Networks",
-				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito.",
+				"description": "Descrizione dell'area di ricerca. Questo testo pu\u00f2 essere modificato in seguito. ggg",
 				"link": {
 					"href": "/research/distributed-computing-complex-networks.html"
 				}
@@ -63,8 +63,12 @@
 			"alt": "Universit\u00e0 di Roma Tor Vergata"
 		},
 		"footerLoginLink": {
-			"innerHTML": "Accedi",
-			"href": "/login.html"
+			"innerHTML": "Logout",
+			"href": "#",
+			"class": null,
+			"alt": null,
+			"title": null,
+			"name": null
 		},
 		"logo": {
 			"src": "/assets/img/logoTv.png",
