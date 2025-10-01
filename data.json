@@ -463,40 +463,5 @@
 			}
 		],
 		"data-simply-page-template": "blank-template.html"
-	},
-	"/cartella1/file1.html": {
-		"topics": [],
-		"data-simply-page-template": "blank-template.html",
-		"pageTitle": "Nuova Pagina",
-		"sections": [
-			{
-				"backgroundImage": {
-					"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg",
-					"class": "page-title-bg",
-					"alt": "",
-					"title": null,
-					"data-simply-src": null
-				},
-				"mainHeading": "Titolo Principale",
-				"breadcrumb": "Sottotitolo",
-				"data-simply-template": "pageTitle"
-			},
-			{
-				"sectionTitle": "Titolo Sezione",
-				"data-simply-template": "sectionTitle"
-			},
-			{
-				"sectionTitle": "Titolo Sezione",
-				"data-simply-template": "sectionTitle"
-			},
-			{
-				"sectionTitle": "Titolo Sezione",
-				"data-simply-template": "sectionTitle"
-			},
-			{
-				"sectionTitle": "Titolo Sezione",
-				"data-simply-template": "sectionTitle"
-			}
-		]
 	}
 }
