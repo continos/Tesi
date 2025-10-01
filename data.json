@@ -463,8 +463,5 @@
 			}
 		],
 		"data-simply-page-template": "blank-template.html"
-	},
-	"/aule.html": {
-		"data-simply-page-template": "blank-template.html"
 	}
 }
