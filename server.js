@@ -71,6 +71,17 @@ app.get('/check-auth', (req, res) => {
   res.json({ isAuthenticated: !!req.session.isAuthenticated });
 });
 
+// Nuova rotta per fornire il PAT al client autenticato
+app.get('/api/get-pat', isAuthenticated, (req, res) => {
+  const pat = process.env.GITHUB_PAT;
+  if (pat) {
+    res.json({ token: pat });
+  } else {
+    res.status(500).json({ message: 'Variabile GITHUB_PAT non configurata sul server.' });
+  }
+});
+
+
 /* Rotta per l'API che elenca le pagine di ricerca
 app.get('/api/research-pages', (req, res) => {
   const researchDir = path.join(__dirname, 'research');
@@ -183,6 +194,13 @@ app.post('/login', (req, res) => {
   console.log('Richiesta di connessione da SimplyEdit ricevuta. Rispondo OK.');
   res.status(200).send('OK');
 });*/
+
+const { Octokit } = require("@octokit/rest");
+
+// Configurazione di Octokit: userà il PAT dalla variabile d'ambiente
+const octokit = new Octokit({
+  auth: process.env.GITHUB_PAT,
+});
 
 // Rotta per gestire il salvataggio del file data.json
 app.put('/data/data.json', isAuthenticated, (req, res) => {

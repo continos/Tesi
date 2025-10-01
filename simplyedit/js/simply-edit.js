@@ -1,3 +1,5 @@
+const { response } = require("express");
+
 /*
 	Simply edit the Web
 
@@ -3149,14 +3151,50 @@
 						return false;
 					}
 
-					if (!editor.storage.key) {
+					/*if (!editor.storage.key) {
 						editor.storage.key = localStorage.storageKey;
 					}
 					if (!editor.storage.key) {
 						editor.storage.key = prompt("Please enter your authentication key");
+					}*/
+
+					// Se abbiamo già un'istanza del repo, la connessione è già attiva. 
+					if (this.repo) {
+						if (typeof callback === "function") callback();
+						return true;
 					}
 
-					if (editor.storage.validateKey(editor.storage.key)) {
+					fetch('/api/get-pat')
+						.then(response => {
+							if (!response.ok){
+								throw new Error('Autenticazione richiesta per accedere alla modalità di modifica.');
+							}
+							return response.json();
+						})
+						.then(data => {
+							if (!data.token) {
+								throw new Error('Token non ricevuto dal server.');
+							}						
+							this.github = new Github({
+								token: data.token,
+								auth: "oauth"
+							});
+							this.repo = this.github.getRepo(this.repoUser, this.repoName);
+							// Chiamo la callback originale per continuare il caricamento dell'editor
+							if (typeof callback === "function") {
+								callback();
+							}
+						})
+						.catch(error => {
+							alert(error.message);
+							// Blocca l'accesso alla modalità di modifica se non si può ottenere il token 
+							if (window.location.hash === '#simply-edit') {
+								history.replaceState(null, null, window.location.pathname + window.location.search);
+							}
+						});
+						return true; //connessione gestita in modo asincrono
+
+					/*if (editor.storage.validateKey(editor.storage.key)) {
 						if (!this.repo) {
 							localStorage.storageKey = editor.storage.key;
 							this.github = new Github({
@@ -3199,7 +3237,7 @@
 							history.replaceState(null, null, window.location.pathname + window.location.search);
 						}
 						return false;
-					}
+					}*/
 				},
 				disconnect : function(callback) {
 					delete this.repo;
