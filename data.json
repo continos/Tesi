@@ -63,8 +63,8 @@
 			"alt": "Universit\u00e0 di Roma Tor Vergata"
 		},
 		"footerLoginLink": {
-			"innerHTML": "Logout",
-			"href": "#",
+			"innerHTML": "Accedi",
+			"href": "/login.html",
 			"class": null,
 			"alt": null,
 			"title": null,
@@ -462,6 +462,9 @@
 				"data-simply-template": "peopleGrid"
 			}
 		],
+		"data-simply-page-template": "blank-template.html"
+	},
+	"/Tesi/aule.html": {
 		"data-simply-page-template": "blank-template.html"
 	}
 }
