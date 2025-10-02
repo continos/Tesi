@@ -1,7 +1,6 @@
 function initializePublicationSearch() {
   const searchForm = document.getElementById('search-form');
-  // Se il form non è ancora sulla pagina, riprova tra un attimo.
-  // Questo gestisce il caso in cui l'utente aggiunge il template dinamicamente.
+  // Se il form non è ancora sulla pagina, si riprova tra un attimo.
   if (!searchForm) {
     setTimeout(initializePublicationSearch, 200);
     return;
@@ -33,15 +32,15 @@ function initializePublicationSearch() {
         throw new Error('La ricerca ha restituito un errore.');
       }
       //const publications = await response.json(); 
-      // Leggiamo la risposta come testo (HTML), non come JSON
+      // Si legge la risposta come testo (HTML), non come JSON
       const htmlString = await response.text();
 
-      // Usiamo DOMParser per analizzare la stringa HTML
+      // Si usa DOMParser per analizzare la stringa HTML
       const parser = new DOMParser();
       const doc = parser.parseFromString(htmlString, 'text/html');
 
       const publications = [];
-      // Eseguiamo lo scraping direttamente qui nel client
+      // Si esegue lo scraping direttamente qui nel client
       doc.querySelectorAll('#tableView_body table tbody tr').forEach(row => {
         const columns = row.querySelectorAll('td');
         if (columns.length < 5) return; // Salta le righe non valide
