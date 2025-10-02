@@ -4,7 +4,9 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title data-simply-field="pageTitle">Nuova Pagina</title>
+  <title data-simply-field="pageTitle">New Research Page - Informatica</title>
+  <meta name="description" content="">
+  <meta name="keywords" content="">
   <base href="/Tesi/">
 
   <!-- Favicons -->
@@ -44,10 +46,8 @@
             </template>
             <template data-simply-template="submenu">
               <li class="dropdown">
-                <a href="#">
-                  <span data-simply-field="item">Submenu</span> 
-                  <i class="bi bi-chevron-down toggle-dropdown"></i>
-                </a>
+                <a data-simply-field="item" href="#"><span>Submenu</span>
+                <i class="bi bi-chevron-down toggle-dropdown"></i></a>
                 <ul data-simply-list="submenu" data-simply-sortable>
                   <template data-simply-template="item">
                     <li><a data-simply-field="item">Item</a></li>
@@ -65,84 +65,92 @@
   </header>
 
   <main id="main" class="main">
-    <div class="sections" data-simply-list="sections" data-simply-sortable="true">
-      <!-- Page Title -->
-      <template data-simply-template="pageTitle" data-simply-template-icon="fa-header">
-        <div class="page-title dark-background" >
-          <img class="page-title-bg" data-simply-field="backgroundImage" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg" alt="">
-          <div class="container page-title-content">
-            <h1 data-simply-field="mainHeading">Titolo Principale</h1>
-            <nav class="breadcrumbs">
-              <ol>
-                <li><a href="index.html">Home</a></li>
-                <li class="current" data-simply-field="breadcrumb">Sottotitolo</li>
-              </ol>
-            </nav>
-          </div>
-        </div>
-      </template>
-      <!-- Row: Image Left, Text Right -->
-      <template data-simply-template="image-left">
-        <div class="row align-items-center gy-4 mb-5">
-          <div class="col-lg-6" data-aos="fade-up">
-            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
-          </div>
-          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
-            <h3 data-simply-field="title">Research Area Title</h3>
-            <p data-simply-field="description">Description of the research area.</p>
-            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
-          </div>
-        </div>
-      </template>
-      <!-- Row: Text Left, Image Right -->
-      <template data-simply-template="image-right">
-        <div class="row align-items-center gy-4 mb-5">
-          <div class="col-lg-6 order-lg-2" data-aos="fade-up">
-            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
-          </div>
-          <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
-            <h3 data-simply-field="title">Research Area Title</h3>
-            <p data-simply-field="description">Description of the research area.</p>
-            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
-          </div>
-        </div>
-      </template>
+
+    <!-- Page Title -->
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url(https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg);">
+      <div class="container">
+        <h1 data-simply-field="mainHeading">New Research Page</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current" data-simply-field="breadcrumb">New Research Page</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Topics Section -->
+    <section id="ai-topics" class="topics section">
       <!-- Section Title -->
-       <template data-simply-template="sectionTitle" data-simply-template-icon="fa-minus">
-        <div class="container section-title" data-aos="fade-up">
-          <h2 data-simply-field="sectionTitle">Titolo Sezione</h2>
-        </div>
-      </template>
-      <!-- People -->
-      <template data-simply-template="peopleGrid" data-simply-template-icon="fa-users">
-        <section id="team" class="team section">
-          <div class="container">
-            <!-- Questa è la lista che conterrà le singole card -->
-            <div class="row gy-4" data-simply-list="people" data-simply-sortable="true">
-              <template data-simply-template="person" data-simply-template-icon="fa-user-plus">
-                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up">
-                  <div class="team-member">
-                      <div class="member-img">
-                          <img data-simply-field="personImage" src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
-                          <div class="social">
-                              <a href="#" data-simply-field="twitterLink"><i class="bi bi-twitter-x"></i></a>
-                              <a href="#" data-simply-field="facebookLink"><i class="bi bi-facebook"></i></a>
-                              <a href="#" data-simply-field="instagramLink"><i class="bi bi-instagram"></i></a>
-                              <a href="#" data-simply-field="linkedinLink"><i class="bi bi-linkedin"></i></a>
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Topics</h2>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+        <div class="row gy-5">
+          <div class="col-lg-12" data-aos="fade-up">
+            <div data-simply-list="topics" data-simply-sortable class="accordion" id="topics-accordion-parent">
+              <template>
+                  <div class="accordion-item">
+                      <h4 class="accordion-header">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse">
+                              <i class="bi bi-list"></i> 
+                              <span data-simply-field="title">Topic Title</span>
+                          </button>
+                      </h4>
+                      <div class="accordion-collapse collapse">
+                          <div class="accordion-body" data-simply-field="body">
+                              <p>Topic body content goes here.</p>
                           </div>
                       </div>
-                      <div class="member-info">
-                          <h4 data-simply-field="personName">Nome Cognome</h4>
-                          <span data-simply-field="personRole">Ruolo</span>
-                      </div>
                   </div>
-                </div>
               </template>
             </div>
+
           </div>
-        </section>
-      </template>
+        </div>
+      </div>
+    </section><!-- End Topics Section -->
+
+     <!-- News Section -->
+  <section id="ai-news" class="news section">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title text-center">
+        <p style="font-size:16px; letter-spacing:6px; color:#525252; font-family:'Fira Sans',
+  sans-serif; font-weight:600;">PHASELLUS EGET METUS</p>
+        <h2>All the latest news</h2>
+        <hr class="short-separator">
+      </div>
+
+      <div class="text-center" data-simply-field="news-content">
+        <p>Qui verranno visualizzate le ultime notizie. Per ora, questo è un segnaposto.</p>
+        <a href="#" class="btn-topic-link">Vedi tutte le News</a>
+      </div>
+
     </div>
+  </section><!-- End News Section -->
+
+   <!-- Publications Section -->
+  <section id="ai-publications" class="publications section light-background">
+    <div class="container" data-aos="fade-up">
+
+      <div class="section-title text-center">
+         <p style="font-size:16px; letter-spacing:6px; color:#525252; font-family:'Fira Sans',
+  sans-serif; font-weight:600;" data-simply-field="publications-subtitle">New Research Page</p>
+        <h2>Publications</h2>
+        <hr class="short-separator">
+      </div>
+
+      <div class="text-center" data-simply-field="publications-content">
+        <p>Spiacente nessuna pubblicazione corrispondente ai criteri di ricerca.</p>
+        <a href="#" class="btn-topic-link">Vedi le Pubblicazioni</a>
+      </div>
+
+    </div>
+  </section><!-- End Publications Section -->
+
+
   </main>
 
   <footer id="footer" class="footer light-background">
@@ -197,6 +205,11 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
+  <!-- Pulsante per attivare Edit Mode -->
+  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode">
+    <i class="bi bi-pencil-square"></i>
+  </a>
+
   <!-- SimplyEdit -->
   <script src="assets/js/simply-edit-config.js"></script>
   <!-- Configurazione SimplyEdit per GitHub -->
@@ -208,9 +221,5 @@
     data-simply-repo-branch="gh-pages"
     data-simply-settings="customSettings"
   ></script>
-  <!-- Pulsante per attivare Edit Mode -->
-  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode">
-    <i class="bi bi-pencil-square"></i>
-  </a>
-</body>
+
 </html>
