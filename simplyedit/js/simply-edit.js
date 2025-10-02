@@ -3504,38 +3504,6 @@
 					});
 				},
 				saveTemplate : function(pageTemplate, callback) {
-					const newPagePath = editor.data.getDataPath(document); // Usa la funzione corretta per il path
-
-					console.log(`Richiesta di creazione pagina via server per: ${newPagePath} con template: ${pageTemplate}`);
-
-					fetch('/api/create-page', {
-					method: 'POST',
-					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ path: newPagePath, template: pageTemplate })
-					})
-					.then(response => {
-					if (!response.ok) {
-						throw new Error('Errore del server durante la creazione della pagina.');
-					}
-					return response.json();
-					})
-					.then(data => {
-					console.log('Risposta dal server:', data.message);
-
-					// Mostra un alert e poi esegue la callback di SimplyEdit,
-					// che gestirà il ricaricamento della pagina.
-					alert('Pagina creata con successo! La pagina verrà ora ricaricata.');
-					if (callback) {
-						callback();
-					} else {
-						window.location.reload();
-					}
-					})
-					.catch(error => {
-					console.error('Errore durante la chiamata a /api/create-page:', error);
-					alert('Impossibile creare la pagina dal template. Controlla la console del server.');
-					});
-					/*
 					// pageTemplate è il percorso del template scelto, es: "templates/blank-template.html"
       				// Il percorso della nuova pagina è l'URL corrente
 					
@@ -3563,7 +3531,7 @@
 							return;
 						}
 						if (data) {
-							/* 1. Crea l'elemento HTML per il dialog
+							// 1. Crea l'elemento HTML per il dialog
 							const dialog = document.createElement('section');
 							dialog.id = 'deploy-status-dialog';
 							dialog.className = 'simply-dialog simply-modal';
@@ -3581,17 +3549,17 @@
 
 							// 2. Aggiungi il dialog al contenitore di SimplyEdit e aprilo
 							editor.toolbarsContainer.appendChild(dialog);
-							editor.plugins.dialog.open(dialog);*/
-							/*
+							editor.plugins.dialog.open(dialog);
+							
 							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
 								if (writeErr) {
-									/*dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
+									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
-									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';*/
-									/*alert('Errore durante la scrittura della pagina su GitHub: ' + (writeErr.error || 'sconosciuto'));
+									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
+									alert('Errore durante la scrittura della pagina su GitHub: ' + (writeErr.error || 'sconosciuto'));
 									return;
 								}
-								/* La scrittura è andata a buon fine, ora inizia il polling dell'URL
+								// La scrittura è andata a buon fine, ora inizia il polling dell'URL
 								const finalUrl = new URL(fullPath, window.location.origin).href;
 								setTimeout(function pollPage() {
 									const bodyEl = dialog.querySelector('.simply-dialog-body');
@@ -3618,12 +3586,12 @@
 											bodyEl.innerHTML += ".";
 											setTimeout(pollPage, 10000);
 										});
-								}, 15000); // Inizia il primo controllo dopo 15 secondi*/
+								}, 15000); // Inizia il primo controllo dopo 15 secondi
 								/*alert('Pagina creata con successo! La pagina verrà ricaricata.');
-								window.location.reload();
+								window.location.reload();*/
 							});
 						}
-					});*/							
+					});						
 				},
 				list : function(url, callback) {
 					if (url.indexOf(editor.storage.dataEndpoint) === 0) {
