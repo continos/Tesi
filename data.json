@@ -455,45 +455,6 @@
 	"/cartella2/file2.html": {
 		"data-simply-page-template": "research-template.html",
 		"pageTitle": "Nuova Pagina",
-		"sections": [
-			{
-				"image": {
-					"src": "https://via.placeholder.com/800x600",
-					"class": "img-fluid",
-					"alt": "Research Area Image",
-					"title": null
-				},
-				"title": "Research Area Title",
-				"description": "Description of the research area.",
-				"link": {
-					"href": "#",
-					"class": "readmore",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<span>Read More</span><i class=\"bi bi-arrow-right\"></i>",
-					"name": null
-				},
-				"data-simply-template": "image-left"
-			},
-			{
-				"image": {
-					"src": "https://via.placeholder.com/800x600",
-					"class": "img-fluid",
-					"alt": "Research Area Image",
-					"title": null
-				},
-				"title": "Research Area Title",
-				"description": "Description of the research area.",
-				"link": {
-					"href": "#",
-					"class": "readmore",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<span>Read More</span><i class=\"bi bi-arrow-right\"></i>",
-					"name": null
-				},
-				"data-simply-template": "image-right"
-			}
-		]
+		"sections": []
 	}
 }
