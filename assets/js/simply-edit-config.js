@@ -100,7 +100,7 @@ var customSettings = {
     ]
   }
 };
-
+/*
 document.addEventListener('simply-storage-init', function() {
   if (!window.editor || editor.storage.getType() !== 'customGithub') {
     return; // Eseguito solo se lo storage è customGithub
@@ -144,7 +144,7 @@ document.addEventListener('simply-storage-init', function() {
       alert('Impossibile creare la pagina dal template. Controlla la console del server.');
     });
   };
-});
+});*/
 
 /*
 // 2. Estensione delle funzionalità di SimplyEdit (es. creazione pagine da template)
