@@ -475,5 +475,8 @@
 	},
 	"/prova3.html": {
 		"data-simply-page-template": "blank-template.html"
+	},
+	"/prova4.html": {
+		"data-simply-page-template": "blank-template.html"
 	}
 }
