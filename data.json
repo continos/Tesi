@@ -451,5 +451,8 @@
 				"data-simply-template": "sectionTitle"
 			}
 		]
+	},
+	"/cartella2/file2.html": {
+		"data-simply-page-template": "blank-template.html"
 	}
 }
