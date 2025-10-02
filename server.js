@@ -1,9 +1,10 @@
 const express = require('express');
-const fs = require('fs');
+const fs = require('fs').promises; // Usa la versione basata su Promise di fs
 const path = require('path');
 const { exec } = require('child_process');
 const cheerio = require('cheerio');
 const session = require('express-session');
+const { Octokit } = require("@octokit/rest");
 
 const app = express();
 const port = 3000;
@@ -78,6 +79,76 @@ app.get('/api/get-pat', isAuthenticated, (req, res) => {
     res.json({ token: pat });
   } else {
     res.status(500).json({ message: 'Variabile GITHUB_PAT non configurata sul server.' });
+  }
+});
+
+// API per creare una nuova pagina atomicamente
+app.post('/api/create-page', isAuthenticated, async (req, res) => {
+  const { path: newPagePath, template: templateName } = req.body;
+  const owner = 'continos'; 
+  const repo = 'Tesi';    
+  const branch = 'gh-pages';
+
+  if (!newPagePath || !templateName) {
+    return res.status(400).json({ message: 'Percorso della pagina o nome del template mancante.' });
+  }
+
+  try {
+    console.log(`Inizio creazione pagina: ${newPagePath} da template: ${templateName}`);
+
+    // 1. Inizializza Octokit con il PAT
+    const octokit = new Octokit({ auth: process.env.GITHUB_PAT });
+
+    // 2. Leggi il contenuto del template dal filesystem locale del server
+    const templateFullPath = path.join(__dirname, 'templates', templateName);
+    const templateContent = await fs.readFile(templateFullPath, 'utf8');
+
+    // 3. Crea il nuovo file HTML nel repository GitHub
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path: newPagePath.startsWith('/') ? newPagePath.substring(1) : newPagePath,
+      message: `feat: Create page ${newPagePath} from template`,
+      content: Buffer.from(templateContent).toString('base64'),
+      branch,
+    });
+    console.log(`File ${newPagePath} creato con successo nel repository.`);
+
+    // 4. Aggiorna data.json
+    // 4a. Ottieni il contenuto e l'hash (sha) del data.json corrente
+    const { data: currentDataFile } = await octokit.repos.getContent({
+      owner,
+      repo,
+      path: 'data.json',
+      branch,
+    });
+    const currentDataContent = Buffer.from(currentDataFile.content, 'base64').toString('utf8');
+    const data = JSON.parse(currentDataContent);
+
+    // 4b. Aggiungi la nuova voce per la pagina
+    data[newPagePath] = {
+      "data-simply-page-template": templateName
+    };
+
+    // 4c. Scrivi il file data.json aggiornato nel repository
+    const updatedDataContent = JSON.stringify(data, null, 2);
+    await octokit.repos.createOrUpdateFileContents({
+      owner,
+      repo,
+      path: 'data.json',
+      message: `chore: Update data.json for new page ${newPagePath}`,
+      content: Buffer.from(updatedDataContent).toString('base64'),
+      sha: currentDataFile.sha, // Fornisci l'hash del file che stai aggiornando
+      branch,
+    });
+    console.log('File data.json aggiornato con successo nel repository.');
+
+    // 5. Invia la risposta di successo
+    res.status(200).json({ message: `Pagina ${newPagePath} creata e configurata con successo.` });
+
+  } catch (error) {
+    console.error('Errore durante la creazione della pagina via API GitHub:', error);
+    res.status(500).json({ message: 'Errore interno del server durante la creazione della pagina.' });
   }
 });
 
@@ -195,12 +266,12 @@ app.post('/login', (req, res) => {
   res.status(200).send('OK');
 });*/
 
-const { Octokit } = require("@octokit/rest");
+/*const { Octokit } = require("@octokit/rest");
 
 // Configurazione di Octokit: userà il PAT dalla variabile d'ambiente
 const octokit = new Octokit({
   auth: process.env.GITHUB_PAT,
-});
+});*/
 
 // Rotta per gestire il salvataggio del file data.json
 app.put('/data/data.json', isAuthenticated, (req, res) => {
