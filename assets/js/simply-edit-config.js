@@ -100,6 +100,52 @@ var customSettings = {
     ]
   }
 };
+
+document.addEventListener('simply-storage-init', function() {
+  if (!window.editor || editor.storage.getType() !== 'customGithub') {
+    return; // Eseguito solo se lo storage è customGithub
+  }
+
+  console.log("Applico override per saveTemplate su storage customGithub.");
+
+  // NON si tocca page.save, il suo comportamento di redirect è corretto.
+
+  // Si sovrascrive SOLO saveTemplate.
+  editor.storage.saveTemplate = function(templateName, callback) {
+    const newPagePath = editor.data.getDataPath(document); // Usa la funzione corretta per il path
+
+    console.log(`Richiesta di creazione pagina via server per: ${newPagePath} con template: ${templateName}`);
+
+    fetch('/api/create-page', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ path: newPagePath, template: templateName })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Errore del server durante la creazione della pagina.');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Risposta dal server:', data.message);
+
+      // Mostra un alert e poi esegue la callback di SimplyEdit,
+      // che gestirà il ricaricamento della pagina.
+      alert('Pagina creata con successo! La pagina verrà ora ricaricata.');
+      if (callback) {
+        callback();
+      } else {
+        window.location.reload();
+      }
+    })
+    .catch(error => {
+      console.error('Errore durante la chiamata a /api/create-page:', error);
+      alert('Impossibile creare la pagina dal template. Controlla la console del server.');
+    });
+  };
+});
+
 /*
 // 2. Estensione delle funzionalità di SimplyEdit (es. creazione pagine da template)
 document.addEventListener('simply-storage-init', function() {
