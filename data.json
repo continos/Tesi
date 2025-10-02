@@ -456,5 +456,8 @@
 		"data-simply-page-template": "research-template.html",
 		"pageTitle": "Nuova Pagina",
 		"sections": []
+	},
+	"/file1.html": {
+		"data-simply-page-template": "blank-template.html"
 	}
 }
