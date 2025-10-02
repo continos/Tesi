@@ -3506,12 +3506,12 @@
 				saveTemplate : function(pageTemplate, callback) {
 					const newPagePath = editor.data.getDataPath(document); // Usa la funzione corretta per il path
 
-					console.log(`Richiesta di creazione pagina via server per: ${newPagePath} con template: ${templateName}`);
+					console.log(`Richiesta di creazione pagina via server per: ${newPagePath} con template: ${pageTemplate}`);
 
 					fetch('/api/create-page', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
-					body: JSON.stringify({ path: newPagePath, template: templateName })
+					body: JSON.stringify({ path: newPagePath, template: pageTemplate })
 					})
 					.then(response => {
 					if (!response.ok) {
