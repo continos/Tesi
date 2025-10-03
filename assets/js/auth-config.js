@@ -53,19 +53,20 @@ window.addEventListener('load', async () => {
 });
 
 // --- FUNZIONE PER AGGIORNARE L'INTERFACCIA UTENTE ---
-const updateUI = () => {
+const updateUI = async () => {
+  const isAuth = await isAuthenticated();
   const userRole = localStorage.getItem('userRole');
   const editModeButton = document.getElementById('edit-mode-button');
   const authLink = document.querySelector('#footer .footer-links a');
 
-  // Mostra il pulsante di modifica solo se l'utente è un amministratore
+  // La visibilità del pulsante di modifica dipende dal RUOLO (autorizzazione)
   if (editModeButton) {
     editModeButton.style.display = (userRole === 'administrator') ? 'flex' : 'none';
   }
 
-  // Aggiorna il link di Accedi/Logout nel footer
+  // Il link Accedi/Logout dipende dallo STATO DI LOGIN (autenticazione)
   if (authLink) {
-    if (userRole && userRole !== 'guest') {
+    if (isAuth) {
       authLink.textContent = 'Logout';
       authLink.href = '#';
       authLink.onclick = (e) => {
