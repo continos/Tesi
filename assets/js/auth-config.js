@@ -104,21 +104,21 @@ const checkUserRole = async () => {
     }
     const roles = await response.json();
 
-    // L'username di GitHub è nel campo 'nickname' del profilo Auth0
-    const githubUsername = user.nickname;
+    // L'identificativo univoco dell'utente è nel campo 'sub'
+    const userId = user.sub;
     let userRole = 'guest'; // Ruolo di default
 
-    if (roles.administrators.includes(githubUsername)) {
+    if (roles.administrators.includes(userId)) {
       userRole = 'administrator';
-    } else if (roles.professors.includes(githubUsername)) {
+    } else if (roles.professors.includes(userId)) {
       userRole = 'professor';
     }
 
     // Salva ruolo e nome utente nel localStorage per un accesso rapido
     localStorage.setItem('userRole', userRole);
-    localStorage.setItem('userName', githubUsername);
+    localStorage.setItem('userName', user.name); // Usiamo il nome visualizzato per comodità
     
-    console.log(`Utente '${githubUsername}' ha effettuato l'accesso con ruolo: '${userRole}'`);
+    console.log(`Utente '${user.name}' (ID: ${userId}) ha effettuato l'accesso con ruolo: '${userRole}'`);
     return userRole;
 
   } catch (error) {
