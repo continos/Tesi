@@ -98,15 +98,25 @@ const checkUserRole = async () => {
 
   try {
     const user = await auth0Client.getUser();
-    const response = await fetch('/Tesi/auth/auth-roles.json');
+    // Aggiungo un parametro per forzare il ricaricamento del file JSON (cache-busting)
+    const response = await fetch('/Tesi/auth/auth-roles.json?t=' + new Date().getTime());
     if (!response.ok) {
       throw new Error('File dei ruoli non trovato.');
     }
     const roles = await response.json();
 
+    // --- LOG DI DEBUG ---
+    console.log("Dati caricati da auth-roles.json:", roles);
+    console.log("Lista amministratori:", roles.administrators);
+    // ------------------
+
     // L'identificativo univoco dell'utente è nel campo 'sub'
     const userId = user.sub;
     let userRole = 'guest'; // Ruolo di default
+
+    // --- LOG DI DEBUG ---
+    console.log(`ID utente da controllare: '${userId}' (tipo: ${typeof userId})`);
+    // ------------------
 
     if (roles.administrators.includes(userId)) {
       userRole = 'administrator';
