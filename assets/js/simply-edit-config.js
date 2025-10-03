@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-/* --- GESTIONE AUTENTICAZIONE CON AUTH0 --- */
+/* --- GESTIONE AUTENTICAZIONE CON AUTH0 --- 
 document.addEventListener('DOMContentLoaded', function() {
   const editModeButton = document.getElementById('edit-mode-button');
   const authLink = document.querySelector('#footer .footer-links a');
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Gestisce anche i cambi di hash manuali
   window.addEventListener('hashchange', handleEditMode);
-});
+});*/
 
 
 // --- PERSONALIZZAZIONE TOOLBAR DI SIMPLYEDIT ---

@@ -49,7 +49,41 @@ window.addEventListener('load', async () => {
     await checkUserRole(); // Controlla e salva il ruolo dopo il login
   }
   await checkUserRole(); // Controlla il ruolo anche al caricamento normale della pagina
+  updateUI(); // Aggiorna l'interfaccia
 });
+
+// --- FUNZIONE PER AGGIORNARE L'INTERFACCIA UTENTE ---
+const updateUI = () => {
+  const userRole = localStorage.getItem('userRole');
+  const editModeButton = document.getElementById('edit-mode-button');
+  const authLink = document.querySelector('#footer .footer-links a');
+
+  // Mostra il pulsante di modifica solo se l'utente è un amministratore
+  if (editModeButton) {
+    editModeButton.style.display = (userRole === 'administrator') ? 'flex' : 'none';
+  }
+
+  // Aggiorna il link di Accedi/Logout nel footer
+  if (authLink) {
+    if (userRole && userRole !== 'guest') {
+      authLink.textContent = 'Logout';
+      authLink.href = '#';
+      authLink.onclick = (e) => {
+        e.preventDefault();
+        if (confirm('Sei sicuro di voler effettuare il logout?')) {
+          logout();
+        }
+      };
+    } else {
+      authLink.textContent = 'Accedi';
+      authLink.href = '#';
+      authLink.onclick = (e) => {
+        e.preventDefault();
+        login();
+      };
+    }
+  }
+};
 
 // --- NUOVA FUNZIONE PER LA GESTIONE DEI RUOLI ---
 const checkUserRole = async () => {
