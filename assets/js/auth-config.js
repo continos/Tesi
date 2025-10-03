@@ -46,6 +46,50 @@ window.addEventListener('load', async () => {
   if (query.includes("code=") && query.includes("state=")) {
     await auth0Client.handleRedirectCallback();
     window.history.replaceState({}, document.title, "/Tesi/");
-    // Qui potresti voler ricaricare lo stato dell'interfaccia utente
+    await checkUserRole(); // Controlla e salva il ruolo dopo il login
   }
+  await checkUserRole(); // Controlla il ruolo anche al caricamento normale della pagina
 });
+
+// --- NUOVA FUNZIONE PER LA GESTIONE DEI RUOLI ---
+const checkUserRole = async () => {
+  const isAuthenticated = await auth0Client.isAuthenticated();
+  if (!isAuthenticated) {
+    // Se non è autenticato, pulisci i dati di ruolo e utente
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
+    return null;
+  }
+
+  try {
+    const user = await auth0Client.getUser();
+    const response = await fetch('/Tesi/auth/auth-roles.json');
+    if (!response.ok) {
+      throw new Error('File dei ruoli non trovato.');
+    }
+    const roles = await response.json();
+
+    // L'username di GitHub è nel campo 'nickname' del profilo Auth0
+    const githubUsername = user.nickname;
+    let userRole = 'guest'; // Ruolo di default
+
+    if (roles.administrators.includes(githubUsername)) {
+      userRole = 'administrator';
+    } else if (roles.professors.includes(githubUsername)) {
+      userRole = 'professor';
+    }
+
+    // Salva ruolo e nome utente nel localStorage per un accesso rapido
+    localStorage.setItem('userRole', userRole);
+    localStorage.setItem('userName', githubUsername);
+    
+    console.log(`Utente '${githubUsername}' ha effettuato l'accesso con ruolo: '${userRole}'`);
+    return userRole;
+
+  } catch (error) {
+    console.error("Errore nel controllo del ruolo:", error);
+    localStorage.setItem('userRole', 'guest'); // In caso di errore, assegna un ruolo sicuro
+    localStorage.setItem('userName', 'unknown');
+    return 'guest';
+  }
+};
