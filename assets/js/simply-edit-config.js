@@ -134,76 +134,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
- /* --- GESTIONE AUTENTICAZIONE ---
+/* --- GESTIONE AUTENTICAZIONE CON AUTH0 --- */
 document.addEventListener('DOMContentLoaded', function() {
   const editModeButton = document.getElementById('edit-mode-button');
+  const authLink = document.querySelector('#footer .footer-links a');
 
-  // Controlla se l'utente è autenticato
-  fetch('/check-auth')
-    .then(response => response.json())
-    .then(data => {
-      if (data.isAuthenticated) {
-        // Mostra il pulsante di modifica se l'utente è loggato
-        if(editModeButton) editModeButton.style.display = 'flex';
-      } else {
-        // Nascondi il pulsante se non è loggato
-        if(editModeButton) editModeButton.style.display = 'none';
-      }
-    });
+  // Funzione per aggiornare l'interfaccia utente in base allo stato di autenticazione
+  const updateUI = async () => {
+    const isAuth = await isAuthenticated();
 
-  // Controlla se l'utente sta cercando di entrare in edit mode manualmente
-  window.addEventListener('hashchange', function() {
-    if (window.location.hash === '#simply-edit') {
-      fetch('/check-auth')
-        .then(response => response.json())
-        .then(data => {
-          if (!data.isAuthenticated) {
-            // Se non è loggato, reindirizza alla pagina di login
-            window.location.href = '/login.html';
-          }
-        });
+    if (editModeButton) {
+      editModeButton.style.display = isAuth ? 'flex' : 'none';
     }
-  });
-  // Esegue il controllo anche al caricamento iniziale della pagina
-  if (window.location.hash === '#simply-edit') {
-      fetch('/check-auth')
-        .then(response => response.json())
-        .then(data => {
-          if (!data.isAuthenticated) {
-            window.location.href = '/login.html';
+
+    if (authLink) {
+      if (isAuth) {
+        authLink.textContent = 'Logout';
+        authLink.href = '#';
+        authLink.onclick = (e) => {
+          e.preventDefault();
+          if (confirm('Sei sicuro di voler terminare la sessione di modifica?')) {
+            logout();
           }
-        });
-  }
+        };
+      } else {
+        authLink.textContent = 'Accedi';
+        authLink.href = '#'; // L'azione di login ora è gestita dal click
+        authLink.onclick = (e) => {
+          e.preventDefault();
+          login();
+        };
+      }
+    }
+  };
+
+  // Funzione per gestire l'ingresso in modalità di modifica
+  const handleEditMode = async () => {
+    if (window.location.hash === '#simply-edit') {
+      const isAuth = await isAuthenticated();
+      if (!isAuth) {
+        await login();
+      }
+    }
+  };
+
+  // Al caricamento della finestra, configura Auth0 e aggiorna l'UI
+  window.addEventListener('load', async () => {
+    await configureClient();
+    await updateUI();
+    await handleEditMode();
+  });
+
+  // Gestisce anche i cambi di hash manuali
+  window.addEventListener('hashchange', handleEditMode);
 });
 
-document.addEventListener('simply-content-loaded', function() {
-  // Ora che SimplyEdit ha caricato il footer, possiamo modificarlo.
-  fetch('/check-auth')
-      .then(response => response.json())
-      .then(data => {
-          const authLink = document.querySelector('#footer .footer-links a');
-          if (authLink) {
-              if (data.isAuthenticated) {
-                  authLink.textContent = 'Logout';
-                  authLink.href = '#';
-                  authLink.onclick = function(e) {
-                    e.preventDefault();
-                    if (confirm('Sei sicuro di voler terminare la sessione di modifica?')) {
-                      fetch('/logout', { method: 'POST' })
-                      .then(() => {
-                          alert('Logout effettuato con successo.');
-                          window.location.href = window.location.pathname + window.location.search; // Naviga via dall'edit mode
-                      });
-                    }
-                  };
-              } else {
-                  authLink.textContent = 'Accedi';
-                  authLink.href = '/login.html';
-                  authLink.onclick = null;
-              }
-          }
-      });
-  });
 
 // --- PERSONALIZZAZIONE TOOLBAR DI SIMPLYEDIT ---
 document.addEventListener('simply-toolbars-loaded', function() {
@@ -213,15 +198,20 @@ document.addEventListener('simply-toolbars-loaded', function() {
   const defaultExitButton = document.querySelector('#simply-main-toolbar button[data-simply-action="simply-logout"]');
   if (defaultExitButton) {
     const icon = defaultExitButton.querySelector('i');
-    // Pulisci il contenuto del pulsante per sicurezza
+    // Pulizia contenuto pulsante per sicurezza
     while(defaultExitButton.firstChild) {
         defaultExitButton.removeChild(defaultExitButton.firstChild);
     }
-    // Ricomponi con icona e nuovo testo
+    // Si ricompone con icona e nuovo testo
     if(icon) defaultExitButton.appendChild(icon);
     defaultExitButton.appendChild(document.createTextNode(' Exit Edit'));
+    // Associa la nostra nuova funzione di logout di Auth0
+    defaultExitButton.onclick = (e) => {
+      e.preventDefault();
+      logout();
+    };
   }
-})*/
+});
 
 
 /*
