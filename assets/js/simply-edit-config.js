@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });*/
 
 
-// --- PERSONALIZZAZIONE TOOLBAR DI SIMPLYEDIT ---
+/* --- PERSONALIZZAZIONE TOOLBAR DI SIMPLYEDIT ---
 document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor) return;
 
@@ -211,7 +211,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       logout();
     };
   }
-});
+});*/
 
 
 /*
