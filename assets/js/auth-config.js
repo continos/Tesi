@@ -4,7 +4,7 @@ let auth0Client = null;
 
 // Funzione per configurare e inizializzare il client Auth0
 const configureClient = async () => {
-  auth0Client = await auth0Client.createAuth0Client({
+  auth0Client = await auth0.createAuth0Client({
     domain: "dev-v7o1tlrqzjq36zmy.us.auth0.com", 
     clientId: "8tkrmF8JOmtabmZi3roQvEkTlnCHKUl2", 
     authorizationParams: {
