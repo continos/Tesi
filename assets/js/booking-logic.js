@@ -34,21 +34,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const rdfData = await response.text();
 
+        // --- LOG DI DEBUG ---
+        console.log("Contenuto RDF caricato:", rdfData);
+        // ------------------
+
         // 2. Parsifica il testo RDF nello store
         $rdf.parse(rdfData, store, bookingsFile, 'application/rdf+xml');
 
         const bookings = store.each(undefined, RDF('type'), BOOK('Booking'));
+        
+        // --- LOG DI DEBUG ---
+        console.log(`Trovate ${bookings.length} prenotazioni.`);
+        // ------------------
+
         tableBody.innerHTML = ''; // Pulisci la tabella
 
         if (bookings.length === 0) {
           noBookingsMessage.style.display = 'block';
         } else {
           noBookingsMessage.style.display = 'none';
-          bookings.forEach(booking => {
+          bookings.forEach((booking, index) => {
             const classroom = store.any(booking, BOOK('classroom'));
             const date = store.any(booking, BOOK('date'));
             const timeslot = store.any(booking, BOOK('timeslot'));
             const professor = store.any(booking, BOOK('professor'));
+
+            // --- LOG DI DEBUG ---
+            console.log(`Dati prenotazione #${index + 1}:`, {
+                classroom: classroom?.value,
+                date: date?.value,
+                timeslot: timeslot?.value,
+                professor: professor?.value
+            });
+            // ------------------
 
             const row = tableBody.insertRow();
             row.innerHTML = `
