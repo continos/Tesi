@@ -2232,6 +2232,10 @@
 				if (
 					target.pathname
 				) {
+					if (typeof editor.storage.followLink === 'function'){
+						editor.storage.followLink(target,evt);
+						return;
+					}
 					var pathname = target.pathname;
 					var hostname = target.hostname;
 					var extraCheck = true;
@@ -2906,7 +2910,7 @@
 					return true;
 				},
 				validateKey : function(key) {
-					return true;
+				return true;
 				},
 				file : {
 					save : function(path, data, callback) {
@@ -3212,6 +3216,26 @@
 				validateKey : function(key) {
 					// Il token deve esistere e non essere vuoto
 					return key && key.trim() != '';
+				},
+				followLink : function(target, evt) {
+				// Funzione di navigazione personalizzata per lo storage GitHub
+				let normalizedPath = target.pathname;
+				if (window.location.hostname.includes('github.io') && this.repoName) {
+					const repoPrefix = '/' + this.repoName;
+					if (normalizedPath.startsWith(repoPrefix)) {
+					normalizedPath = normalizedPath.substring(repoPrefix.length);
+					if (!normalizedPath.startsWith('/')) {
+						normalizedPath = '/' + normalizedPath;
+					}
+					}
+				}
+		
+				if (typeof editor.currentData[normalizedPath] == "undefined") {
+					this.page.save(target.href);
+					evt.preventDefault();
+				} else {
+					document.location.href = target.href + "#simply-edit";
+				}
 				},
 				deletePages: function(itemsToDelete) {
 					return new Promise((resolve, reject) => {
