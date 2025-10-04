@@ -50,6 +50,9 @@ window.addEventListener('load', async () => {
   }
   await checkUserRole(); // Controlla il ruolo anche al caricamento normale della pagina
   updateUI(); // Aggiorna l'interfaccia
+
+  // Annuncia che l'autenticazione è pronta
+  window.dispatchEvent(new Event('auth-ready'));
 });
 
 // --- FUNZIONE PER AGGIORNARE L'INTERFACCIA UTENTE ---
@@ -83,6 +86,22 @@ const updateUI = async () => {
         login();
       };
     }
+  }
+
+  // Gestione visibilità link Prenotazione Aule
+  const bookingLink = document.getElementById('booking-link');
+  if (bookingLink) {
+      bookingLink.parentElement.style.display = (userRole === 'administrator' || userRole === 'professor') ? 'list-item' : 'none';
+  } else {
+      // Se il link non è ancora nel DOM, usa un observer per aspettarlo
+      const observer = new MutationObserver((mutations, obs) => {
+          const link = document.getElementById('booking-link');
+          if (link) {
+              link.parentElement.style.display = (userRole === 'administrator' || userRole === 'professor') ? 'list-item' : 'none';
+              obs.disconnect(); // Smetti di osservare una volta trovato
+          }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
   }
 };
 

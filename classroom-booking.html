@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Prenotazione Aule</title>
+  <base href="/Tesi/">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/mainInformatica.css" rel="stylesheet">
+</head>
+
+<body class="details-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top" data-simply-field="header" data-simply-path="/">
+  </header>
+
+  <main id="main" class="main">
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade" style="background-image: url(assets/img/portfolio-page-title-bg.jpg);">
+      <div class="container">
+        <h1>Prenotazione Aule</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Prenotazione Aule</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Sezione Contenuto -->
+    <section id="booking-section" class="booking-section section">
+      <div class="container">
+        
+        <!-- Contenuto visibile solo agli utenti autorizzati -->
+        <div id="booking-app" style="display: none;">
+          <div class="row">
+            <!-- Colonna per la visualizzazione delle prenotazioni -->
+            <div class="col-lg-8">
+              <h3>Prenotazioni Esistenti</h3>
+              <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Aula</th>
+                      <th scope="col">Data</th>
+                      <th scope="col">Fascia Oraria</th>
+                      <th scope="col">Professore</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bookings-table-body">
+                    <!-- Le righe verranno popolate dinamicamente -->
+                  </tbody>
+                </table>
+                <p id="no-bookings-message" style="display: none;">Nessuna prenotazione trovata.</p>
+              </div>
+            </div>
+
+            <!-- Colonna per il form di nuova prenotazione -->
+            <div class="col-lg-4">
+              <h3>Nuova Prenotazione</h3>
+              <form id="booking-form">
+                <div class="mb-3">
+                  <label for="classroom" class="form-label">Aula</label>
+                  <select class="form-select" id="classroom" required>
+                    <option value="Aula 1">Aula 1</option>
+                    <option value="Aula 2">Aula 2</option>
+                    <option value="Aula 3">Aula 3</option>
+                    <option value="Laboratorio 1">Laboratorio 1</option>
+                    <option value="Laboratorio 2">Laboratorio 2</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="booking-date" class="form-label">Data</label>
+                  <input type="date" class="form-control" id="booking-date" required>
+                </div>
+                <div class="mb-3">
+                  <label for="timeslot" class="form-label">Fascia Oraria</label>
+                  <select class="form-select" id="timeslot" required>
+                    <option value="09:00-11:00">09:00 - 11:00</option>
+                    <option value="11:00-13:00">11:00 - 13:00</option>
+                    <option value="14:00-16:00">14:00 - 16:00</option>
+                    <option value="16:00-18:00">16:00 - 18:00</option>
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Prenota</button>
+                <div id="booking-feedback" class="mt-3"></div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Messaggio per utenti non autorizzati -->
+        <div id="access-denied" style="display: none;">
+          <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Accesso Negato</h4>
+            <p>Non si dispone dei permessi necessari per visualizzare questa pagina. È necessario essere autenticati con un ruolo di "professore" o "amministratore".</p>
+            <hr>
+            <p class="mb-0">Se credi si tratti di un errore, contatta l'amministratore del sistema.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer light-background" data-simply-field="footer" data-simply-path="/">
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/imagesloaded/imagesloaded.pkgd.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+  <!-- RDFlib.js per la manipolazione di dati RDF -->
+  <script src="https://unpkg.com/rdflib/dist/rdflib.min.js"></script>
+
+  <!-- Logica specifica per la pagina di prenotazioni -->
+  <script src="assets/js/booking-logic.js"></script>
+  
+  <!-- Auth0 and SimplyEdit scripts -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="assets/js/auth-config.js"></script>
+  <script src="assets/js/simply-edit-config.js"></script>
+  <script
+    src="simplyedit/js/simply-edit.js"
+    data-simply-storage="customGithub"
+    data-simply-repo-user="continos"
+    data-simply-repo-name="Tesi"
+    data-simply-repo-branch="gh-pages"
+    data-simply-settings="customSettings"
+  ></script>
+
+</body>
+</html>
