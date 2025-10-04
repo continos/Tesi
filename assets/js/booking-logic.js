@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const RDF = $rdf.Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#");
     const BOOK = $rdf.Namespace("https://continos.github.io/Tesi/prenotazione#");
     const store = $rdf.graph();
-    const fetcher = new $rdf.Fetcher(store);
+    const fetcher = new $rdf.Fetcher(store, { fetch: window.fetch });
     const updater = new $rdf.UpdateManager(store);
     const bookingsFile =  `${window.location.origin}/Tesi/data/bookings.rdf`;;
 
@@ -27,8 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadBookings() {
       tableBody.innerHTML = '<tr><td colspan="4">Caricamento...</td></tr>';
       try {
-        await fetcher.load(bookingsFile, { force: true, 'Content-Type': 'application/rdf+xml' });
-        
+        // 1. Carica il file RDF manualmente usando il fetch del browser
+        const response = await fetch(bookingsFile, { cache: "no-store" }); // Aggiunto no-store per evitare cache
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const rdfData = await response.text();
+
+        // 2. Parsifica il testo RDF nello store
+        $rdf.parse(rdfData, store, bookingsFile, 'application/rdf+xml');
+
         const bookings = store.each(undefined, RDF('type'), BOOK('Booking'));
         tableBody.innerHTML = ''; // Pulisci la tabella
 
