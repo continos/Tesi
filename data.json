@@ -63,8 +63,12 @@
 			"alt": "Universit\u00c3\u00a0 di Roma Tor Vergata"
 		},
 		"footerLoginLink": {
-			"innerHTML": "Accedi",
-			"href": "/Tesi/login.html"
+			"innerHTML": "Logout",
+			"href": "#",
+			"class": null,
+			"alt": null,
+			"title": null,
+			"name": null
 		},
 		"logo": {
 			"src": "/Tesi/assets/img/logoTv.png",
