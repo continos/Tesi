@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const store = $rdf.graph();
     const fetcher = new $rdf.Fetcher(store);
     const updater = new $rdf.UpdateManager(store);
-    const bookingsFile = 'data/bookings.rdf';
+    const bookingsFile =  `${window.location.origin}/Tesi/data/bookings.rdf`;;
 
     // --- ELEMENTI DEL DOM ---
     const tableBody = document.getElementById('bookings-table-body');
