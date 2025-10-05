@@ -111,8 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       store.add(newTriples);
 
       // Serializza l'INTERO store aggiornato in formato RDF/XML
-      const serializer = new $rdf.Serializer(store);
-      const updatedRdfData = serializer.toXML(store);
+      const updatedRdfData = $rdf.serialize(undefined, store, bookingsFile, 'application/rdf+xml');
 
       // Salva il file su GitHub
       try {
