@@ -2,7 +2,8 @@
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
          xmlns:book="https://continos.github.io/Tesi/prenotazione#">
 
-  <rdf:Description rdf:about="https://continos.github.io/Tesi/prenotazione1">
+  <rdf:Description rdf:about="https://continos.github.io/Tesi/prenotazione/booking1">
+    <rdf:type rdf:resource="https://continos.github.io/Tesi/prenotazione#Booking"/>
     <book:classroom>Aula 1</book:classroom>
     <book:date>2025-10-20</book:date>
     <book:timeslot>14:00-16:00</book:timeslot>
