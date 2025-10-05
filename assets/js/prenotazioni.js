@@ -27,42 +27,49 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    /* Forza la connessione allo storage per creare l'oggetto .repo
+    // 1. Connettiti allo storage per autenticarti con GitHub e creare l'oggetto .repo
     editor.storage.connect(() => {
       console.log("Connessione allo storage GitHub stabilita.");
+      // 2. Solo dopo la connessione, carica i dati
       loadBookings();
-    });*/
+    });
 
-    const bookingsFile = '/Tesi/data/bookings.json';
     const tableBody = document.getElementById('bookings-table-body');
     const noBookingsMessage = document.getElementById('no-bookings-message');
     const bookingForm = document.getElementById('booking-form');
     const feedbackDiv = document.getElementById('booking-feedback');
 
     let allBookings = [];
-    loadBookings();
 
+    // 3. Usa editor.storage.repo.read() invece di fetch
     async function loadBookings() {
       tableBody.innerHTML = '<tr><td colspan="4">Caricamento...</td></tr>';
-      try {
-        const response = await fetch(bookingsFile + '?t=' + new Date().getTime(), { cache: "no-store" });
-        if (!response.ok) {
-          if (response.status === 404) {
-            allBookings = [];
+      editor.storage.repo.read(
+        editor.storage.repoBranch,
+        'data/bookings.json',
+        (err, data) => {
+          if (err) {
+            // Se il file non esiste (errore 404), lo trattiamo come un array vuoto
+            if (err.error === 404) {
+              console.log('File bookings.json non trovato, inizio con un array vuoto.');
+              allBookings = [];
+            } else {
+              console.error("Errore nel caricamento del file JSON da GitHub:", err);
+              tableBody.innerHTML = '<tr><td colspan="4" class="text-danger">Errore nel caricamento delle prenotazioni.</td></tr>';
+              return;
+            }
           } else {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            try {
+              allBookings = JSON.parse(data);
+            } catch (parseErr) {
+              console.error("Errore nel parsing del JSON:", parseErr);
+              tableBody.innerHTML = '<tr><td colspan="4" class="text-danger">Errore nel formato dei dati delle prenotazioni.</td></tr>';
+              return;
+            }
           }
-        } else {
-          const responseText = await response.text();
-          console.log("Testo grezzo ricevuto dalla fetch:", responseText); // DEBUG
-          allBookings = JSON.parse(responseText);
+          renderTable();
         }
-        console.log('Dati ricevuti e parsificati:', allBookings); // DEBUG
-        renderTable();
-      } catch (err) {
-        console.error("Errore nel caricamento del file JSON:", err);
-        tableBody.innerHTML = '<tr><td colspan="4" class="text-danger">Errore nel caricamento delle prenotazioni.</td></tr>';
-      }
+      );
     }
 
     function renderTable() {
@@ -99,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const updatedJsonData = JSON.stringify(allBookings, null, 2);
 
       try {
-        // Ora editor.storage.repo dovrebbe esistere
         editor.storage.repo.write(
           editor.storage.repoBranch,
           'data/bookings.json',
@@ -107,13 +113,12 @@ document.addEventListener('DOMContentLoaded', () => {
           `Aggiunta prenotazione aula da ${newBooking.professor}`,
           (err) => {
             if (err) {
-              // Se c'è un errore, lo gestiamo qui
               console.error("Errore durante la scrittura su GitHub:", err);
               feedbackDiv.textContent = 'Errore durante il salvataggio della prenotazione.';
               feedbackDiv.className = 'alert alert-danger';
-              allBookings.pop(); // Annulla l'aggiunta ottimistica
+              allBookings.pop();
               renderTable();
-              return; // Interrompi l'esecuzione
+              return;
             }
             feedbackDiv.textContent = 'Prenotazione salvata con successo!';
             feedbackDiv.className = 'alert alert-success';
