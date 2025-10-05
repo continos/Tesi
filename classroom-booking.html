@@ -35,7 +35,6 @@
   <header id="header" class="header d-flex align-items-center fixed-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
         <a href="index.html" class="logo d-flex align-items-center">
-          <!-- Uncomment the line below if you also wish to use an image logo -->
           <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"  data-simply-field="logo" data-simply-path="/"> 
         </a>
         <nav id="navmenu" class="navmenu">
@@ -66,7 +65,6 @@
   </header>
 
   <main id="main" class="main">
-    <!-- Page Title -->
     <div class="page-title" data-aos="fade" style="background-image: url(assets/img/portfolio-page-title-bg.jpg);">
       <div class="container">
         <h1>Prenotazione Aule</h1>
@@ -77,16 +75,13 @@
           </ol>
         </nav>
       </div>
-    </div><!-- End Page Title -->
+    </div>
 
-    <!-- Sezione Contenuto -->
     <section id="booking-section" class="booking-section section">
       <div class="container">
         
-        <!-- Contenuto visibile solo agli utenti autorizzati -->
         <div id="booking-app" style="display: none;">
           <div class="row">
-            <!-- Colonna per la visualizzazione delle prenotazioni -->
             <div class="col-lg-8">
               <h3>Prenotazioni Esistenti</h3>
               <div class="table-responsive">
@@ -100,14 +95,12 @@
                     </tr>
                   </thead>
                   <tbody id="bookings-table-body">
-                    <!-- Le righe verranno popolate dinamicamente -->
                   </tbody>
                 </table>
                 <p id="no-bookings-message" style="display: none;">Nessuna prenotazione trovata.</p>
               </div>
             </div>
 
-            <!-- Colonna per il form di nuova prenotazione -->
             <div class="col-lg-4">
               <h3>Nuova Prenotazione</h3>
               <form id="booking-form">
@@ -141,7 +134,6 @@
           </div>
         </div>
 
-        <!-- Messaggio per utenti non autorizzati -->
         <div id="access-denied" style="display: none;">
           <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">Accesso Negato</h4>
@@ -157,37 +149,6 @@
   </main>
 
   <footer id="footer" class="footer light-background">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row gy-4 justify-content-center">
-
-          <!-- Colonna 1: Logo Università -->
-          <div class="col-lg-4 col-md-6 footer-about text-center">
-            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
-              <img data-simply-field="footerLogo" data-simply-path="/" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
-            </a>
-          </div>
-
-          <!-- Colonna 2: Link Utili/Admin -->
-          <div class="col-lg-2 col-6 footer-links">
-            <h4>Area Riservata</h4>
-            <ul>
-              <li><a data-simply-field="footerLoginLink" data-simply-path="/" href="#">Accedi</a></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="container copyright text-center">
-      <p>
-        © <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span>
-      </p>
-      <div class="credits">
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
   </footer>
 
   <!-- Scroll Top -->
@@ -226,6 +187,24 @@
     data-simply-repo-branch="gh-pages"
     data-simply-settings="customSettings"
   ></script>
+
+  <!-- Script per il Controllo Accessi -->
+  <script>
+    window.addEventListener('auth-ready', () => {
+      const userRole = localStorage.getItem('userRole');
+      const bookingApp = document.getElementById('booking-app');
+      const accessDenied = document.getElementById('access-denied');
+
+      if (userRole === 'administrator' || userRole === 'professor') {
+        bookingApp.style.display = 'block';
+        accessDenied.style.display = 'none';
+      } else {
+        bookingApp.style.display = 'none';
+        accessDenied.style.display = 'block';
+      }
+    });
+  </script>
+
   <!-- Pulsante per attivare Edit Mode -->
   <a href="#" id="edit-mode-button" title="Attiva Edit Mode">
     <i class="bi bi-pencil-square"></i>
