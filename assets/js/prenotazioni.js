@@ -1,21 +1,46 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Attendi che l'autenticazione sia gestita prima di eseguire la logica di prenotazione
-  window.addEventListener('auth-ready', main);
+  let authIsReady = false;
+  let simplyIsReady = false;
+
+  function attemptToInitialize() {
+    if (authIsReady && simplyIsReady) {
+      main();
+    }
+  }
+
+  window.addEventListener('auth-ready', () => {
+    authIsReady = true;
+    console.log('Auth0 è pronto.');
+    attemptToInitialize();
+  });
+
+  document.addEventListener('simply-storage-init', () => {
+    simplyIsReady = true;
+    console.log('SimplyEdit Storage è pronto.');
+    attemptToInitialize();
+  });
 
   function main() {
+    console.log('Tutti i sistemi sono pronti. Avvio la logica di prenotazione.');
     const userRole = localStorage.getItem('userRole');
     if (userRole !== 'administrator' && userRole !== 'professor') {
-      return; // Non eseguire nulla se l'utente non ha i permessi
+      return;
     }
 
-    const bookingsFile = '/Tesi/data/bookings.json';
+    /* Forza la connessione allo storage per creare l'oggetto .repo
+    editor.storage.connect(() => {
+      console.log("Connessione allo storage GitHub stabilita.");
+      loadBookings();
+    });*/
 
+    const bookingsFile = '/Tesi/data/bookings.json';
     const tableBody = document.getElementById('bookings-table-body');
     const noBookingsMessage = document.getElementById('no-bookings-message');
     const bookingForm = document.getElementById('booking-form');
     const feedbackDiv = document.getElementById('booking-feedback');
 
-    let allBookings = []; // Cache locale per le prenotazioni
+    let allBookings = [];
+    loadBookings();
 
     async function loadBookings() {
       tableBody.innerHTML = '<tr><td colspan="4">Caricamento...</td></tr>';
@@ -71,14 +96,21 @@ document.addEventListener('DOMContentLoaded', () => {
       const updatedJsonData = JSON.stringify(allBookings, null, 2);
 
       try {
-        await editor.storage.repo.write(
+        // Ora editor.storage.repo dovrebbe esistere
+        editor.storage.repo.write(
           editor.storage.repoBranch,
           'data/bookings.json',
           updatedJsonData,
           `Aggiunta prenotazione aula da ${newBooking.professor}`,
           (err) => {
             if (err) {
-              throw new Error(err);
+              // Se c'è un errore, lo gestiamo qui
+              console.error("Errore durante la scrittura su GitHub:", err);
+              feedbackDiv.textContent = 'Errore durante il salvataggio della prenotazione.';
+              feedbackDiv.className = 'alert alert-danger';
+              allBookings.pop(); // Annulla l'aggiunta ottimistica
+              renderTable();
+              return; // Interrompi l'esecuzione
             }
             feedbackDiv.textContent = 'Prenotazione salvata con successo!';
             feedbackDiv.className = 'alert alert-success';
@@ -87,14 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         );
       } catch (error) {
-        console.error("Errore durante il salvataggio su GitHub:", error);
-        feedbackDiv.textContent = 'Errore durante il salvataggio della prenotazione.';
+        console.error("Errore imprevisto durante il salvataggio su GitHub:", error);
+        feedbackDiv.textContent = 'Errore imprevisto durante il salvataggio.';
         feedbackDiv.className = 'alert alert-danger';
         allBookings.pop();
         renderTable();
       }
     });
-
-    loadBookings();
   }
 });
