@@ -1,24 +1,20 @@
 document.addEventListener('DOMContentLoaded', () => {
   let authIsReady = false;
-  let simplyIsReady = false;
-
-  function attemptToInitialize() {
-    if (authIsReady && simplyIsReady) {
-      main();
-    }
-  }
 
   window.addEventListener('auth-ready', () => {
     authIsReady = true;
     console.log('Auth0 è pronto.');
-    attemptToInitialize();
+    waitForSimplyEdit();
   });
 
-  document.addEventListener('simply-storage-init', () => {
-    simplyIsReady = true;
-    console.log('SimplyEdit Storage è pronto.');
-    attemptToInitialize();
-  });
+  function waitForSimplyEdit() {
+    if (window.editor && window.editor.storage) {
+      console.log('SimplyEdit è pronto.');
+      main();
+    } else {
+      setTimeout(waitForSimplyEdit,100);
+    }
+  }
 
   function main() {
     console.log('Tutti i sistemi sono pronti. Avvio la logica di prenotazione.');
