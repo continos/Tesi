@@ -53,7 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
         } else {
-          allBookings = await response.json();
+          const responseText = await response.text();
+          console.log("Testo grezzo ricevuto dalla fetch:", responseText); // DEBUG
+          allBookings = JSON.parse(responseText);
         }
         console.log('Dati ricevuti e parsificati:', allBookings); // DEBUG
         renderTable();
