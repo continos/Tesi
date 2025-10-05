@@ -55,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           allBookings = await response.json();
         }
+        console.log('Dati ricevuti e parsificati:', allBookings); // DEBUG
         renderTable();
       } catch (err) {
         console.error("Errore nel caricamento del file JSON:", err);
