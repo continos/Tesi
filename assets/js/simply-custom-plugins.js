@@ -5,6 +5,33 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
   console.log('Toolbars loaded, adding custom "View HTML" plugin.');
 
+  // Funzione per ottenere l'HTML pulito della sezione <main>
+  const getCleanMainHtml = () => {
+    const mainElement = document.querySelector('main.main');
+    if (!mainElement) {
+      return '<!-- Elemento <main> non trovato -->';
+    }
+
+    const clone = mainElement.cloneNode(true);
+
+    // Rimuovi attributi di stato aggiunti da SimplyEdit all'interno del clone di <main>
+    clone.querySelectorAll('[data-simply-selectable], [data-simply-list-item], [contenteditable], [data-simply-stashed]').forEach(el => {
+      el.removeAttribute('data-simply-selectable');
+      el.removeAttribute('data-simply-list-item');
+      el.removeAttribute('contenteditable');
+      el.removeAttribute('data-simply-stashed');
+      el.removeAttribute('style'); // Rimuove stili inline aggiunti dall'editor
+    });
+    
+    // Rimuovi classi specifiche di SimplyEdit
+    clone.querySelectorAll('.simply-selected, .simply-empty').forEach(el => {
+        el.classList.remove('simply-selected', 'simply-empty');
+    });
+
+    // Restituisce l'HTML pulito dell'elemento <main>
+    return clone.innerHTML;
+  };
+
   // 1. Definisce l'azione che mostra la modale
   const viewHtmlAction = function() {
     // --- Crea la struttura della modale ---
@@ -38,7 +65,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
 
     const modalHeader = document.createElement('div');
-    modalHeader.innerHTML = '<h2 style="margin: 0; font-family: sans-serif;">HTML Sorgente della Pagina</h2>';
+    modalHeader.innerHTML = '<h2 style="margin: 0; font-family: sans-serif;">HTML Sorgente della Sezione &lt;main&gt;</h2>';
     
     const closeButton = document.createElement('button');
     closeButton.innerHTML = '&times;';
@@ -68,9 +95,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     const codeElement = document.createElement('code');
     
-    // Prende e "escapa" il contenuto HTML per mostrarlo come testo
-    const pageHtml = document.documentElement.outerHTML;
-    codeElement.textContent = pageHtml;
+    // Prende e pulisce l'HTML di <main>
+    codeElement.textContent = getCleanMainHtml();
 
     // --- Assembla la modale ---
     preElement.appendChild(codeElement);
@@ -100,11 +126,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
   if (mainToolbarUl) {
     const newButtonLi = document.createElement('li');
     newButtonLi.innerHTML = `
-      <button data-simply-action="custom-view-html" title="Visualizza HTML sorgente">
-        <i class="fa fa-code"></i> View HTML
+      <button data-simply-action="custom-view-html" title="Visualizza HTML sorgente di <main>">
+        <i class="fa fa-code"></i> View Main HTML
       </button>
     `;
-    // Lo aggiunge dopo il pulsante 'Save'
     const saveButtonLi = mainToolbarUl.querySelector('button[data-simply-action="simply-save"]').parentElement;
     if (saveButtonLi && saveButtonLi.nextSibling) {
         mainToolbarUl.insertBefore(newButtonLi, saveButtonLi.nextSibling);
