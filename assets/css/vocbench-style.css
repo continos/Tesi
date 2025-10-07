@@ -1,0 +1,95 @@
+/* Stili base per il body */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+.container-fluid {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+/* Header e Footer minimali */
+.vocbench-header, .vocbench-footer {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.vocbench-footer {
+  border-top: 1px solid #dee2e6;
+  border-bottom: none;
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9em;
+  color: #6c757d;
+}
+
+/* Layout a tre colonne */
+.vocbench-layout .row {
+  display: flex;
+}
+
+.vocbench-layout .left-column, 
+.vocbench-layout .right-column {
+  flex: 0 0 20%; /* Colonne laterali al 20% */
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+}
+
+.vocbench-layout .right-column {
+  border-right: none;
+  border-left: 1px solid #dee2e6;
+}
+
+.vocbench-layout .main-column {
+  flex: 1; /* La colonna centrale occupa lo spazio rimanente */
+  padding: 20px;
+}
+
+/* Stili per i menu laterali */
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu ul li a {
+  display: block;
+  padding: 8px 10px;
+  color: #007bff;
+  text-decoration: none;
+  border-radius: 4px;
+}
+
+.sidebar-menu ul li a:hover {
+  background-color: #e9ecef;
+  text-decoration: none;
+}
+
+/* Tipografia di base per il contenuto principale */
+.main-column h1, .main-column h2, .main-column h3 {
+  color: #343a40;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.main-column p {
+  margin-bottom: 1rem;
+}
+
+.main-column a {
+  color: #007bff;
+}
+
+.main-column a:hover {
+  text-decoration: underline;
+}
