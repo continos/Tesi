@@ -44,8 +44,10 @@
             </template>
             <template data-simply-template="submenu">
               <li class="dropdown">
-                <a data-simply-field="item" href="#"><span>Submenu</span> 
-                <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <a href="#">
+                  <span data-simply-field="item">Submenu</span> 
+                  <i class="bi bi-chevron-down toggle-dropdown"></i>
+                </a>
                 <ul data-simply-list="submenu" data-simply-sortable>
                   <template data-simply-template="item">
                     <li><a data-simply-field="item">Item</a></li>
@@ -76,6 +78,32 @@
                 <li class="current" data-simply-field="breadcrumb">Sottotitolo</li>
               </ol>
             </nav>
+          </div>
+        </div>
+      </template>
+      <!-- Row: Image Left, Text Right -->
+      <template data-simply-template="image-left">
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6" data-aos="fade-up">
+            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
+          </div>
+        </div>
+      </template>
+      <!-- Row: Text Left, Image Right -->
+      <template data-simply-template="image-right">
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6 order-lg-2" data-aos="fade-up">
+            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
           </div>
         </div>
       </template>
@@ -168,7 +196,8 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="assets/js/auth-config.js"></script>
   <!-- SimplyEdit -->
   <script src="assets/js/simply-edit-config.js"></script>
   <!-- Configurazione SimplyEdit per GitHub -->
