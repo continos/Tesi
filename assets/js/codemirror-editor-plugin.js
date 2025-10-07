@@ -4,15 +4,20 @@ document.addEventListener('simply-toolbars-loaded', function() {
   }
 
   console.log('Toolbars loaded, adding GitHub-aware HTML editor plugin.');
+  
+  let codeEditor = null; // Variabile per tenere traccia dell'editor
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
+      if (codeEditor) {
+          codeEditor.focus();
+          codeEditor.refresh();
+      }
       return;
     }
 
-    let codeEditor;
     const modalOverlay = document.createElement('div');
     modalOverlay.id = 'manual-editor-modal-overlay';
     Object.assign(modalOverlay.style, {
@@ -72,7 +77,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
             if (window.editor && editor.currentData) {
                 editor.data.apply(editor.currentData, document.body);
             }
-            alert('Anteprima applicata e dati sincronizzati.');
+            modalOverlay.style.display = 'none'; // chiude la modale dopo aver applicato l'anteprima
         } catch (e) {
             console.error("Errore durante l'applicazione dell'anteprima:", e);
             alert("Errore nell'HTML, impossibile applicare l'anteprima.");
@@ -85,9 +90,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
   };
 
   const saveHtmlAction = function() {
-    const modal = document.getElementById('manual-editor-modal-overlay');
-    if (!modal || !modal.codeEditorInstance) {
-      alert("Per salvare, apri prima l'editor HTML, applica un'anteprima se necessario, e poi clicca Commit Body.");
+    if (!codeEditor) {
+      alert("Per salvare, apri prima l'editor HTML, controlla applicando l'anteprima se necessario, e poi clicca Commit Body.");
       return;
     }
 
@@ -95,7 +99,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         return;
     }
 
-    const newBodyHtml = modal.codeEditorInstance.getValue();
+    const newBodyHtml = codeEditor.getValue();
     let filePath = window.location.pathname;
 
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -127,7 +131,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
       // --- NUOVA LOGICA DI POLLING ---
       const pollDeploy = () => {
-          const apiUrl = "https://api.github.com/repos/${repoUser}/${repoName}/deployments";
+          const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
           fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
             .then(res => res.json())
             .then(deployments => {
