@@ -3,9 +3,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
     return;
   }
 
-  console.log('Toolbars loaded, adding Body HTML editor plugin with Live Preview.');
+  console.log('Toolbars loaded, adding Toggleable Body HTML editor plugin.');
 
-  // Funzione Debounce per non chiamare l'update ad ogni tasto premuto
+  // Funzione Debounce
   function debounce(func, delay) {
     let timeout;
     return function(...args) {
@@ -15,9 +15,18 @@ document.addEventListener('simply-toolbars-loaded', function() {
   }
 
   const bodyEditorAction = function() {
+    const existingModal = document.getElementById('live-editor-modal-overlay');
+
+    // Se la modale esiste già ed è nascosta, la riapre e basta.
+    if (existingModal) {
+      existingModal.style.display = 'flex';
+      return;
+    }
+
+    // Se non esiste, crea la modale da zero.
     let codeEditor;
     const modalOverlay = document.createElement('div');
-    modalOverlay.id = 'live-editor-modal-overlay'; // ID univoco
+    modalOverlay.id = 'live-editor-modal-overlay';
     Object.assign(modalOverlay.style, {
       position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
       backgroundColor: 'rgba(0, 0, 0, 0.7)', zIndex: '100001', display: 'flex',
@@ -33,10 +42,11 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     modalContent.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a;">
-        <h2 style="margin: 0; font-family: sans-serif; color: #f8f8f2;">Editor HTML del &lt;body&gt; (con Anteprima Live)</h2>
+        <h2 style="margin: 0; font-family: sans-serif; color: #f8f8f2;">Editor HTML del &lt;body&gt;</h2>
         <div>
+          <button id="modal-restore-button" style="padding: 8px 15px; background-color: #ffb86c; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Ripristina</button>
           <button id="modal-save-body-button" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px; font-weight: bold;">Salva e Committa</button>
-          <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">&times; Annulla</button>
+          <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
         </div>
       </div>
       <textarea id="html-editor-textarea"></textarea>
@@ -51,40 +61,27 @@ document.addEventListener('simply-toolbars-loaded', function() {
     }
 
     codeEditor = CodeMirror.fromTextArea(textarea, {
-      lineNumbers: true,
-      mode: 'htmlmixed',
-      theme: 'dracula',
-      lineWrapping: true,
-      autofocus: true,
-      extraKeys: {"Ctrl-Space": "autocomplete"}
+      lineNumbers: true, mode: 'htmlmixed', theme: 'dracula',
+      lineWrapping: true, autofocus: true, extraKeys: {"Ctrl-Space": "autocomplete"}
     });
     codeEditor.setSize('100%', 'calc(100% - 50px)');
     setTimeout(() => codeEditor.refresh(), 1);
 
-    // --- LOGICA ANTEPRIMA LIVE ---
     const updatePreview = () => {
         try {
             const newBodyHtml = codeEditor.getValue();
-            
-            // Svuota il body attuale, ma preserva gli elementi essenziali (la modale e gli script)
             Array.from(document.body.children).forEach(child => {
                 if (child.id !== 'live-editor-modal-overlay' && child.tagName !== 'SCRIPT') {
                     child.remove();
                 }
             });
-
-            // Crea un body temporaneo per processare il nuovo HTML
             const tempBody = document.createElement('body');
             tempBody.innerHTML = newBodyHtml;
-
-            // Reinserisci i nuovi nodi nel body reale
             Array.from(tempBody.children).forEach(newNode => {
-                // Assicurati di non reinserire la modale o script dal codice nell'editor
                 if (newNode.id !== 'live-editor-modal-overlay' && newNode.tagName !== 'SCRIPT') {
                     document.body.appendChild(newNode);
                 }
             });
-
         } catch (e) {
             console.error("Errore durante l'aggiornamento dell'anteprima live:", e);
         }
@@ -92,12 +89,16 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     codeEditor.on('change', debounce(updatePreview, 400));
 
-    // --- GESTIONE FINESTRA ---
-    const closeModal = () => {
-        // Ricarica la pagina per ripristinare lo stato originale se non si salva
-        window.location.reload();
+    // --- NUOVA LOGICA DEI PULSANTI ---
+    document.getElementById('modal-close-button').onclick = () => {
+      modalOverlay.style.display = 'none'; // Nasconde la modale
     };
-    document.getElementById('modal-close-button').onclick = closeModal;
+
+    document.getElementById('modal-restore-button').onclick = () => {
+      if(confirm('Sei sicuro di voler annullare tutte le modifiche? La pagina verrà ricaricata.')){
+        window.location.reload(); // Ricarica per ripristinare lo stato originale
+      }
+    };
     
     document.getElementById('modal-save-body-button').onclick = () => {
       const newBodyHtml = codeEditor.getValue();
@@ -119,8 +120,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           console.error(result.details || '');
         } else {
           alert(result.message);
-          // Non serve ricaricare perché il salvataggio è l'azione finale
-          document.body.removeChild(modalOverlay);
+          document.body.removeChild(modalOverlay); // Rimuove la modale dopo un salvataggio riuscito
         }
       });
     };
