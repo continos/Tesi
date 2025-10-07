@@ -3556,14 +3556,65 @@
 												}, 1500);*/
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
-								const pollDeploy = () => {							
+								const pollPagesStatus = () => {
+									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
+									
+									fetch(apiUrl, { 
+										headers: { 'Accept': 'application/vnd.github.v3+json' }
+									})
+									.then(res => res.json())
+									.then(pagesInfo => {
+										const bodyEl = dialog.querySelector('.simply-dialog-body');
+										
+										if (pagesInfo.status === 'built') {
+											bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+											setTimeout(() => window.location.reload(), 2000);
+										} else {
+											bodyEl.innerHTML += ".";
+											setTimeout(pollPagesStatus, 10000);
+										}
+									})
+									.catch(err => {
+										console.error("Errore nel polling:", err);
+										bodyEl.innerHTML += ".";
+										setTimeout(pollPagesStatus, 10000);
+									});
+								};
+
+								setTimeout(pollPagesStatus, 15000);
+								/*const pollDeploy = () => {							
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
 									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}})
 										.then(res => res.json())
-										.then(pagesInfo => {
-											if (pagesInfo.status === 'built' && pagesInfo.source.commit === newCommitSha){
-												bodyEl.innerHTML ="Deploy completato! La pagina verrà ricaricata.";
-												setTimeout(() => window.localation.reload(),20);
+										.then(deployments => {
+											// deployments è un array, prendiamo il deployment più recente
+        									const latestDeployment = deployments[0];
+											if (latestDeployment && latestDeployment.sha === newCommitSha){
+												// Controllo stato del deployment
+												const statusUrl = latestDeployment.statuses_url;
+												
+												fetch(statusUrl, {
+													headers: { 
+														'Accept': 'application/vnd.github.v3+json'
+													}
+												})
+												.then(res => res.json())
+												.then(statuses => {
+													const latestStatus = statuses[0];
+													
+													if (latestStatus && latestStatus.state === 'success') {
+														bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+														setTimeout(() => window.location.reload(), 2000); // Corretto: window.location
+													} else {
+														bodyEl.innerHTML += ".";
+														setTimeout(pollDeploy, 10000);
+													}
+												})
+												.catch(err => {
+													console.error("Errore nel polling dello status:", err);
+													bodyEl.innerHTML += ".";
+													setTimeout(pollDeploy, 10000);
+												});
 											} else {
 												// La pagina non è ancora pronta (es. 404)
 												bodyEl.innerHTML += ".";
@@ -3577,7 +3628,7 @@
 											setTimeout(pollDeploy, 10000);
 										})
 									};
-									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
+									setTimeout(pollDeploy, 20000);*/ // Inizia il primo controllo dopo 20 secondi
 								//}, 15000); // Inizia il primo controllo dopo 15 secondi
 							});
 						}
