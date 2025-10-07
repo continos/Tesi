@@ -3462,7 +3462,7 @@
 						// L'autenticazione non è necessaria per leggere un file pubblico,
 						// ma può aiutare con i rate limit dell'API.
 						// Se il repo è privato, questa parte è FONDAMENTALE.
-						...(this.key && { 'Authorization': `token ${this.key}` })
+						...(editor.storage.key && { 'Authorization': `token ${editor.storage.key}` })
 					}
 					})
 					.then(response => {
