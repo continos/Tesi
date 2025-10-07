@@ -5,56 +5,55 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title data-simply-field="pageTitle">VocBench Replica</title>
 
-  <!-- Stile minimale per VocBench -->
-  <link href="assets/css/vocbench-style.css" rel="stylesheet">
+  <!-- Stile originale di VocBench -->
+  <link href="assets/css/art.css" rel="stylesheet">
 
 </head>
 
-<body>
+<body class="art">
 
-  <header class="vocbench-header" data-simply-field="header" data-simply-path="/">
-    <h1>VocBench Replica</h1>
-  </header>
+  <div id="container">
 
-  <div class="container-fluid vocbench-layout">
-      <div class="row">
-          <!-- Colonna Sinistra -->
-          <div class="left-column">
-              <nav class="sidebar-menu" data-simply-field="leftSidebarContent">
-                  <h4>Navigazione</h4>
-                  <ul>
-                      <li><a href="#">Home</a></li>
-                      <li><a href="#">Documentation</a></li>
-                      <li><a href="#">Download</a></li>
-                  </ul>
-              </nav>
-          </div>
+    <div id="head_container">
+        <div id="left_logo"><span><!-- Logo Sinistro --></span></div>
+        <div id="right_logo"><span><!-- Logo Destro --></span></div>
+        <div id="head_middle">
+            <h1 data-simply-field="mainHeading">Semantic Turkey</h1>
+            <h2 data-simply-field="subHeading">A Linguistic and Semantic Platform for Knowledge Management and Acquisition</h2>
+        </div>
+    </div>
 
-          <!-- Colonna Centrale -->
-          <div class="main-column">
-              <main id="main" class="main" data-simply-field="mainContent">
-                  <h2>Contenuto Principale</h2>
-                  <p>Questo è il contenuto principale della pagina. Può essere modificato usando il nostro editor HTML.</p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
-              </main>
-          </div>
+    <div class="horizontalBarContainer">
+        <div class="horizontalBar"></div>
+    </div>
 
-          <!-- Colonna Destra -->
-          <div class="right-column">
-              <aside class="sidebar-menu" data-simply-field="rightSidebarContent">
-                  <h4>On this page</h4>
-                  <ul>
-                      <li><a href="#">Sezione 1</a></li>
-                      <li><a href="#">Sezione 2</a></li>
-                  </ul>
-              </aside>
-          </div>
-      </div>
+    <div id="leftSideBar" data-simply-field="leftSidebarContent">
+        <h3>Navigazione</h3>
+        <p>Contenuto della barra laterale sinistra. Modificabile.</p>
+        <ul>
+            <li>Link 1</li>
+            <li>Link 2</li>
+        </ul>
+    </div>
+
+    <div id="rightSideBar" data-simply-field="rightSidebarContent">
+        <h3>On this page</h3>
+        <p>Contenuto della barra laterale destra. Modificabile.</p>
+    </div>
+
+    <div id="mainContent" data-simply-field="mainContent">
+        <h2>Contenuto Principale</h2>
+        <p>Questo è il contenuto principale della pagina. È possibile modificarlo utilizzando l'editor HTML personalizzato.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. </p>
+    </div>
+
+    <br class="clearfloat" />
+
+    <div id="footer">
+        <p>© 2025 - Progetto Tesi</p>
+    </div>
+
   </div>
-
-  <footer class="vocbench-footer" data-simply-field="footer" data-simply-path="/">
-    <p>© 2025 - Progetto Tesi</p>
-  </footer>
 
   <!-- SimplyEdit & Plugins -->
   <script src="assets/js/simply-edit-config.js"></script>

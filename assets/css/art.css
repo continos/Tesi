@@ -1,0 +1,245 @@
+/* CSS fornito dall'utente, basato su art.css di VocBench */
+@charset "utf-8";
+body  {
+font: small Verdana, Arial, Helvetica, sans-serif;
+font-size: 10pt;
+background: #FFFFFF;
+margin: 0;
+padding: 0;
+text-align: left;
+color: #000000;
+}
+
+.std {
+font: small Verdana, Arial, Helvetica, sans-serif;
+font-size: 10pt;
+}
+
+.art #container { 
+width: 100%;
+text-align: left;
+}  
+
+.art #head_container {
+width: 100%;
+}
+
+.art #head_middle {
+text-align: center;
+margin: 0 14em 0 14em;
+padding: 2em 1em 0 1em;
+} 
+
+.art #title {
+
+}
+
+.art #left_logo {
+float: left;
+width: 14em;
+padding: 11px 0;
+text-align:center;
+}
+.art #right_logo {
+float: right;
+width: 14em;
+padding: 11px 0;
+text-align:center;
+}
+
+a.rightLogo:link, a.rightLogo:visited, a.rightLogo:hover {
+color: #FFFFFF;
+text-decoration: none
+}
+
+#topNavBar {
+margin-top:30px;
+}
+
+a.topNavBarButton, a.topNavBarButton:link, a.topNavBarButton:visited {
+margin: -2.5px;
+color: #FFFFFF;
+text-decoration: none
+}
+
+a.topNavBarButton:hover {
+color: #D5EAEA;
+}
+
+.horizontalBarContainer {
+padding: .325em 1.25em 0em;
+}
+.horizontalBarContainer > .horizontalBar {
+height: 4px; 
+background: linear-gradient(135deg, #591819, #D4A7A3, #9C292E, #260B0A, #D4A7A3, #260B0A, #D4A7A3, #591819, #9C292E, #260B0A, #D4A7A3, #591819, #9C292E, #260B0A, #D4A7A3, #591819); 
+box-shadow: 2px 3px 5px;
+}
+
+a.leftLogo:link, a.leftLogo:visited, a.leftLogo:hover {
+color: #FFFFFF;
+text-decoration: none
+}
+
+.art #leftSideBar {
+float: left; 
+width: 14em;
+padding: 11px 0;
+}
+
+#leftNavBar ul {
+padding: 0;
+margin: 0;
+list-style-type: none;
+}
+#leftNavBar a {
+display: block;
+padding-top: 2px;
+padding-right: 2px;
+padding-bottom: 4px;
+margin: 2px 12px 1px 5px;
+color:#400000;
+background-color: #f1f1f1;
+font-weight: bold;
+text-align: center;
+background-image: url('../images/STButtonLeftPanel.png');
+font-size: 8pt;
+}
+
+.art #rightSideBar {
+float: right; 
+width: 14em;
+padding: 11px 0;
+}
+.art #rightSideBar > div {
+text-align: center;
+margin-bottom: 2em;
+}
+.art #leftSideBar h3, .art #leftSideBar p, .art #rightSideBar h3, .art #rightSideBar p {
+margin-left: 10px;
+margin-right: 10px;
+}
+
+.art #mainContent {
+ margin: 0 14em 0 14em; 
+padding: 0 1em 0 1em;
+} 
+
+.art #footer { 
+text-align: center;
+padding: 10px 10px;
+}
+ 
+.art #footer p {
+margin: 0;
+padding: 10px 0;
+font-style:italic;
+}
+
+h1 {
+text-align:center;
+color: #660000;
+font-size: 16px;
+}
+
+h2 {
+color: #660000;
+font-size: 14px;
+}
+
+h3 {
+color: #660000;
+font-size: 13px;
+}
+
+h4, h5 {
+font-size: 12px;
+}
+
+.story {
+font-family: "Times New Roman";
+font-size:13px;
+}
+
+.code {
+font: medium "Courier New", Times, serif;
+font-size: 12px;
+}
+
+.code_comment {
+font: medium "Courier New", Times, serif;
+font-size: 12px;
+color: #009933;
+}
+
+div.figure > img {
+max-width: 100%;
+display: block;
+margin-left: auto;
+margin-right: auto;
+}
+
+.fline:FIRST-LETTER {
+font-size: 36pt;
+font-stretch: extra-expanded;
+}
+
+.fltrt {
+float: right;
+margin-left: 8px;
+}
+.fltlft {
+float: left;
+margin-right: 8px;
+}
+.clearfloat {
+clear:both;
+height:0;
+font-size: 1px;
+line-height: 0px;
+}
+
+a.structure:link, a.structure:visited {
+ color: #FFFFFF;
+ text-decoration: none
+}
+
+.isa a {
+ font: normal 30px Arial,serif;
+ color: #336699;
+ text-decoration: none
+}
+
+img.screenshot {
+max-width: 100%;
+margin-left:auto; 
+margin-right:auto;
+display:block;
+}
+
+img.schema {
+width: 75%;
+}
+
+img.inline {
+max-width: 30%;
+margin-top:10px;
+margin-bottom:15px;
+display:block;
+}
+
+li.publ {
+margin-bottom: 12pt;
+}
+
+.gsc-control-cse {
+padding: 0px !important;
+margin-left: 5px !important;
+margin-right: 12px !important;
+margin-top: 12px;
+}
+.gsc-input {
+padding-right: 2px !important;
+}
+.gsc-search-button-v2 {
+padding: 6px !important;
+}
