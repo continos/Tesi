@@ -67,6 +67,49 @@ app.post('/logout', (req, res) => {
   });
 });
 
+// Nuova rotta per salvare l'HTML della sezione <main>
+app.post('/save-main-html', isAuthenticated, (req, res) => {
+  const { filePath, mainContent } = req.body;
+  const fullPath = path.join(__dirname, filePath);
+
+  // Controllo di sicurezza per assicurarsi che si stia modificando un file nella directory del progetto
+  if (!fullPath.startsWith(__dirname)) {
+    return res.status(400).send('Percorso file non valido.');
+  }
+
+  fs.readFile(fullPath, 'utf8', (err, fileData) => {
+    if (err) {
+      console.error('Errore lettura file:', err);
+      return res.status(500).send('Errore durante la lettura del file.');
+    }
+
+    const $ = cheerio.load(fileData);
+    $('main.main').html(mainContent); // Sostituisce il contenuto di <main>
+
+    fs.writeFile(fullPath, $.html(), 'utf8', (writeErr) => {
+      if (writeErr) {
+        console.error('Errore scrittura file:', writeErr);
+        return res.status(500).send('Errore durante il salvataggio del file.');
+      }
+
+      console.log(`Contenuto di <main> in ${filePath} aggiornato.`);
+
+      const commitMessage = `Aggiornamento HTML di <main> per ${filePath}`;
+      const gitCommand = `git add "${filePath.substring(1)}" && git commit -m "${commitMessage}"`;
+
+      exec(gitCommand, (gitErr, stdout, stderr) => {
+        if (gitErr) {
+          console.error('Errore Git:', stderr);
+          return res.status(500).send('File salvato, ma commit Git fallito.');
+        }
+        console.log('Commit Git per <main> eseguito:', stdout);
+        res.status(200).send('Contenuto HTML salvato e committato.');
+      });
+    });
+  });
+});
+
+
 app.get('/check-auth', (req, res) => {
   res.json({ isAuthenticated: !!req.session.isAuthenticated });
 });
