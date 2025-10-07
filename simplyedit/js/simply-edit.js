@@ -3505,7 +3505,10 @@
 					}
 					console.log(`Applico il template ${pageTemplate} a ${githubPath}`);
 
-					var repo = this.repo;
+					const repo = this.repo;
+					const repoUser = this.repoUser;
+					const repoName = this.repoName;
+					const repoBranch = this.repoBranch;
 					// Leggo il contenuto del template dal repository
 					repo.read(this.repoBranch, 'templates/' + pageTemplate, function(err, data) {
 						if (err) {
@@ -3530,7 +3533,7 @@
 							editor.plugins.dialog.open(dialog);
 							const bodyEl = dialog.querySelector('.simply-dialog-body');
 							
-							repo.write(this.repoBranch, githubPath, data, "Apply template " + pageTemplate, function(writeErr, commitData) {
+							repo.write(repoBranch, githubPath, data, "Apply template " + pageTemplate, function(writeErr, commitData) {
 								if (writeErr) {
 									bodyEl.textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									return;
@@ -3554,7 +3557,6 @@
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
 								const pollDeploy = () => {							
-									const {repoUser,repoName} = editor.storage;
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
 									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}}
 										.then(res => res.json())
