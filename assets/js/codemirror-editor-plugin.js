@@ -125,32 +125,40 @@ document.addEventListener('simply-toolbars-loaded', function() {
         bodyEl.textContent = 'Errore: ' + result.message;
         return;
       }
-      
+      const newCommitSha = result.commitSha;
+      const { repoUser, repoName } = editor.storage;
       bodyEl.innerHTML = `Commit ${result.commitSha.substring(0,7)} creato! <br> Avvio del deploy su GitHub Pages...<br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...`;
 
       // --- NUOVA LOGICA DI POLLING ---
-      setTimeout(function pollDeploy() {
-        const { repoUser, repoName } = editor.storage;
-        const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
-        
-        fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
-          .then(res => res.json())
-          .then(pagesInfo => {
-            if (pagesInfo.status === 'built' && pagesInfo.html_url && pagesInfo.source.commit === result.commitSha) {
-              bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
-              setTimeout(() => window.location.reload(), 2000);
-            } else {
-              bodyEl.innerHTML += ".";
-              setTimeout(pollDeploy, 15000); // Aspetta 15 secondi e ricontrolla
-            }
-          })
-          .catch(err => {
-            console.error("Errore nel polling del deploy:", err);
-            bodyEl.innerHTML += "?";
-            setTimeout(pollDeploy, 15000);
-          });
-      }, 20000); // Inizia il primo controllo dopo 20 secondi
-    });
+      const pollDeploy = () => {
+          const apiUrl = "https://api.github.com/repos/${repoUser}/${repoName}/deployments";
+          fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+            .then(res => res.json())
+            .then(deployments => {
+              const latestDeployment = deployments.find(d => d.sha === newCommitSha);
+              if (latestDeployment) {
+                fetch(latestDeployment.statuses_url, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+                  .then(res => res.json())
+                  .then(statuses => {
+                    const latestStatus = statuses[0];
+                    if (latestStatus && latestStatus.state === 'success') {
+                      bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+                      setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                      bodyEl.innerHTML += ".";
+                      setTimeout(pollDeploy, 15000);
+                    }
+                  })
+                  .catch(() => setTimeout(pollDeploy, 15000));
+              } else {
+                bodyEl.innerHTML += "-";
+                setTimeout(pollDeploy, 15000);
+              }
+            })
+            .catch(() => setTimeout(pollDeploy, 15000));
+        };
+        setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
+      });
   };
 
   editor.addAction('custom-body-editor', bodyEditorAction);

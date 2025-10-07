@@ -3556,33 +3556,7 @@
 												}, 1500);*/
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
-								/*const pollPagesStatus = () => {
-									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/builds/latest`;
-									
-									fetch(apiUrl, { 
-										headers: { 'Accept': 'application/vnd.github.v3+json' }
-									})
-									.then(res => res.json())
-									.then(pagesInfo => {
-										const bodyEl = dialog.querySelector('.simply-dialog-body');
-										
-										if (pagesInfo.status === 'built') {
-											bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
-											setTimeout(() => window.location.reload(), 2000);
-										} else {
-											bodyEl.innerHTML += ".";
-											setTimeout(pollPagesStatus, 10000);
-										}
-									})
-									.catch(err => {
-										console.error("Errore nel polling:", err);
-										bodyEl.innerHTML += ".";
-										setTimeout(pollPagesStatus, 10000);
-									});
-								};
-
-								setTimeout(pollPagesStatus, 15000);
-								*/const pollDeploy = () => {							
+								const pollDeploy = () => {							
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
 									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}})
 										.then(res => res.json())
@@ -3607,29 +3581,28 @@
 														setTimeout(() => window.location.reload(), 2000); // Corretto: window.location
 													} else {
 														bodyEl.innerHTML += ".";
-														setTimeout(pollDeploy, 10000);
+														setTimeout(pollDeploy, 15000);
 													}
 												})
 												.catch(err => {
 													console.error("Errore nel polling dello status:", err);
 													bodyEl.innerHTML += ".";
-													setTimeout(pollDeploy, 10000);
+													setTimeout(pollDeploy, 15000);
 												});
 											} else {
 												// La pagina non è ancora pronta (es. 404)
 												bodyEl.innerHTML += ".";
-												setTimeout(pollDeploy, 10000); // Aspetta 10 secondi e ricontrolla
+												setTimeout(pollDeploy, 30000); // Aspetta 30 secondi e ricontrolla
 											}
 										})
 										.catch(err => {
 											// Errore di rete, continuiamo a provare
 											console.error("Errore nel polling del deploy:", err);
 											bodyEl.innerHTML += ".";
-											setTimeout(pollDeploy, 10000);
+											setTimeout(pollDeploy, 15000);
 										})
 									};
 									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
-								//}, 15000); // Inizia il primo controllo dopo 15 secondi
 							});
 						}
 					});
