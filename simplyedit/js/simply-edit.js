@@ -3558,7 +3558,7 @@
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
 								const pollDeploy = () => {							
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
-									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}}
+									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}})
 										.then(res => res.json())
 										.then(pagesInfo => {
 											if (pagesInfo.status === 'built' && pagesInfo.source.commit === newCommitSha){
@@ -3576,7 +3576,7 @@
 											bodyEl.innerHTML += ".";
 											setTimeout(pollDeploy, 10000);
 										})
-									)};
+									};
 									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
 								//}, 15000); // Inizia il primo controllo dopo 15 secondi
 							});
