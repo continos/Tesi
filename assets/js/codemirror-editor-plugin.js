@@ -70,18 +70,25 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const updatePreview = () => {
         try {
             const newBodyHtml = codeEditor.getValue();
+            
+            // Svuota il body attuale, ma preserva gli elementi essenziali
             Array.from(document.body.children).forEach(child => {
-                if (child.id !== 'live-editor-modal-overlay' && child.tagName !== 'SCRIPT') {
+                if (child.id !== 'live-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
                     child.remove();
                 }
             });
+
+            // Crea un body temporaneo per processare il nuovo HTML
             const tempBody = document.createElement('body');
             tempBody.innerHTML = newBodyHtml;
+
+            // Reinserisci i nuovi nodi nel body reale
             Array.from(tempBody.children).forEach(newNode => {
-                if (newNode.id !== 'live-editor-modal-overlay' && newNode.tagName !== 'SCRIPT') {
+                if (newNode.id !== 'live-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
                     document.body.appendChild(newNode);
                 }
             });
+
         } catch (e) {
             console.error("Errore durante l'aggiornamento dell'anteprima live:", e);
         }
