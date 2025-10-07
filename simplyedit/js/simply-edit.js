@@ -3554,7 +3554,7 @@
 													// per essere sicuri di caricare la nuova pagina.
 													window.location.reload();
 												}, 1500);*/
-								const newCommitSha = commitData.commit.sha;
+								/*const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
 								const pollPagesStatus = () => {
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/builds/latest`;
@@ -3582,7 +3582,7 @@
 								};
 
 								setTimeout(pollPagesStatus, 15000);
-								/*const pollDeploy = () => {							
+								*/const pollDeploy = () => {							
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
 									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}})
 										.then(res => res.json())
@@ -3628,7 +3628,7 @@
 											setTimeout(pollDeploy, 10000);
 										})
 									};
-									setTimeout(pollDeploy, 20000);*/ // Inizia il primo controllo dopo 20 secondi
+									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
 								//}, 15000); // Inizia il primo controllo dopo 15 secondi
 							});
 						}
