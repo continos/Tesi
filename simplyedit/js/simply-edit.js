@@ -3503,7 +3503,7 @@
 					if (githubPath.startsWith(repoPrefix + '/')) {
 						githubPath = githubPath.substring(repoPrefix.length + 1); // Rimuove /Tesi/ da Tesi/research/nuova-pagina.html
 					}
-					console.log(`Creo pagina ${githubPath} usando il template ${pageTemplate}`);
+					console.log(`Applico il template ${pageTemplate} a ${githubPath}`);
 
 					var repo = this.repo;
 					// Leggo il contenuto del template dal repository
@@ -3519,13 +3519,8 @@
 							dialog.id = 'deploy-status-dialog';
 							dialog.className = 'simply-dialog simply-modal';
 							dialog.innerHTML = `
-								<div class="simply-toolbar">
-									<ul class="simply-buttons">
-										<li><h1 style="font-size: 16px; margin-left: 10px;">Creazione Pagina</h1></li>
-									</ul>
-								</div>
 								<div class="simply-dialog-body" style="padding: 20px; font-size: 14px; line-height: 1.5;">
-									Pagina creata con successo! Avvio del deploy su GitHub Pages...<br><br>
+									Template applicato con successo! Avvio del deploy su GitHub Pages...<br><br>
 									Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...
 								</div>
 							`;
@@ -3533,16 +3528,14 @@
 							// 2. Aggiungi il dialog al contenitore di SimplyEdit e aprilo
 							editor.toolbarsContainer.appendChild(dialog);
 							editor.plugins.dialog.open(dialog);
-
+							const bodyEl = dialog.querySelector('.simply-dialog-body');
 							
-							repo.write(this.repoBranch, githubPath, data, "Create page from " + pageTemplate, function(writeErr) {
+							repo.write(this.repoBranch, githubPath, data, "Apply template " + pageTemplate, function(writeErr, commitData) {
 								if (writeErr) {
-									dialog.querySelector('.simply-dialog-body').textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
-									const toolbarButtons = dialog.querySelector('.simply-toolbar.simply-buttons');
-									toolbarButtons.innerHTML += '<li class="simply-right"><button data-simply-action="simply-dialog-close">Chiudi</button></li>';
+									bodyEl.textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									return;
 								}
-								// La scrittura è andata a buon fine, ora inizia il polling dell'URL
+								/* La scrittura è andata a buon fine, ora inizia il polling dell'URL
 								const finalUrl = new URL(fullPath, window.location.origin).href;
 								setTimeout(function pollPage() {
 									const bodyEl = dialog.querySelector('.simply-dialog-body');
@@ -3557,22 +3550,34 @@
 													// Non chiamiamo la callback, ma facciamo il reload diretto
 													// per essere sicuri di caricare la nuova pagina.
 													window.location.reload();
-												}, 1500);
+												}, 1500);*/
+								const newCommitSha = commitData.commit.sha;
+								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
+								setTimeout(function pollDeploy(){
+									const {repoUser,repoName} = editor.storage;
+									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
+									fetch(apiUrl, {headers: { 'Accept':'application/vnd.github.vr+json'}}
+										.then(res => res.json())
+										.then(pagesInfo => {
+											if (pagesInfo.status === 'built' && pagesInfo.source.commit === newCommitSha){
+												bodyEl.innerHTML ="Deploy completato! La pagina verrà ricaricata.";
+												setTimeout(() => window.localation.reload(),20);
 											} else {
 												// La pagina non è ancora pronta (es. 404)
 												bodyEl.innerHTML += ".";
-												setTimeout(pollPage, 10000); // Aspetta 10 secondi e ricontrolla
+												setTimeout(pollDeploy, 10000); // Aspetta 10 secondi e ricontrolla
 											}
 										})
 										.catch(() => {
 											// Errore di rete, continuiamo a provare
 											bodyEl.innerHTML += ".";
-											setTimeout(pollPage, 10000);
-										});
+											setTimeout(pollDeploy, 10000);
+										})
+									);
 								}, 15000); // Inizia il primo controllo dopo 15 secondi
-							});
+							}.bind(this));
 						}
-					});
+					}.bind(this));
 				},
 				list : function(url, callback) {
 					if (url.indexOf(editor.storage.dataEndpoint) === 0) {
@@ -3632,28 +3637,28 @@
 					}
 
 					storage.repo.read(storage.repoBranch, filePath, (err, currentFileContent) => {
-					if (err) {
-						return callback({ error: true, message: "Errore: impossibile leggere il file dal repository GitHub." });
-					}
-
-					const parser = new DOMParser();
-					const doc = parser.parseFromString(currentFileContent, 'text/html');
-					const elementToUpdate = doc.querySelector(selector);
-
-					if (!elementToUpdate) {
-						return callback({ error: true, message: `Errore: impossibile trovare l'elemento con selettore '${selector}' nel file.` });
-					}
-
-					elementToUpdate.innerHTML = htmlContent;
-					const updatedFileContent = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-					const commitMessage = `Aggiornamento HTML di <${selector}> per ${filePath}`;
-
-					storage.repo.write(storage.repoBranch, filePath, updatedFileContent, commitMessage, (writeErr) => {
-						if (writeErr) {
-						return callback({ error: true, message: "Errore durante il salvataggio su GitHub.", details: writeErr });
+						if (err) {
+							return callback({ error: true, message: "Errore: impossibile leggere il file dal repository GitHub." });
 						}
-						callback({ success: true, message: `Contenuto di <${selector}> aggiornato e committato con successo!` });
-					});
+
+						const parser = new DOMParser();
+						const doc = parser.parseFromString(currentFileContent, 'text/html');
+						const elementToUpdate = doc.querySelector(selector);
+
+						if (!elementToUpdate) {
+							return callback({ error: true, message: `Errore: impossibile trovare l'elemento con selettore '${selector}' nel file.` });
+						}
+
+						elementToUpdate.innerHTML = htmlContent;
+						const updatedFileContent = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+						const commitMessage = `Aggiornamento HTML di <${selector}> per ${filePath}`;
+
+						storage.repo.write(storage.repoBranch, filePath, updatedFileContent, commitMessage, (writeErr, commitData) => {
+						if (writeErr) {
+							return callback({ error: true, message: "Errore durante il salvataggio su GitHub.", details: writeErr });
+						}
+						callback({ success: true, message: `Contenuto di <${selector}> aggiornato.`, commitSha: commitData.commit.sha });
+						});					
 					});
 				},			
 			},

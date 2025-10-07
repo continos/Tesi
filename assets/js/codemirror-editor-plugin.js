@@ -1,10 +1,13 @@
 document.addEventListener('simply-toolbars-loaded', function() {
-  if (!window.editor) {
+  if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
 
-  // Questo plugin aggiunge solo il pulsante e la UI, la logica di salvataggio è nello storage.
-  console.log('Toolbars loaded, adding UI for HTML editor plugin.');
+  if (editor.storage.getType() !== 'customGithub') {
+    return;
+  }
+
+  console.log('Toolbars loaded, adding GitHub-aware HTML editor plugin.');
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -86,10 +89,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
   };
 
   const saveHtmlAction = function() {
-    // Cerca l'istanza dell'editor attiva, se esiste
     const modal = document.getElementById('manual-editor-modal-overlay');
     if (!modal || !modal.codeEditorInstance) {
-      alert("Errore: l'editor non è aperto o non è stato trovato.");
+      alert("Per salvare, apri prima l'editor HTML, applica un'anteprima se necessario, e poi clicca Commit Body.");
       return;
     }
 
@@ -97,9 +99,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         return;
     }
 
-    // Prende l'HTML direttamente dall'editor, che è la fonte più pulita
     const newBodyHtml = modal.codeEditorInstance.getValue();
-    
     let filePath = window.location.pathname;
 
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -112,7 +112,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
       filePath = filePath.substring(1);
     }
 
-    // Mostra una modale di attesa
     const dialog = document.createElement('section');
     dialog.id = 'deploy-status-dialog';
     dialog.className = 'simply-dialog simply-modal';
@@ -121,15 +120,36 @@ document.addEventListener('simply-toolbars-loaded', function() {
     editor.plugins.dialog.open(dialog);
     const bodyEl = dialog.querySelector('.simply-dialog-body');
 
-    // Chiama la funzione di salvataggio con l'HTML pulito dall'editor
     editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
       if (result.error) {
         bodyEl.textContent = 'Errore: ' + result.message;
-        console.error(result.details || '');
-      } else {
-        bodyEl.textContent = result.message + " La pagina verrà ricaricata.";
-        setTimeout(() => window.location.reload(), 2000);
+        return;
       }
+      
+      bodyEl.innerHTML = `Commit ${result.commitSha.substring(0,7)} creato! <br> Avvio del deploy su GitHub Pages...<br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...`;
+
+      // --- NUOVA LOGICA DI POLLING ---
+      setTimeout(function pollDeploy() {
+        const { repoUser, repoName } = editor.storage;
+        const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
+        
+        fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+          .then(res => res.json())
+          .then(pagesInfo => {
+            if (pagesInfo.status === 'built' && pagesInfo.html_url && pagesInfo.source.commit === result.commitSha) {
+              bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+              setTimeout(() => window.location.reload(), 2000);
+            } else {
+              bodyEl.innerHTML += ".";
+              setTimeout(pollDeploy, 15000); // Aspetta 15 secondi e ricontrolla
+            }
+          })
+          .catch(err => {
+            console.error("Errore nel polling del deploy:", err);
+            bodyEl.innerHTML += "?";
+            setTimeout(pollDeploy, 15000);
+          });
+      }, 20000); // Inizia il primo controllo dopo 20 secondi
     });
   };
 
