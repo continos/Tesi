@@ -21,7 +21,1083 @@
 
 <body class="art">
 
-  <div id="container">
+  <div id="simply-editor"><link rel="stylesheet" type="text/css" href="https://continos.github.io/Tesi/simplyedit/simply/css/editor.v9.css"><link rel="stylesheet" type="text/css" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk=" crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css"><section id="simply-main-toolbar" class="simply-section">
+	<div class="simply-toolbar" data-simply-section="simply-page-management"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li>
+				<button data-simply-action="simply-about" id="simply-logo">
+				<img src="https://continos.github.io/Tesi/simplyedit/graphics/simply-edit-centered.svg" alt="SimplyEdit"></button>
+			</li>
+			<li>
+				<button data-simply-action="simply-save">
+					<i class="fa fa-save"></i>Save
+				</button>
+			</li>
+			<li>
+				<button data-simply-action="simply-logout">
+					<i class="fa fa-power-off"></i>Log out
+				</button>
+			</li>
+			<li>
+				<button data-simply-action="simply-meta">
+					<i class="fa fa-tags"></i>Meta tags
+				</button>
+			</li>
+		<li><button data-simply-action="simply-browse-sitemap"><i class="fa fa-sitemap"></i>Sitemap</button></li><li><button data-simply-action="simply-template"><i class="fa fa-paint-brush"></i>Page template</button></li><li><button data-simply-action="simply-undo" disabled="true"><i class="fa fa-undo"></i>Undo</button></li><li><button data-simply-action="simply-redo" disabled="true"><i class="fa fa-repeat"></i>Redo</button></li><li>
+        <button data-simply-action="custom-body-editor" title="Modifica HTML del &lt;body&gt;">
+          <i class="fa fa-file-code-o"></i> Edit Body HTML
+        </button>
+      </li><li>
+        <button data-simply-action="custom-save-html" title="Salva e committa le modifiche
+   all'HTML del body">
+          <i class="fa fa-github"></i> Commit Body
+        </button>
+      </li></ul>
+	</div>
+</section>
+<section id="simply-text-cursor" class="simply-section">
+	<h1>*HTML Toolbar for Text Cursor*</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-section="simply-text-textstyle" class="simply-expands"><i class="fa fa-magic"></i>Text</button></li>
+			<li><button data-simply-section="simply-text-style" class="simply-expands"><i class="fa fa-paint-brush"></i>Style</button></li>
+			<li><button data-simply-section="simply-text-align" class="simply-expands"><i class="fa fa-align-left"></i>Align</button></li>
+			<li><button data-simply-section="simply-insert" class="simply-expands"><i class="fa fa-plus"></i>Insert</button></li>
+			<li><button data-simply-action="simply-hyperlink-follow"><i class="fa fa-external-link"></i>Follow link</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-text-textstyle">
+			<ul>
+				<li class="simply-text-format"><select data-simply-action="simply-text-blockstyle">
+					<option value="h1">Heading 1</option>
+					<option value="h2">Heading 2</option>
+					<option value="h3">Heading 3</option>
+					<option value="p">Paragraph</option>
+					<option value="ol">Numbered list</option>
+					<option value="ul">Unnumbered list</option>
+					<option value="">(plain text)</option>
+				</select></li>
+			</ul>
+			<ul class="simply-text-inline">
+				<li><button data-simply-action="simply-text-inline" data-value="strong"><i class="fa fa-bold"></i>Bold</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="em"><i class="fa fa-italic"></i>Italic</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="u"><i class="fa fa-underline"></i>Underline</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="code"><i class="fa fa-code"></i>[Code]</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-text-style">
+		</div>
+		<div class="simply-toolbar-section simply-text-align">
+			<ul data-type="simply-buttongroup-radio">
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-left"><i class="fa fa-align-left"></i>Left</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-center"><i class="fa fa-align-center"></i>Center</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-right"><i class="fa fa-align-right"></i>Right</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-justify"><i class="fa fa-align-justify"></i>Justify</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="none"><i class="fa fa-times"></i>None</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-insert">
+			<ul>
+				<li><button data-simply-action="simply-insert-image" data-simply-section="simply-insert-image"><i class="fa fa-picture-o"></i>Image</button></li>
+				<li><button data-simply-action="simply-insert-source" data-simply-section="simply-insert-source"><i class="fa fa-code"></i>Code</button></li>
+			<li><button data-simply-action="simply-symbol"><i class="fa fa-copyright"></i>Symbol</button></li></ul>
+		</div>
+	</div>
+</section>
+<section id="simply-text-selection" class="simply-section">
+	<h1>*HTML Toolbar for Text Selection*</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-section="simply-text-textstyle" class="simply-expands"><i class="fa fa-magic"></i>Text</button></li>
+			<li><button data-simply-section="simply-text-style" class="simply-expands"><i class="fa fa-paint-brush"></i>Style</button></li>
+			<li><button data-simply-section="simply-text-align" class="simply-expands"><i class="fa fa-align-left"></i>Align</button></li>
+			<li><button data-simply-section="simply-hyperlink" class="simply-expands"><i class="fa fa-link"></i>Link</button></li>
+			<li><button data-simply-section="simply-insert" class="simply-expands"><i class="fa fa-plus"></i>Insert</button></li>
+			<li><button data-simply-action="simply-hyperlink-follow"><i class="fa fa-external-link"></i>Follow link</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-text-textstyle">
+			<ul>
+				<li class="simply-text-format"><select data-simply-action="simply-text-blockstyle">
+					<option value="h1">Heading 1</option>
+					<option value="h2">Heading 2</option>
+					<option value="h3">Heading 3</option>
+					<option value="p">Paragraph</option>
+					<option value="ol">Numbered list</option>
+					<option value="ul">Unnumbered list</option>
+					<option value="">(plain text)</option>
+				</select></li>
+			</ul>
+			<ul class="simply-text-inline">
+				<li><button data-simply-action="simply-text-inline" data-value="strong"><i class="fa fa-bold"></i>Bold</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="em"><i class="fa fa-italic"></i>Italic</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="u"><i class="fa fa-underline"></i>Underline</button></li>
+				<li><button data-simply-action="simply-text-inline" data-value="code"><i class="fa fa-code"></i>[Code]</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-text-style">
+		</div>
+		<div class="simply-toolbar-section simply-hyperlink">
+			<div><label>URL<button data-simply-action="simply-browse"><i class="fa fa-folder"></i></button></label><input type="text" id="vdHyperlinkHref" data-simply-action="simply-hyperlink-href"></div>
+			<div><label>Title</label><input type="text" id="vdHyperlinkTitle" data-simply-action="simply-hyperlink-title"></div>
+			<div><label>Name</label><input type="text" id="vdHyperlinkName" data-simply-action="simply-hyperlink-name"></div>
+			<div>
+				<button class="simply-hyperlink-nofollow" data-simply-action="simply-hyperlink-nofollow"><i class="fa fa-hand-stop-o"></i>Nofollow</button>
+				<button class="simply-hyperlink-newwindow" data-simply-action="simply-hyperlink-newwindow"><i class="fa fa-external-link"></i>New window</button>
+				<button class="simply-hyperlink-unlink" data-simply-action="simply-hyperlink-unlink"><i class="fa fa-chain-broken"></i>Remove link</button>
+			</div>
+		</div>
+		<div class="simply-toolbar-section simply-text-align">
+			<ul data-type="simply-buttongroup-radio">
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-left"><i class="fa fa-align-left"></i>Left</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-center"><i class="fa fa-align-center"></i>Center</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-right"><i class="fa fa-align-right"></i>Right</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="simply-text-align-justify"><i class="fa fa-align-justify"></i>Justify</button></li>
+				<li><button data-simply-action="simply-text-class" data-value="none"><i class="fa fa-times"></i>None</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-insert">
+			<ul>
+				<li><button data-simply-action="simply-insert-image" data-simply-section="simply-insert-image"><i class="fa fa-picture-o"></i>Image</button></li>
+				<li><button data-simply-action="simply-insert-source" data-simply-section="simply-insert-source"><i class="fa fa-code"></i>Code</button></li>
+			<li><button data-simply-action="simply-symbol"><i class="fa fa-copyright"></i>Symbol</button></li></ul>
+		</div>
+	</div>
+</section>
+<style>
+	.simply-toolbar-section > ul > li.simply-label {
+		height: 40px;
+		line-height: 40px;
+		font-weight: bold;
+		padding-left: 5px;
+		padding-right: 5px;
+		min-width: 60px;
+	}
+</style>
+<section id="simply-image" class="simply-section">
+	<h1>HTML Image Toolbar</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-section="simply-image-style" class="simply-expands"><i class="fa fa-paint-brush"></i>Style</button></li>
+			<li><button data-simply-section="simply-image-align" class="simply-expands"><i class="fa fa-align-left"></i>Align</button></li>
+			<li><button data-simply-section="simply-image-properties" class="simply-expands"><i class="fa fa-tags"></i>Properties</button></li>
+			<li><button data-simply-section="simply-hyperlink" class="simply-expands"><i class="fa fa-link"></i>Link</button></li>
+			<li><button data-simply-section="simply-code" data-simply-action="simply-edit-source"><i class="fa fa-code"></i>Code</button></li>
+			<li><button data-simply-action="simply-hyperlink-follow"><i class="fa fa-external-link"></i>Follow link</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-image-style">
+		</div>
+		<div class="simply-toolbar-section simply-image-align">
+			<ul data-type="simply-buttongroup-radio" style="display: inline-block;">
+				<li><button data-simply-action="simply-image-class" data-value="simply-image-align-left"><i class="fa fa-align-left"></i>Left</button></li>
+				<li><button data-simply-action="simply-image-class" data-value="simply-image-align-right"><i class="fa fa-align-right"></i>Right</button></li>
+				<li><button data-simply-action="simply-image-class" data-value="none"><i class="fa fa-times"></i>None</button></li>
+			</ul>
+			<ul data-type="simply-buttongroup-radio" style="display: inline-block;">
+				<li><button data-simply-action="simply-image-class" data-value="simply-image-align-top"><i class="fa fa-chevron-up"></i>Top</button></li>
+				<li><button data-simply-action="simply-image-class" data-value="simply-image-align-bottom"><i class="fa fa-chevron-down"></i>Bottom</button></li>
+				<li><button data-simply-action="simply-image-class" data-value="simply-image-align-middle"><i class="fa fa-chevron-right"></i>Middle</button></li>
+				<li><button data-simply-action="simply-image-class" data-value="none"><i class="fa fa-times"></i>None</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-image-properties">
+			<div><label>URL</label><input type="text" class="simply-image-src" data-simply-action="simply-image-src"></div>
+			<div><label>Alt</label><input type="text" class="simply-image-alt" data-simply-action="simply-image-alt"></div>
+			<div><label>Title</label><input type="text" class="simply-image-title" data-simply-action="simply-image-title"></div>
+		</div>
+		<div class="simply-toolbar-section simply-hyperlink">
+			<div><label>URL<button data-simply-action="simply-browse"><i class="fa fa-folder"></i></button></label><input type="text" class="simply-hyperlink-href" data-simply-action="simply-hyperlink-href"></div>
+			<div><label>Title</label><input type="text" class="simply-hyperlink-title" data-simply-action="simply-hyperlink-title"></div>
+			<div><label>Name</label><input type="text" class="simply-hyperlink-name" data-simply-action="simply-hyperlink-name"></div>
+			<div>
+				<button class="simply-hyperlink-nofollow" data-simply-action="simply-hyperlink-nofollow"><i class="fa fa-chain-broken"></i>Nofollow</button>
+				<button class="simply-hyperlink-newwindow" data-simply-action="simply-hyperlink-newwindow"><i class="fa fa-external-link"></i>New window</button>
+				<button class="simply-hyperlink-unlink" data-simply-action="simply-hyperlink-unlink"><i class="fa fa-chain-broken"></i>Remove link</button>
+			</div>
+		</div>
+	</div>
+</section>
+<section id="simply-image-field" class="simply-section">
+	<h1>HTML Image Toolbar</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-section="simply-image-style" class="simply-expands"><i class="fa fa-paint-brush"></i>Style</button></li>
+			<li><button data-simply-section="simply-image-properties" class="simply-expands"><i class="fa fa-tags"></i>Properties</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-image-style">
+		</div>
+		<div class="simply-toolbar-section simply-image-properties">
+			<div><label>URL</label><input type="text" class="simply-image-src" data-simply-action="simply-image-src"></div>
+			<div><label>Alt</label><input type="text" class="simply-image-alt" data-simply-action="simply-image-alt"></div>
+			<div><label>Title</label><input type="text" class="simply-image-title" data-simply-action="simply-image-title"></div>
+		</div>
+	</div>
+</section>
+
+
+<section id="simply-browse" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<!-- Add -->
+			<li style="display: none;"><button data-simply-action="simply-browse-add-page"><i class="fa fa-file-text-o"></i>Add page</button></li>
+			<li style="display: block;"><button data-simply-action="simply-browse-add-folder"><i class="fa fa-plus-square"></i>Add folder</button></li>
+			<li style="display: block;"><button data-simply-action="simply-browse-upload"><i class="fa fa-upload"></i>Upload</button><input type="file" multiple=""></li>
+			<li><button data-simply-action="simply-browse-listmode"><i class="fa fa-list"></i>List mode</button></li>
+
+			<!-- Delete -->
+			<li style="display: none;"><button data-simply-action="simply-browse-delete"><i class="fa fa-trash"></i>Delete</button></li>
+
+			<!-- Dialog -->
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+	</div>
+	<div class="simply-dialog-body"><div class="marker"></div>
+	</div>
+</section>
+<style type="text/css">
+	#simply-browse .simply-dialog-body > button,
+	#simply-browse .simply-dialog-body > .simply-button,
+	#simply-browse .simply-add-folder,
+	#simply-browse .simply-add-page {
+		border: 1px solid #eee;
+		background-color: white;
+		height: 149px;
+		width: 149px;
+		font-family: inherit;
+		font-size: 20px;
+		position: relative;
+		padding: 5px;
+		color: #999 !important;
+		display: inline-block;
+		vertical-align: top;
+		text-align: center;
+		box-sizing: border-box;
+		padding-top: 30px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-height: 1.2em;
+	}
+
+	#simply-browse .simply-button:after {
+		display: block;
+		content: "";
+		bottom: 0;
+		background-image: -webkit-gradient( linear, left top, left bottom, from(rgba(255,255,255,0.1)), to(rgba(2550,255,255,1)) );
+		width: 100%;
+		height: 20px;
+		z-index: 10;
+		position: absolute;
+	}
+
+	#simply-browse .simply-add-folder,
+	#simply-browse .simply-add-page {
+		box-sizing: border-box;
+		padding-top: 38px;
+	}
+
+	#simply-browse .simply-add-folder input,
+	#simply-browse .simply-add-page input {
+		width: 133px;
+		color: #333;
+		line-height: 1.2em;
+		font-family: arial;
+	}
+	#simply-browse input[type="file"] {
+		display: none;
+	}
+	#simply-browse .simply-dialog-body > button:before,
+	#simply-browse .simply-dialog-body > .simply-button:before {
+		display: block;
+		content: '';
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100%;
+		width: 100%;
+	}
+        #simply-browse .simply-dialog-body > button i,
+        #simply-browse .simply-dialog-body > .simply-button i,
+	#simply-browse .simply-add-folder > i,
+	#simply-browse .simply-add-page > i {
+		font-size: 48px;
+		display: block;
+		width: 100%;
+		text-align: center;
+	}
+	#simply-browse .simply-add-folder > button.simply-add,
+	#simply-browse .simply-add-page > button.simply-add {
+		color: #333;
+		background-color: #eee;
+		position: absolute;
+		bottom: 5px;
+		left: 5px;
+		padding: 3px 10px 3px 6px;
+		border: 1px solid #999
+		font-size: 12px;
+		border-radius: 0;
+		font-weight: normal;
+	}
+	#simply-browse .simply-add-folder > button.simply-cancel,
+	#simply-browse .simply-add-page > button.simply-cancel {
+		color: #666;
+		position: absolute;
+		bottom: 5px;
+		right: 5px;
+		border: 0px;
+		background-color: white;
+		font-size: 18px;
+		padding: 0;
+	}
+	#simply-browse .simply-add-folder > button.simply-add > i,
+	#simply-browse .simply-add-page > button.simply-add > i {
+		margin-right: 5px;
+	}
+
+	#simply-browse .simply-dialog-body > button img,
+	#simply-browse .simply-dialog-body > .simply-button img {
+		max-width: 100%;
+		max-height: 100%;
+	}
+	#simply-browse .simply-dialog-body > button progress,
+	#simply-browse .simply-dialog-body > .simply-button progress {
+		width: 100%;
+		height: 10px;
+	}
+	#simply-browse .simply-dialog-body > button i.select,
+	#simply-browse .simply-dialog-body > .simply-button i.select {
+		position: absolute;
+		top: 0;
+		right: 0px;
+		display: inline-block;
+		text-align: right;
+		width: 40px;
+	}
+	#simply-browse .simply-dialog-body > button i.select:before,
+	#simply-browse .simply-dialog-body > .simply-button i.select:before {
+		width: 16px;
+		display: inline-block;
+		font-size: 20px;
+		border-left: 1px solid #ddd;
+		padding: 10px;
+		border-bottom: 1px solid #ddd;
+		color: #ddd;
+		border-bottom-left-radius: 15px;
+		z-index: 1;
+		background-color: rgba(255,255,255,0.3);
+		vertical-align: top;
+		box-sizing: content-box;
+	}
+	#simply-browse .simply-dialog-body.simply-selecting button i.select,
+	#simply-browse .simply-dialog-body.simply-selecting .simply-button i.select {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		bottom: 0px;
+		right: 0px;
+		width: auto;
+	}
+	#simply-browse .simply-dialog-body > button.simply-selected i.select:before,
+	#simply-browse .simply-dialog-body > .simply-button.simply-selected i.select:before {
+		border-color: #999;
+		color: #16B916;
+		background-color: rgba(255,255,255,0.8);
+	}
+
+	@media (max-width: 481px) {
+		#simply-browse .simply-dialog-body > button,
+		#simply-browse .simply-dialog-body > .simply-button {
+			width: 50%;
+		}
+		#simply-browse .simply-dialog-body > .simply-add-folder,
+		#simply-browse .simply-dialog-body > .simply-add-page {
+			width: 50%;
+		}
+	}
+
+	#simply-browse .simply-dialog-body > .simply-button.simply-image {
+		line-height: 149px;
+		padding-top: 0px;
+	}
+
+	#simply-browse .simply-dialog-body > button img,
+	#simply-browse .simply-dialog-body > .simply-button img {
+		max-width: 100%;
+		max-height: 100%;
+		vertical-align: middle;
+	}
+	#simply-browse .simply-button span.filename {
+		position: absolute;
+		font-size: 14px;
+		text-align: center;
+		line-height: 15px;
+		word-wrap: break-word;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: rgba(255,255,255,0.3);
+		color: #666;
+		padding: 3px;
+		text-shadow: white 0px 0px 2px;
+		border-top: 1px solid #eee;
+		transition: background-color 0.6s ease;
+	}
+	#simply-browse .simply-button.simply-selected span.filename {
+		background-color: rgba(255,255,255,1);
+	}
+
+	#simply-browse.simply-listmode .simply-dialog-body > button i.select:before,
+	#simply-browse.simply-listmode .simply-dialog-body > .simply-button i.select:before {
+		border-bottom: 0;
+		border-bottom-left-radius: 0;
+		border-left: 1px solid #eee;
+	}
+	#simply-browse.simply-listmode .simply-dialog-body > button,
+	#simply-browse.simply-listmode .simply-dialog-body > .simply-button,
+	#simply-browse.simply-listmode .simply-add-folder,
+	#simply-browse.simply-listmode .simply-add-page {
+		height: 40px;
+		width: 100%;
+		padding: 7px;
+		padding-right: 40px;
+		text-align: left;
+		white-space: nowrap;
+	}
+	#simply-browse.simply-listmode .simply-button:after {
+		display: none;
+	}
+	#simply-browse.simply-listmode .simply-dialog-body > button i,
+	#simply-browse.simply-listmode .simply-dialog-body > .simply-button i,
+	#simply-browse.simply-listmode .simply-add-folder > i,
+	#simply-browse.simply-listmode .simply-add-page > i {
+		font-size: 24px;
+		display: inline-block;
+		width: auto;
+		padding-right: 7px;
+		text-align: left;
+	}
+
+	#simply-browse.simply-listmode .simply-dialog-body > .simply-button.simply-image {
+		line-height: inherit;
+	}
+	#simply-browse.simply-listmode .simply-dialog-body > button img[data-value],
+	#simply-browse.simply-listmode .simply-dialog-body > .simply-button img[data-value] {
+		display: none;
+	}
+	#simply-browse.simply-listmode .simply-button span.filename {
+		position: static;
+		font-size: inherit;
+		text-align: inherit;
+		display: inline;
+		color: inherit;
+		border: 0;
+		padding: 0;
+		text-shadow: 0;
+		display: inline-block;
+		overflow: hidden;
+		max-width: 95%;
+		text-overflow: ellipsis;
+		line-height: 26px;
+		white-space: nowrap;
+	}
+	#simply-browse.simply-listmode .simply-dialog-body.simply-selecting button i.select,
+	#simply-browse.simply-listmode .simply-dialog-body.simply-selecting .simply-button i.select {
+		left: auto;
+	}
+
+	#simply-browse.simply-listmode .simply-add-folder > button.simply-add,
+	#simply-browse.simply-listmode .simply-add-page > button.simply-add {
+		bottom: -40px;
+		margin-bottom: 10px;
+	}
+	#simply-browse.simply-listmode .simply-add-folder input,
+	#simply-browse.simply-listmode .simply-add-page input {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	#simply-browse.simply-listmode .simply-add-folder > button.simply-cancel,
+	#simply-browse.simply-listmode .simply-add-page > button.simply-cancel {
+		bottom: 7px;
+		right: 9px;
+	}
+</style>
+
+<section id="simply-iframe" class="simply-section">
+	<h1>HTML Iframe Toolbar</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-section="simply-iframe-properties" class="simply-expands"><i class="fa fa-link"></i>IFrame target</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-iframe-properties">
+			<div><label>URL</label><input type="text" id="vdIframeSrc" data-simply-action="simply-iframe-src"></div>
+		</div>
+	</div>
+</section>
+<section id="simply-list-item" class="simply-section">
+	<h1>*Objectlist Toolbar*</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-list-item-delete"><i class="fa fa-times"></i>Delete</button></li>
+			<li><button data-simply-action="simply-list-item-add"><i class="fa fa-plus-circle"></i>Add</button></li>
+			<li><button data-simply-section="simply-list-mogrify" class="simply-expands"><i class="fa fa-cube"></i>Switch type</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-list-item-templates">
+			<ul>
+				<li><button data-simply-action="simply-list-item-add"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-list-mogrify">
+			<ul>
+				<li><button data-simply-action="simply-list-item-mogrify"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+	</div>
+</section>
+<section id="simply-list" class="simply-section">
+	<h1>*Objectlist Toolbar*</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-list-add"><i class="fa fa-plus-circle"></i>Add</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-list-templates">
+			<ul>
+				<li><button data-simply-action="simply-list-add"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+	</div>
+</section>
+<section id="simply-list-and-item" class="simply-section">
+	<h1>*Objectlist Toolbar*</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-list-add"><i class="fa fa-plus-circle"></i>Add child</button></li>
+			<li><button data-simply-action="simply-list-item-delete"><i class="fa fa-times"></i>Delete</button></li>
+			<li><button data-simply-action="simply-list-item-add"><i class="fa fa-plus-circle"></i>Add sibling</button></li>
+			<li><button data-simply-section="simply-list-mogrify" class="simply-expands"><i class="fa fa-cube"></i>Switch type</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-list-templates">
+			<ul>
+				<li><button data-simply-action="simply-list-add"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-list-item-templates">
+			<ul>
+				<li><button data-simply-action="simply-list-item-add"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+		<div class="simply-toolbar-section simply-list-mogrify">
+			<ul>
+				<li><button data-simply-action="simply-list-item-mogrify"><i class="fa fa-cube"></i>Template</button></li>
+			</ul>
+		</div>
+	</div>
+</section>
+<section id="simply-icon" class="simply-section">
+	<h1>Insert icon toolbar</h1>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-symbol"><i class="fa fa-rocket"></i>Insert icon</button></li>
+		</ul>
+	</div>
+</section>
+<section id="simply-template" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button class="simply-expands simply-selected" data-simply-action="simply-page-template" data-simply-section="simply-page-template"><i class="fa fa-paint-brush"></i>Page template</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-page-template simply-selected">
+			<div class="field">
+				<label for="simply-page-template-list">Page template</label>
+				<select id="simply-page-template-list"><option value="blank-template.html">Blank Page</option><option value="research-template.html">Research Page</option></select>
+			</div>
+			<div class="field">
+				<label><strong>Notice: </strong>when you apply, the page will be saved and reloaded with the new template;</label>
+			</div>
+		</div>
+	</div>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="simply-right"><button data-simply-action="simply-template-apply"><i class="fa fa-check"></i>Apply</button></li>
+		</ul>
+	</div>
+</section>
+<style type="text/css">
+	#simply-template .simply-toolbar-section ul {
+		background: transparent;
+	}
+	#simply-template .simply-page-template button:not(.simply-selected) {
+		background: white;
+	}
+	#simply-template .simply-page-template .simply-buttons {
+		margin-top: 0px;
+		margin-left: -3px;
+		display: inline-block;
+	}
+	#simply-template .simply-page-template .simply-buttons li {
+		margin-right: 5px;
+		list-style: none;
+	}
+	#simply-template .simply-page-template .field {
+		margin-bottom: 10px;
+		padding-left: 120px;
+		margin-right: 20px;
+	}
+	#simply-template .simply-page-template .field label {
+		margin-left: -120px;
+		display: inline-block;
+		width: 95px;
+		vertical-align: top;
+		margin-top: 12px;
+		white-space: normal;
+		line-height: 1.8em;
+    }
+	#simply-template .simply-page-template input {
+		width: 100%;
+	}
+</style>
+<section id="simply-save" class="simply-dialog">
+	<div class="simply-dialog-body"><div class="marker"></div>
+		<i class="fa fa-spinner fa-spin"></i>
+		<div class="simply-title">Saving...</div>
+		<div class="simply-message">Please wait...</div>
+	</div>
+</section>
+<style type="text/css">
+	#simply-save {
+		top: 50%;
+		max-height: 80%;
+		margin-top: -100px;
+		bottom: auto;
+		right: auto;
+		left: 50%;
+		width: 200px;
+		max-width: 80%;
+		margin-left: -100px;
+	}
+	#simply-save .simply-title {
+		font-size: 20px;
+		font-weight: bold;
+		margin-bottom: 5px;
+	}
+	#simply-save .simply-message {
+		font-size: 12px;
+	}
+	#simply-save i {
+		float: right;
+		font-size: 24px;
+	}
+	#simply-save .simply-dialog-body {
+		padding: 10px;
+	}
+	
+	@media (max-width: 481px) {
+		#simply-save {
+			top: 50%;
+			max-height: 80%;
+			margin-top: -100px;
+			left: 50%;
+			margin-left: -100px;
+			width: 200px;
+			max-width: 80%;
+			bottom: auto;
+			right: auto;
+			max-width: 100%;
+			max-height: 100%;
+			height: auto;
+		}
+	}
+</style>
+
+<section id="simply-meta" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button class="simply-expands simply-selected" data-simply-action="simply-metadata" data-simply-section="simply-metadata"><i class="fa fa-tags"></i>Meta tags</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+		<div class="simply-toolbar-section simply-metadata simply-selected">
+			<div class="field">
+				<label for="simply-meta-title">Page title</label>
+				<input type="text" id="simply-meta-title">
+			</div>
+			<div class="field">
+				<label for="simply-meta-description">Page description</label>
+				<input type="text" id="simply-meta-description">
+			</div>
+			<div class="field">
+				<label for="simply-meta-author">Author</label>
+				<input type="text" id="simply-meta-author">
+			</div>
+			<div class="field">
+				<label>Robots</label>
+				<ul class="simply-buttons" id="simply-meta-robots">
+					<li><button data-simply-action="simply-meta-robots" data-value="nofollow"><i class="fa fa-chain-broken"></i>No follow</button></li>
+					<li><button data-simply-action="simply-meta-robots" data-value="noindex"><i class="fa fa-eye-slash"></i>No index</button></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="simply-right"><button data-simply-action="simply-meta-apply"><i class="fa fa-check"></i>Apply</button></li>
+		</ul>
+	</div>
+</section>
+<style type="text/css">
+	#simply-meta .simply-toolbar-section ul {
+		background: transparent;
+	}
+	#simply-meta .simply-metadata button:not(.simply-selected) {
+		background: white;
+	}
+	#simply-meta .simply-metadata .simply-buttons {
+		margin-top: 0px;
+		margin-left: -3px;
+		display: inline-block;
+	}
+	#simply-meta .simply-metadata .simply-buttons li {
+		margin-right: 5px;
+		list-style: none;
+	}
+	#simply-meta .simply-metadata .field {
+		margin-bottom: 10px;
+		padding-left: 120px;
+		margin-right: 20px;
+	}
+	#simply-meta .simply-metadata .field label {
+		margin-left: -120px;
+		display: inline-block;
+		width: 95px;
+		vertical-align: top;
+		margin-top: 12px;
+	}
+	#simply-meta .simply-metadata input {
+		width: 100%;
+	}
+</style>
+<section id="simply-htmlsource" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-htmlsource-selectall"><i class="fa fa-quote-right"></i>Select field</button></li>
+			<!-- li><button data-simply-action="simply-htmlsource-editable"><i class="fa fa-lock"></i>Lock source</button></li -->
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+	</div>
+	<div class="simply-dialog-body"><div class="marker"></div>
+		<textarea id="insertHTMLSource"></textarea>
+	</div>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="simply-warning" id="insertHTMLWarning" style="display: none;">
+				<i class="fa fa-warning"></i> Warning: editable source and javascript do not mix.
+			</li>
+			<li class="simply-right"><button data-simply-action="simply-htmlsource-insert"><i class="fa fa-check"></i>Insert</button></li>
+		</ul>
+	</div>
+</section>
+<style type="text/css">
+	#simply-htmlsource .simply-dialog-body {
+		overflow-y: hidden;
+	}
+	#simply-htmlsource textarea {
+		width: 100%;
+		height: 100%;
+		border: 1px solid #9F9F9F;
+		background-color: white;
+		box-sizing: border-box;
+	}
+	#insertHTMLWarning {
+		height: 60px;
+		line-height: 60px;
+		overflow: hidden;
+		font-size: 14px;
+		margin-left: 5px;
+	}
+</style>
+
+<section id="simply-symbol" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+	</div>
+	<div class="simply-dialog-body"><div class="marker"></div>
+	</div>
+</section>
+<style type="text/css">
+	#simply-symbol .simply-dialog-body button {
+		border: 1px solid #eee;
+		background-color: white;
+		color: black;
+		font-weight: normal;
+		height: 50px;
+		width: 50px;
+		font-family: inherit;
+		font-size: 20px;
+	}
+</style>
+
+<section id="simply-diff" class="simply-dialog simply-modal fullscreen">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li><button data-simply-action="simply-diff-prev"><i class="fa fa-chevron-up"></i>Previous</button></li>
+			<li><button data-simply-action="simply-diff-next"><i class="fa fa-chevron-down"></i>Next</button></li>
+			<li><button data-simply-action="simply-diff-keep-theirs"><i class="fa fa-toggle-left"></i>Keep theirs</button></li>
+			<li><button data-simply-action="simply-diff-keep-mine"><i class="fa fa-toggle-right"></i>Keep mine</button></li>
+			<!-- Dialog -->
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Cancel</button></li>
+			<!-- li class='simply-right'><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li -->
+		</ul>
+	</div>
+	<div class="simply-dialog-body"><div class="marker"></div>
+		<div id="diff">
+			<div class="theirs">Theirs</div>
+			<div class="mine">Mine</div>
+		</div>
+	</div>
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="message">Review the differences and choose which of them to use.</li>
+			<li class="simply-right"><button disabled="" data-simply-action="simply-diff-save"><i class="fa fa-check"></i>Save merged</button></li>
+		</ul>
+	</div>
+</section>
+<style>
+	#simply-diff .message {
+		font-size: 12px;
+		line-height: 30px;
+		vertical-align: middle;
+		padding: 15px;
+	}
+	#simply-diff .simply-dialog-body {
+		padding-top: 30px;
+	}
+	#simply-diff #diff {
+		font-size: 0px;
+	}
+
+	#simply-diff #diff .theirs,
+	#simply-diff #diff .mine {
+		background-color: white;
+		box-sizing: border-box;
+		box-shadow: 0 0 5px #ccc;
+		width: 48%;
+		display: inline-block;
+		vertical-align: top;
+		color: #555;
+		white-space: pre-wrap;
+		position: relative;
+		margin-left: 1%;
+		margin-right: 1%;
+		line-height: initial;
+	}
+	#simply-diff #diff span,
+	#simply-diff #diff ins,
+	#simply-diff #diff del {
+		font-family: monospace;
+		font-size: initial;
+	}
+	#simply-diff #diff .theirs:before,
+	#simply-diff #diff .mine:before {
+		content: "Mine";
+		position: absolute;
+		display: block;
+		height: 30px;
+		line-height: 30px;
+		vertical-align: middle;
+		text-align: center;
+		margin-top: -30px;
+		width: 100%;
+		font-size: initial;
+	}
+	#simply-diff #diff .theirs:before {
+		content: "Theirs (server version)";
+	}
+
+	
+	#simply-diff #diff .theirs ins,
+	#simply-diff #diff .mine del {
+		color: transparent;
+		letter-spacing: -20px;
+		/*
+			xdisplay: none;
+			width: 0;
+			overflow: hidden;
+			display: inline-block;
+			line-height: 0;
+			vertical-align: top;
+		*/
+	}
+	#simply-diff #diff del.selected:before,
+	#simply-diff #diff ins.selected:before {
+		content: " ";
+		position: absolute;
+		left: 0px;
+		right: 0px;
+		box-shadow: 0 0 2px #ccc;
+
+		background-color: rgba(25, 25 ,255, 0.1);
+		line-height: 1.2em;
+	}
+
+	#simply-diff #diff .theirs del,
+	#simply-diff #diff .mine ins {
+		background-color: #ffc0cb;
+		color: black;
+		text-decoration: none;
+	}
+	#simply-diff #diff .theirs del.selected,
+	#simply-diff #diff .mine ins.selected,
+	#simply-diff #diff .theirs ins.selected + del,
+	#simply-diff #diff .mine del.selected + ins {
+		background-color: #c2eeff;
+	}
+
+</style>
+<section id="simply-about" class="simply-dialog simply-modal">
+	<div class="simply-toolbar"><div class="marker"></div>
+		<ul class="simply-buttons">
+			<li class="simply-left simply-expands"><button data-simply-section="simply-about-body" class="simply-selected"><i class="fa fa-info"></i>About</button></li>
+			<li class="simply-left simply-expands"><button data-simply-section="simply-key"><i class="fa fa-key"></i>Your Key</button></li>
+			<li class="simply-left"><button data-simply-action="simply-help"><i class="fa fa-question"></i>Help</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-close"><i class="fa fa-times"></i>Close</button></li>
+			<li class="simply-right"><button data-simply-action="simply-dialog-fullscreen"><i class="fa fa-expand"></i>Full screen</button></li>
+		</ul>
+		<div id="simply-key" class="simply-key simply-toolbar-section simply-dialog-body"><div class="marker"></div>
+			<div id="simply-about-header">
+				<img src="https://simplyedit.io/graphics/logo.svg" alt="SimplyEdit" class="simply-logo">
+			</div>
+			<div id="simply-about-key-info">
+				<div id="simply-about-key"><span class="simply-label">Your key</span><span class="simply-info"></span></div>
+				<div id="simply-about-key-domains"><span class="simply-label">Valid for</span><span class="simply-info"></span></div>
+			</div>
+			<div id="simply-about-footer">
+				<p>SimplyEdit is a product by <button class="simply-about-muze" data-simply-action="simply-about-muze">Muze</button><br>© 2015-2019, <button class="simply-about-muze" data-simply-action="simply-about-license">all rights reserved.</button></p>
+			</div>
+		</div>
+		<div id="simply-about-body" class="simply-about-body simply-toolbar-section simply-dialog-body simply-selected"><div class="marker"></div>
+			<div id="simply-about-header">
+				<img src="https://simplyedit.io/graphics/logo.svg" alt="SimplyEdit" class="simply-logo">
+				<div id="simply-about-version"></div>
+			</div>
+			<div id="simply-about-info">
+				<div id="simply-about-key-valid" style="display: none"></div>
+				<div id="simply-about-key-upgrade" style="display: none"></div>
+				<button id="simply-buy-button" data-simply-action="simply-about-buy" style="display: none">Buy now</button>
+			</div>
+			<div id="simply-about-footer">
+				<p>SimplyEdit is a product by <button class="simply-about-muze" data-simply-action="simply-about-muze">Muze</button><br>©
+				2015-2021, <button class="simply-about-muze" data-simply-action="simply-about-license">all rights reserved.</button></p>
+			</div>
+		</div>
+	</div>
+</section>
+<style type="text/css">
+	#simply-about .simply-toolbar-section {
+		font-size: 16px;
+		overflow: hidden;
+		line-height: 25px;
+	}
+	#simply-about .simply-toolbar-section > div {
+		padding: 0;
+	}
+	#simply-about .simply-toolbar-section button:focus {
+		border: 0 !important;
+	}
+	#simply-about .simply-toolbar-section button {
+		border: 1px solid #eee;
+		background-color: white;
+		height: 50px;
+		width: 50px;
+		font-family: inherit;
+		font-size: 20px;
+	}
+	#simply-about .simply-toolbar-section button.simply-about-muze {
+		font-size: 1em;
+		display: inline;
+		color: #888;
+		padding: 0;
+		background-color: transparent;
+		border: 0;
+		height: auto;
+		width: auto;
+		box-shadow: 0 0 0;
+	}
+	#simply-about button.simply-about-muze:hover {
+		text-decoration: underline;
+	}
+	#simply-about .simply-toolbar-section button {
+		width: auto;
+		font-size: 1em;
+		color: #333;
+		height: auto;
+		padding: 5px;
+		border-radius: 3px;
+		box-shadow: 2px 2px 3px #666;
+	}
+	#simply-about img.simply-logo {
+		display: block;
+	}
+	#simply-about-header {
+		width: 50%;
+		max-width: 400px;
+		text-align: center;
+		margin: 20px auto 10px auto;
+	}
+	#simply-about-footer {
+		position: absolute;
+		bottom: 0;
+		font-size: 0.8em;
+		color: #888;
+		text-align: center;
+		width: 100%;
+	}
+	#simply-about-info {
+		margin-top: 20px;
+		padding: 0 20px;
+	}
+	#simply-about-upgrade {
+		visibility: hidden;
+	}
+	#simply-about-info,
+	#simply-about-key-valid {
+		text-align: center;
+	}
+	#simply-about .simply-label {
+		display: block;
+	}
+	#simply-about .simply-info {
+		display: block;
+		padding: 5px;
+		border-radius: 3px;
+		background-color: white;
+	}
+	#simply-about-key-info {
+		margin: 0 20px;
+	}
+	#simply-about-key {
+		margin-bottom: 10px;
+	}
+</style>
+
+</div><div id="manual-editor-modal-overlay" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); z-index: 100001; display: none; align-items: center; justify-content: center;"><div style="background-color: rgb(40, 42, 54); padding: 15px; border: 1px solid rgb(136, 136, 136); width: 85%; height: 85%; max-width: 1400px; box-shadow: rgba(0, 0, 0, 0.2) 0px 4px 8px 0px; display: flex; flex-direction: column; position: relative;">
+        <div style="display: flex; justify-content: space-between; align-items: center;
+  padding-bottom: 10px; border-bottom: 1px solid #44475a;">
+          <h2 style="margin: 0; font-family: sans-serif; color: #f8f8f2;">Editor HTML del
+  &lt;body&gt;</h2>
+          <div>
+            <button id="modal-apply-preview" style="padding: 8px 15px; background-color:
+  #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica
+  Anteprima</button>
+            <button id="modal-close-button" style="padding: 8px 15px; background-color:
+  #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
+          </div>
+        </div>
+        <textarea id="html-editor-textarea" style="display: none;"></textarea><div class="CodeMirror cm-s-dracula CodeMirror-wrap" translate="no" style="width: 100%; height: calc(100% - 50px);"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 259px; left: 509.667px;"><textarea style="position: absolute; bottom: -1em; padding: 0px; width: 1px; height: 1em; min-height: 1em; outline: none;" wrap="off" autocorrect="off" autocapitalize="none" spellcheck="false" tabindex="0"></textarea></div><div class="CodeMirror-vscrollbar" tabindex="-1" cm-not-content="true" style="display: block; bottom: 0px; width: 18px; visibility: hidden;"><div style="min-width: 1px; height: 2453px;"></div></div><div class="CodeMirror-hscrollbar" tabindex="-1" cm-not-content="true" style="height: 18px; visibility: hidden;"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-scrollbar-filler" cm-not-content="true"></div><div class="CodeMirror-gutter-filler" cm-not-content="true"></div><div class="CodeMirror-scroll" tabindex="-1" draggable="true"><div class="CodeMirror-sizer" style="margin-left: 29px; margin-bottom: 0px; border-right-width: 50px; min-height: 2453px; padding-right: 0px; padding-bottom: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines" role="presentation"><div style="position: relative; outline: none;" role="presentation"><div class="CodeMirror-measure"><pre class="CodeMirror-line-like">x</pre></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-cursors" style=""><div class="CodeMirror-cursor" style="left: 480.667px; top: 255px; height: 15px;">&nbsp;</div></div><div class="CodeMirror-code" role="presentation" style=""><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">1</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">2</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">3</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"container"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">4</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">5</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"head_container"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">6</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"left_logo"</span><span class="cm-tag cm-bracket">&gt;&lt;</span><span class="cm-tag">span</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-comment">&lt;!-- Logo Sinistro --&gt;</span><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">span</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">7</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"right_logo"</span><span class="cm-tag cm-bracket">&gt;&lt;</span><span class="cm-tag">span</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-comment">&lt;!-- Logo Destro --&gt;</span><span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">span</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">8</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"head_middle"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">9</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">h1</span> <span class="cm-attribute">data-simply-field</span>=<span class="cm-string">"mainHeading"</span><span class="cm-tag cm-bracket">&gt;</span>Semantic Turkey<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">h1</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">10</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">h2</span> <span class="cm-attribute">data-simply-field</span>=<span class="cm-string">"subHeading"</span><span class="cm-tag cm-bracket">&gt;</span>A Linguistic and Semantic Platform for Knowledge Management and Acquisition<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">h2</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">11</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">12</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">13</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">14</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">class</span>=<span class="cm-string">"horizontalBarContainer"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">15</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">class</span>=<span class="cm-string">"horizontalBar"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">16</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">17</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">18</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"leftSideBar"</span> <span class="cm-attribute">data-simply-field</span>=<span class="cm-string">"leftSidebarContent"</span><span class="cm-tag cm-bracket">&gt;</span><span class="cm-tab" role="presentation" cm-text="	">   </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span><span class="cm-tab" role="presentation" cm-text="	">    </span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">19</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">20</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">21</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"rightSideBar"</span> <span class="cm-attribute">data-simply-field</span>=<span class="cm-string">"rightSidebarContent"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">22</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">h3</span><span class="cm-tag cm-bracket">&gt;</span>On this page<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">h3</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">23</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span>Contenuto della barra laterale destra. Modificabile.<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">24</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">25</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">26</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"mainContent"</span> <span class="cm-attribute">data-simply-field</span>=<span class="cm-string">"mainContent"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">27</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">h2</span><span class="cm-tag cm-bracket">&gt;</span>Contenuto Principale<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">h2</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">28</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span>Questo è il contenuto principale della pagina. È possibile modificarlo utilizzando l'editor HTML personalizzato.<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">29</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. <span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">30</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">31</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">32</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">br</span> <span class="cm-attribute">class</span>=<span class="cm-string">"clearfloat"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">33</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">34</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">id</span>=<span class="cm-string">"footer"</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">35</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp; &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span>© 2025 - Progetto Tesi<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">p</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">36</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp; &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">37</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">38</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">39</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">40</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-comment">&lt;!-- SimplyEdit &amp; Plugins --&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">41</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span> <span class="cm-attribute">src</span>=<span class="cm-string">"assets/js/simply-edit-config.js"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">42</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span> <span class="cm-attribute">src</span>=<span class="cm-string">"assets/js/codemirror-editor-plugin.js"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">43</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">44</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-comment">&lt;!-- Configurazione SimplyEdit per GitHub --&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">45</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">script</span> <span class="cm-attribute">src</span>=<span class="cm-string">"simplyedit/js/simply-edit.js"</span> <span class="cm-attribute">data-simply-storage</span>=<span class="cm-string">"customGithub"</span> <span class="cm-attribute">data-simply-repo-user</span>=<span class="cm-string">"continos"</span> <span class="cm-attribute">data-simply-repo-name</span>=<span class="cm-string">"Tesi"</span> <span class="cm-attribute">data-simply-repo-branch</span>=<span class="cm-string">"gh-pages"</span> <span class="cm-attribute">data-simply-settings</span>=<span class="cm-string">"customSettings"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">script</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">46</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;</span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">47</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-comment">&lt;!-- Pulsante per attivare Edit Mode --&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">48</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"> &nbsp;<span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">a</span> <span class="cm-attribute">href</span>=<span class="cm-string">"#simply-edit"</span> <span class="cm-attribute">id</span>=<span class="cm-string">"edit-mode-button"</span> <span class="cm-attribute">title</span>=<span class="cm-string">"Attiva Edit Mode"</span><span class="cm-tag cm-bracket">&gt;&lt;</span><span class="cm-tag">i</span> <span class="cm-attribute">class</span>=<span class="cm-string">"bi bi-pencil-square"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">i</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">a</span><span class="cm-tag cm-bracket">&gt;</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">49</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">50</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">51</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span cm-text="">​</span></span></pre></div><div style="position: relative;"><div class="CodeMirror-gutter-wrapper" style="left: -29px;" aria-hidden="true"><div class="CodeMirror-linenumber CodeMirror-gutter-elt" style="left: 0px; width: 21px;">52</div></div><pre class=" CodeMirror-line " role="presentation"><span role="presentation"><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">style</span>=<span class="cm-string">"border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"</span><span class="cm-tag cm-bracket">&gt;&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">style</span>=<span class="cm-string">"border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag">div</span><span class="cm-tag cm-bracket">&gt;&lt;/</span><span class="cm-tag cm-error">div</span><span class="cm-tag cm-bracket cm-error">&gt;</span><span class="cm-tag cm-bracket">&lt;</span><span class="cm-tag">div</span> <span class="cm-attribute">style</span>=<span class="cm-string">"border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"</span>&gt;&lt;div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"&gt;&lt;/div&gt;&lt;/div&gt;</span></pre></div></div></div></div></div></div><div style="position: absolute; height: 50px; width: 1px; border-bottom: 0px solid transparent; top: 2453px;"></div><div class="CodeMirror-gutters" style="height: 2503px; left: 0px;"><div class="CodeMirror-gutter CodeMirror-linenumbers" style="width: 29px;"></div></div></div></div>
+      </div></div><div id="container">
 
     <div id="head_container">
         <div id="left_logo"><span><!-- Logo Sinistro --></span></div>
@@ -37,16 +1113,12 @@
     </div>
 
     <div id="leftSideBar" data-simply-field="leftSidebarContent">
-        
-					<div id="leftNavBar">
-						<ul id="primary-nav">
-								<li class="menuparent">
-									<a class="leftNavBarButton" href="/doc/history.jsf">history</a>
-								</li>
-								<li class="menuparent">
-									<a class="leftNavBarButton" href="/doc/publications.jsf">publications</a>
-								</li>
-						</ul>				
+        <h3>Navigazione</h3>
+        <p>Contenuto della barra laterale sinistra. Modificabile.</p>
+        <ul>
+            <li>Link 1</li>
+            <li>Link 2</li>
+        </ul>
     </div>
 
     <div id="rightSideBar" data-simply-field="rightSidebarContent">
@@ -55,10 +1127,20 @@
     </div>
 
     <div id="mainContent" data-simply-field="mainContent">
-        <h2>Contenuto Principale</h2>
-        <p>Questo è il contenuto principale della pagina. È possibile modificarlo utilizzando l'editor HTML personalizzato.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper. Duis arcu massa, scelerisque vitae, consequat in, pretium a, enim. </p>
-    </div>
+  <h1>VocBench</h1>
+  <p><strong style="color: #047370">VocBench </strong>is a web-based, multilingual, collaborative development platform for managing <a href="https://www.w3.org/TR/owl2-overview/">OWL</a> ontologies, <a href="https://www.w3.org/TR/skos-reference/">SKOS</a>(/<a href="https://www.w3.org/TR/skos-reference/skos-xl.html">XL</a>) thesauri, <a href="https://www.w3.org/2016/05/ontolex/">Ontolex-lemon</a> lexicons and generic RDF datasets.</p>
+
+  <p>Designed to meet the needs of semantic web and linked data environments,&nbsp;VocBench&nbsp;development has also been driven by the feedback gathered from a <a href="support/community.jsf">community of users</a> made of public organizations, companies and independent users looking for open source solutions for maintaining their ontologies, thesauri, code lists and authority resources.  </p>
+  <p><strong style="color: #047370">VocBench </strong>(or, simply, <strong style="color: #047370">VB</strong>)  business and data access layers are realized by <a href="http://semanticturkey.uniroma2.it/" rel="nofollow">Semantic Turkey</a>, an open-source platform for Knowledge Acquisition and Management realized by the <a href="http://art.uniroma2.it/" rel="nofollow">ART Research Group</a> at the <a href="http://www.uniroma2.it/">University of Rome Tor Vergata</a>.  </p>
+  <p><strong style="color: #047370">VocBench </strong>offers a powerful editing environment, with facilities for management of OWL ontologies, SKOS/SKOS-XL thesauri, OntoLex lexicons and any sort of RDF dataset. It aims to set new standards for flexibility, openness and expressive power as a free and open source RDF modelling platform.</p>
+  <p>Initially funded by the <a href="http://ec.europa.eu/">European Commission</a> <a href="http://ec.europa.eu/isa/isa2/">ISA² programme</a> and currently by the Digital Europe Programme <a href="https://digital-strategy.ec.europa.eu/activities/digital-programme">(DIGITAL</a>), the development of <strong style="color: #047370">VocBench</strong> is managed by the <a href="http://publications.europa.eu/">Publications Office of the EU</a> under contract with <a href="https://www.eurodyn.com/">European Dynamics</a>.</p>
+  <p>Download links for the sources and binaries of VocBench are available on the <a href="downloads">downloads page</a></p>
+  <p>&nbsp;</p>
+  <img src="https://vocbench.uniroma2.it/images/OverallPicture_VB3.png" alt="Overall Picture of VocBench" class="screenshot">
+  <p>&nbsp;</p>
+						
+						
+											</div>
 
     <br class="clearfloat">
 
@@ -66,18 +1148,4 @@
         <p>© 2025 - Progetto Tesi</p>
     </div>
 
-  </div>
-
-  <!-- SimplyEdit & Plugins -->
-  <script src="assets/js/simply-edit-config.js"></script>
-  <script src="assets/js/codemirror-editor-plugin.js"></script>
-
-  <!-- Configurazione SimplyEdit per GitHub -->
-  <script src="simplyedit/js/simply-edit.js" data-simply-storage="customGithub" data-simply-repo-user="continos" data-simply-repo-name="Tesi" data-simply-repo-branch="gh-pages" data-simply-settings="customSettings"></script>
-  
-  <!-- Pulsante per attivare Edit Mode -->
-  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode"><i class="bi bi-pencil-square"></i></a>
-
-
-
-<div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"></div></div></div></body></html>
+  </div><a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode"><i class="bi bi-pencil-square"></i></a><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"></div></div><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"></div></div><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"><div style="border-block: unset; border-inline: unset; border-start-start-radius: unset; border-start-end-radius: unset; border-end-start-radius: unset; border-end-end-radius: unset; overflow-block: unset; overflow-inline: unset; overscroll-behavior-block: unset; overscroll-behavior-inline: unset; margin-block: unset; margin-inline: unset; scroll-margin-block: unset; scroll-margin-inline: unset; padding-block: unset; padding-inline: unset; scroll-padding-block: unset; scroll-padding-inline: unset; inset-block: unset; inset-inline: unset; block-size: unset; min-block-size: unset; max-block-size: unset; inline-size: unset; min-inline-size: unset; max-inline-size: unset; contain-intrinsic-block-size: unset; contain-intrinsic-inline-size: unset; background: unset; background-blend-mode: unset; border: unset; border-radius: unset; box-decoration-break: unset; -moz-float-edge: unset; display: unset; position: absolute; float: unset; clear: unset; vertical-align: unset; baseline-source: unset; overflow: unset; overflow-anchor: unset; transform: unset; rotate: unset; scale: unset; translate: unset; offset: unset; scroll-behavior: unset; scroll-snap-align: unset; scroll-snap-type: unset; scroll-snap-stop: unset; overscroll-behavior: unset; isolation: unset; break-after: unset; break-before: unset; break-inside: unset; resize: unset; perspective: unset; perspective-origin: unset; backface-visibility: unset; transform-box: unset; transform-style: unset; transform-origin: unset; contain: unset; content-visibility: unset; container: unset; appearance: unset; -moz-orient: unset; will-change: unset; shape-image-threshold: unset; shape-margin: unset; shape-outside: unset; touch-action: unset; -webkit-line-clamp: unset; scrollbar-gutter: unset; zoom: unset; columns: unset; column-fill: unset; column-rule: unset; column-span: unset; content: unset; counter-increment: unset; counter-reset: unset; counter-set: unset; opacity: unset; box-shadow: unset; clip: unset; filter: unset; backdrop-filter: unset; mix-blend-mode: unset; font: unset; font-synthesis: unset; font-palette: unset; math-depth: unset; math-style: unset; visibility: unset; writing-mode: unset; text-orientation: unset; print-color-adjust: unset; image-rendering: unset; image-orientation: unset; dominant-baseline: unset; text-anchor: unset; color-interpolation: unset; color-interpolation-filters: unset; fill: unset; fill-opacity: unset; fill-rule: unset; shape-rendering: unset; stroke: unset; stroke-width: unset; stroke-linecap: unset; stroke-linejoin: unset; stroke-miterlimit: unset; stroke-opacity: unset; stroke-dasharray: unset; stroke-dashoffset: unset; clip-rule: unset; marker: unset; paint-order: unset; border-collapse: unset; empty-cells: unset; caption-side: unset; border-spacing: unset; color: unset; text-transform: unset; hyphens: unset; -moz-text-size-adjust: unset; text-indent: unset; overflow-wrap: unset; word-break: unset; text-justify: unset; text-align-last: unset; text-align: unset; letter-spacing: unset; word-spacing: unset; white-space: unset; text-shadow: unset; text-emphasis: unset; text-emphasis-position: unset; tab-size: unset; line-break: unset; -webkit-text-fill-color: unset; -webkit-text-stroke: unset; ruby-align: unset; ruby-position: unset; text-combine-upright: unset; text-rendering: unset; text-underline-offset: unset; text-underline-position: unset; text-decoration-skip-ink: unset; hyphenate-character: unset; forced-color-adjust: unset; -webkit-text-security: unset; hyphenate-limit-chars: unset; text-wrap: unset; cursor: unset; pointer-events: unset; caret-color: unset; accent-color: unset; color-scheme: unset; scrollbar-color: unset; list-style: unset; quotes: unset; margin: unset; overflow-clip-margin: unset; scroll-margin: unset; outline: unset; outline-offset: unset; padding: unset; scroll-padding: unset; page: unset; top: 0px; right: unset; bottom: unset; left: 0px; z-index: unset; flex-flow: unset; place-content: unset; place-items: unset; flex: unset; place-self: unset; order: unset; height: unset; min-height: unset; max-height: unset; width: unset; min-width: unset; max-width: unset; box-sizing: unset; object-fit: unset; object-position: unset; grid-area: unset; grid: unset; gap: unset; aspect-ratio: unset; contain-intrinsic-size: unset; vector-effect: unset; stop-color: unset; stop-opacity: unset; flood-color: unset; flood-opacity: unset; lighting-color: unset; mask-type: unset; clip-path: unset; mask: unset; x: unset; y: unset; cx: unset; cy: unset; rx: unset; ry: unset; r: unset; d: unset; table-layout: unset; text-overflow: unset; text-decoration: unset; ime-mode: unset; scrollbar-width: unset; user-select: unset; -moz-force-broken-image-icon: unset; transition: unset; animation: unset; animation-composition: unset; -moz-box-align: unset; -moz-box-direction: unset; -moz-box-flex: unset; -moz-box-orient: unset; -moz-box-pack: unset; -moz-box-ordinal-group: unset;"></div></div></body></html>
