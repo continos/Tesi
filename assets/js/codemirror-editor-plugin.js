@@ -36,7 +36,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     document.body.appendChild(modalOverlay);
 
     const textarea = document.getElementById('html-editor-textarea');
-    const mainElement = document.querySelector('main.main');
+    const mainElement = editor.data.originalBody.querySelector('main.main');
     if (mainElement) {
         textarea.value = mainElement.innerHTML;
     }
