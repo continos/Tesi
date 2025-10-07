@@ -3557,7 +3557,7 @@
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
 								const pollPagesStatus = () => {
-									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
+									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages/builds/latest`;
 									
 									fetch(apiUrl, { 
 										headers: { 'Accept': 'application/vnd.github.v3+json' }
