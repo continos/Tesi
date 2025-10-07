@@ -435,7 +435,7 @@
 	},
 	"/cartella1/file1.html": {
 		"topics": [],
-		"data-simply-page-template": "research-template.html",
+		"data-simply-page-template": "blank-template.html",
 		"pageTitle": "Nuova Pagina",
 		"sections": [
 			{
@@ -453,7 +453,12 @@
 				"sectionTitle": "Titolo Sezione",
 				"data-simply-template": "sectionTitle"
 			}
-		]
+		],
+		"mainHeading": "New Research Page",
+		"breadcrumb": "New Research Page",
+		"news-content": "\n        <p>Qui verranno visualizzate le ultime notizie. Per ora, questo \u00e8 un segnaposto.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi tutte le News</a>\n      ",
+		"publications-subtitle": "New Research Page",
+		"publications-content": "\n        <p>Spiacente nessuna pubblicazione corrispondente ai criteri di ricerca.</p>\n        <a href=\"#\" class=\"btn-topic-link\">Vedi le Pubblicazioni</a>\n      "
 	},
 	"/cartella2/file2.html": {
 		"data-simply-page-template": "research-template.html",
