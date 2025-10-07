@@ -2,9 +2,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
-  if (editor.storage.getType() !== 'customGithub') {
-    return;
-  }
 
   console.log('Toolbars loaded, adding GitHub-powered HTML editor plugin.');
 
