@@ -3579,9 +3579,9 @@
 									)};
 									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
 								//}, 15000); // Inizia il primo controllo dopo 15 secondi
-							}.bind(this));
+							});
 						}
-					}.bind(this));
+					});
 				},
 				list : function(url, callback) {
 					if (url.indexOf(editor.storage.dataEndpoint) === 0) {
