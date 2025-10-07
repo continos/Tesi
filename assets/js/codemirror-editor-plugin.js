@@ -1,11 +1,12 @@
 document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor) {
+    // Non attivare il plugin se lo storage non supporta la funzione necessaria
     return;
   }
 
-  console.log('Toolbars loaded, adding CodeMirror HTML editor plugin.');
+  console.log('Toolbars loaded, adding Body HTML editor plugin.');
 
-  const htmlEditorAction = function() {
+  const bodyEditorAction = function() {
     let codeEditor;
     const modalOverlay = document.createElement('div');
     Object.assign(modalOverlay.style, {
@@ -23,9 +24,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     modalContent.innerHTML = `
       <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a;">
-        <h2 style="margin: 0; font-family: sans-serif; color: #f8f8f2;">Editor HTML della Sezione &lt;main&gt;</h2>
+        <h2 style="margin: 0; font-family: sans-serif; color: #f8f8f2;">Editor HTML del &lt;body&gt;</h2>
         <div>
-          <button id="modal-save-html-button" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px; font-weight: bold;">Salva e Committa</button>
+          <button id="modal-save-body-button" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px; font-weight: bold;">Salva e Committa</button>
           <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">&times; Annulla</button>
         </div>
       </div>
@@ -36,12 +37,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
     document.body.appendChild(modalOverlay);
 
     const textarea = document.getElementById('html-editor-textarea');
-    // Leggiamo l'HTML dalla copia di backup per includere i template
     if (editor.data.originalBody) {
-        const mainElement = editor.data.originalBody.querySelector('main.main');
-        if (mainElement) {
-            textarea.value = mainElement.innerHTML;
-        }
+        textarea.value = editor.data.originalBody.innerHTML;
     }
 
     codeEditor = CodeMirror.fromTextArea(textarea, {
@@ -49,7 +46,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
       mode: 'htmlmixed',
       theme: 'dracula',
       lineWrapping: true,
-      autofocus: true
+      autofocus: true,
+      extraKeys: {"Ctrl-Space": "autocomplete"}
     });
     codeEditor.setSize('100%', 'calc(100% - 50px)');
     setTimeout(() => codeEditor.refresh(), 1);
@@ -57,8 +55,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const closeModal = () => document.body.removeChild(modalOverlay);
     document.getElementById('modal-close-button').onclick = closeModal;
     
-    document.getElementById('modal-save-html-button').onclick = () => {
-      const newMainHtml = codeEditor.getValue();
+    document.getElementById('modal-save-body-button').onclick = () => {
+      const newBodyHtml = codeEditor.getValue();
       let filePath = window.location.pathname;
 
       if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -71,8 +69,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
         filePath = filePath.substring(1);
       }
 
-      // Chiama la funzione specifica dello storage, che ora vive in simply-edit.js
-      editor.storage.saveMainHtml(filePath, newMainHtml, (result) => {
+      // Chiama la funzione generica dello storage con il selettore 'body'
+      editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
         if (result.error) {
           alert(result.message);
           console.error(result.details || '');
@@ -84,14 +82,14 @@ document.addEventListener('simply-toolbars-loaded', function() {
     };
   };
 
-  editor.addAction('custom-html-editor', htmlEditorAction);
+  editor.addAction('custom-body-editor', bodyEditorAction);
 
   const mainToolbarUl = document.querySelector('#simply-main-toolbar .simply-buttons');
   if (mainToolbarUl) {
     const newButtonLi = document.createElement('li');
     newButtonLi.innerHTML = `
-      <button data-simply-action="custom-html-editor" title="Modifica HTML della sezione <main>">
-        <i class="fa fa-file-code-o"></i> Edit Main HTML
+      <button data-simply-action="custom-body-editor" title="Modifica HTML del <body>">
+        <i class="fa fa-file-code-o"></i> Edit Body HTML
       </button>
     `;
     const saveButtonLi = mainToolbarUl.querySelector('button[data-simply-action="simply-save"]').parentElement;

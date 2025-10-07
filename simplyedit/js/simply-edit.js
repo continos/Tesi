@@ -3624,43 +3624,38 @@
 						}
 					});
 				},
-				saveMainHtml: function(filePath, htmlContent, callback) {
+				// Funzione generica per salvare un blocco di HTML in un file
+				saveHtmlBlock: function(filePath, selector, htmlContent, callback) {
 					const storage = this;
 					if (!storage.repo) {
-						return callback({ error: true, message: "Connessione al repository GitHub non ancora stabilita." });
+					return callback({ error: true, message: "Connessione al repository GitHub non ancora stabilita." });
 					}
 
-					// 1. Leggi il contenuto attuale del file intero dal repo
 					storage.repo.read(storage.repoBranch, filePath, (err, currentFileContent) => {
-						if (err) {
-							return callback({ error: true, message: "Errore: impossibile leggere il file dal repository GitHub." });
+					if (err) {
+						return callback({ error: true, message: "Errore: impossibile leggere il file dal repository GitHub." });
+					}
+
+					const parser = new DOMParser();
+					const doc = parser.parseFromString(currentFileContent, 'text/html');
+					const elementToUpdate = doc.querySelector(selector);
+
+					if (!elementToUpdate) {
+						return callback({ error: true, message: `Errore: impossibile trovare l'elemento con selettore '${selector}' nel file.` });
+					}
+
+					elementToUpdate.innerHTML = htmlContent;
+					const updatedFileContent = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+					const commitMessage = `Aggiornamento HTML di <${selector}> per ${filePath}`;
+
+					storage.repo.write(storage.repoBranch, filePath, updatedFileContent, commitMessage, (writeErr) => {
+						if (writeErr) {
+						return callback({ error: true, message: "Errore durante il salvataggio su GitHub.", details: writeErr });
 						}
-
-						// 2. Usa DOMParser per manipolare l'HTML
-						const parser = new DOMParser();
-						const doc = parser.parseFromString(currentFileContent, 'text/html');
-						const main = doc.querySelector('main.main');
-
-						if (!main) {
-							return callback({ error: true, message: "Errore: impossibile trovare la sezione <main> nel file." });
-						}
-
-						// 3. Sostituisci il contenuto di <main>
-						main.innerHTML = htmlContent;
-
-						// 4. Riconverti il documento in stringa HTML
-						const updatedFileContent = '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
-						const commitMessage = `Aggiornamento HTML di <main> per ${filePath}`;
-
-						// 5. Scrivi il file aggiornato su GitHub
-						storage.repo.write(storage.repoBranch, filePath, updatedFileContent, commitMessage, (writeErr) => {
-							if (writeErr) {
-								return callback({ error: true, message: "Errore durante il salvataggio su GitHub.", details: writeErr });
-							}
-							callback({ success: true, message: "File HTML aggiornato e committato su GitHub con successo!" });
-						});
+						callback({ success: true, message: `Contenuto di <${selector}> aggiornato e committato con successo!` });
 					});
-				}			
+					});
+				},			
 			},
 			default : {
 				init : function(endpoint) {
