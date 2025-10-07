@@ -86,16 +86,21 @@ document.addEventListener('simply-toolbars-loaded', function() {
   };
 
   const saveHtmlAction = function() {
-    const mainBody = document.querySelector('body');
-    if (!mainBody) return;
+    // Cerca l'istanza dell'editor attiva, se esiste
+    const modal = document.getElementById('manual-editor-modal-overlay');
+    if (!modal || !modal.codeEditorInstance) {
+      alert("Errore: l'editor non è aperto o non è stato trovato.");
+      return;
+    }
 
     if (!confirm("Sei sicuro di voler salvare le modifiche HTML all'intero body? Questa azione non può essere annullata e creerà un nuovo commit.")) {
         return;
     }
 
-    const newBodyHtml = mainBody.innerHTML;
+    // Prende l'HTML direttamente dall'editor, che è la fonte più pulita
+    const newBodyHtml = modal.codeEditorInstance.getValue();
+    
     let filePath = window.location.pathname;
-    const finalUrl = new URL(filePath, window.location.origin).href;
 
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
       const repoPrefix = '/' + editor.storage.repoName;
@@ -107,48 +112,24 @@ document.addEventListener('simply-toolbars-loaded', function() {
       filePath = filePath.substring(1);
     }
 
-    // Crea e mostra la modale di attesa
+    // Mostra una modale di attesa
     const dialog = document.createElement('section');
     dialog.id = 'deploy-status-dialog';
     dialog.className = 'simply-dialog simply-modal';
-    dialog.innerHTML = `
-      <div class="simply-toolbar">
-        <ul class="simply-buttons">
-          <li><h1 style="font-size: 16px; margin-left: 10px;">Salvataggio e Deploy</h1></li>
-        </ul>
-      </div>
-      <div class="simply-dialog-body" style="padding: 20px; font-size: 14px; line-height: 1.5;">
-        Salvataggio su GitHub in corso...</div>
-    `;
+    dialog.innerHTML = `<div class="simply-dialog-body" style="padding: 20px;">Salvataggio e commit in corso...</div>`;
     editor.toolbarsContainer.appendChild(dialog);
     editor.plugins.dialog.open(dialog);
     const bodyEl = dialog.querySelector('.simply-dialog-body');
 
+    // Chiama la funzione di salvataggio con l'HTML pulito dall'editor
     editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
       if (result.error) {
-        bodyEl.textContent = 'Errore durante il salvataggio: ' + result.message;
-        return;
+        bodyEl.textContent = 'Errore: ' + result.message;
+        console.error(result.details || '');
+      } else {
+        bodyEl.textContent = result.message + " La pagina verrà ricaricata.";
+        setTimeout(() => window.location.reload(), 2000);
       }
-      
-      bodyEl.innerHTML = "Salvataggio completato! Avvio del deploy su GitHub Pages...<br><br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...";
-
-      // Avvia il polling
-      setTimeout(function pollPage() {
-        fetch(finalUrl, { method: 'HEAD', cache: 'no-store' })
-          .then(response => {
-            if (response.ok) {
-              bodyEl.innerHTML = "Pagina online! La pagina verrà ricaricata.";
-              setTimeout(() => window.location.reload(), 1500);
-            } else {
-              bodyEl.innerHTML += ".";
-              setTimeout(pollPage, 10000);
-            }
-          })
-          .catch(() => {
-            bodyEl.innerHTML += ".";
-            setTimeout(pollPage, 10000);
-          });
-      }, 15000);
     });
   };
 
