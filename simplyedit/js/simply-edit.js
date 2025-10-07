@@ -3554,9 +3554,9 @@
 													// per essere sicuri di caricare la nuova pagina.
 													window.location.reload();
 												}, 1500);*/
-								/*const newCommitSha = commitData.commit.sha;
+								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
-								const pollPagesStatus = () => {
+								/*const pollPagesStatus = () => {
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/builds/latest`;
 									
 									fetch(apiUrl, { 
