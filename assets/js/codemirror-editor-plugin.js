@@ -64,19 +64,22 @@ document.addEventListener('simply-toolbars-loaded', function() {
           try {
               const newBodyHtml = codeEditor.getValue();
               Array.from(document.body.children).forEach(child => {
-                  if (child.id !== 'manual-editor-modal-overlay' && child.id !==
-  'simply-editor' && child.tagName !== 'SCRIPT') {
+                  if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
                       child.remove();
                   }
               });
               const tempBody = document.createElement('body');
               tempBody.innerHTML = newBodyHtml;
               Array.from(tempBody.children).forEach(newNode => {
-                  if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !==
-  'simply-editor' && newNode.tagName !== 'SCRIPT') {
+                  if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
                       document.body.appendChild(newNode);
                   }
               });
+               // Forza SimplyEdit a ri-popolare i campi data-simply-field nel nuovo HTML
+              if (window.editor && editor.currentData) {
+                  console.log("Riapplico i dati di SimplyEdit al nuovo DOM...");
+                  editor.data.apply(editor.currentData, document.body);
+              }
               alert('Anteprima applicata. Ora puoi chiudere questa finestra per vedere il risultato.');
           } catch (e) {
               console.error("Errore durante l'applicazione dell'anteprima:", e);
