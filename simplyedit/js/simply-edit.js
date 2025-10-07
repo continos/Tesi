@@ -3553,10 +3553,10 @@
 												}, 1500);*/
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
-								setTimeout(function pollDeploy(){
+								const pollDeploy = () => {							
 									const {repoUser,repoName} = editor.storage;
 									const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/pages`;
-									fetch(apiUrl, {headers: { 'Accept':'application/vnd.github.vr+json'}}
+									fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json'}}
 										.then(res => res.json())
 										.then(pagesInfo => {
 											if (pagesInfo.status === 'built' && pagesInfo.source.commit === newCommitSha){
@@ -3568,13 +3568,15 @@
 												setTimeout(pollDeploy, 10000); // Aspetta 10 secondi e ricontrolla
 											}
 										})
-										.catch(() => {
+										.catch(err => {
 											// Errore di rete, continuiamo a provare
+											console.error("Errore nel polling del deploy:", err);
 											bodyEl.innerHTML += ".";
 											setTimeout(pollDeploy, 10000);
 										})
-									);
-								}, 15000); // Inizia il primo controllo dopo 15 secondi
+									)};
+									setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
+								//}, 15000); // Inizia il primo controllo dopo 15 secondi
 							}.bind(this));
 						}
 					}.bind(this));
