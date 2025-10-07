@@ -2,18 +2,21 @@ document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
+  if (editor.storage.getType() !== 'customGithub') {
+    return;
+  }
 
-  console.log('Toolbars loaded, adding GitHub-aware HTML editor plugin.');
-  
-  let codeEditor = null; // Variabile per tenere traccia dell'editor
+  console.log('Toolbars loaded, adding GitHub-powered HTML editor plugin.');
+
+  let activeCodeEditorInstance = null;
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
-      if (codeEditor) {
-          codeEditor.focus();
-          codeEditor.refresh();
+      if (activeCodeEditorInstance) {
+        activeCodeEditorInstance.focus();
+        activeCodeEditorInstance.refresh();
       }
       return;
     }
@@ -41,27 +44,48 @@ document.addEventListener('simply-toolbars-loaded', function() {
           <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
         </div>
       </div>
-      <textarea id="html-editor-textarea"></textarea>
+      <textarea id="html-editor-textarea">Caricamento del contenuto da GitHub...</textarea>
     `;
 
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 
     const textarea = document.getElementById('html-editor-textarea');
-    if (editor.data.originalBody) {
-        textarea.value = editor.data.originalBody.innerHTML;
+    
+    // --- NUOVA LOGICA: Carica l'HTML direttamente da GitHub ---
+    let filePath = window.location.pathname;
+    if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
+      const repoPrefix = '/' + editor.storage.repoName;
+      if (filePath.startsWith(repoPrefix)) {
+        filePath = filePath.substring(repoPrefix.length);
+      }
+    }
+    if (filePath.startsWith('/')) {
+      filePath = filePath.substring(1);
     }
 
-    codeEditor = CodeMirror.fromTextArea(textarea, {
-      lineNumbers: true, mode: 'htmlmixed', theme: 'dracula',
-      lineWrapping: true, autofocus: true, extraKeys: {"Ctrl-Space": "autocomplete"}
+    editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
+      if (err) {
+        textarea.value = "Errore nel caricamento del file da GitHub.";
+        return;
+      }
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(fileContent, 'text/html');
+      textarea.value = doc.body.innerHTML;
+
+      // Inizializza CodeMirror solo dopo aver caricato il contenuto
+      activeCodeEditorInstance = CodeMirror.fromTextArea(textarea, {
+        lineNumbers: true, mode: 'htmlmixed', theme: 'dracula',
+        lineWrapping: true, autofocus: true, extraKeys: {"Ctrl-Space": "autocomplete"}
+      });
+      activeCodeEditorInstance.setSize('100%', 'calc(100% - 50px)');
+      setTimeout(() => activeCodeEditorInstance.refresh(), 1);
     });
-    codeEditor.setSize('100%', 'calc(100% - 50px)');
-    setTimeout(() => codeEditor.refresh(), 1);
 
     document.getElementById('modal-apply-preview').onclick = () => {
+        if (!activeCodeEditorInstance) return;
         try {
-            const newBodyHtml = codeEditor.getValue();
+            const newBodyHtml = activeCodeEditorInstance.getValue();
             Array.from(document.body.children).forEach(child => {
                 if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
                     child.remove();
@@ -77,9 +101,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
             if (window.editor && editor.currentData) {
                 editor.data.apply(editor.currentData, document.body);
             }
-            modalOverlay.style.display = 'none'; // chiude la modale dopo aver applicato l'anteprima
+            modalOverlay.style.display = 'none';
         } catch (e) {
-            console.error("Errore durante l'applicazione dell'anteprima:", e);
             alert("Errore nell'HTML, impossibile applicare l'anteprima.");
         }
     };
@@ -90,16 +113,15 @@ document.addEventListener('simply-toolbars-loaded', function() {
   };
 
   const saveHtmlAction = function() {
-    if (!codeEditor) {
-      alert("Per salvare, apri prima l'editor HTML, controlla applicando l'anteprima se necessario, e poi clicca Commit Body.");
+    if (!activeCodeEditorInstance) {
+      alert("Azione non disponibile. Apri prima l'editor 'Edit Body HTML' per caricare il contenuto.");
       return;
     }
-
-    if (!confirm("Sei sicuro di voler salvare le modifiche HTML all'intero body? Questa azione non può essere annullata e creerà un nuovo commit.")) {
+    if (!confirm("Sei sicuro di voler salvare le modifiche all'HTML del body? L'azione creerà un nuovo commit.")) {
         return;
     }
 
-    const newBodyHtml = codeEditor.getValue();
+    const newBodyHtml = activeCodeEditorInstance.getValue();
     let filePath = window.location.pathname;
 
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -125,40 +147,38 @@ document.addEventListener('simply-toolbars-loaded', function() {
         bodyEl.textContent = 'Errore: ' + result.message;
         return;
       }
+      
       const newCommitSha = result.commitSha;
       const { repoUser, repoName } = editor.storage;
-      bodyEl.innerHTML = `Commit ${result.commitSha.substring(0,7)} creato! <br> Avvio del deploy su GitHub Pages...<br>Questa operazione potrebbe richiedere 1-2 minuti. Verifico lo stato...`;
+      bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In attesa del deploy...`;
 
-      // --- NUOVA LOGICA DI POLLING ---
       const pollDeploy = () => {
-          const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
-          fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
-            .then(res => res.json())
-            .then(deployments => {
-              const latestDeployment = deployments.find(d => d.sha === newCommitSha);
-              if (latestDeployment) {
-                fetch(latestDeployment.statuses_url, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
-                  .then(res => res.json())
-                  .then(statuses => {
-                    const latestStatus = statuses[0];
-                    if (latestStatus && latestStatus.state === 'success') {
-                      bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
-                      setTimeout(() => window.location.reload(), 2000);
-                    } else {
-                      bodyEl.innerHTML += ".";
-                      setTimeout(pollDeploy, 15000);
-                    }
-                  })
-                  .catch(() => setTimeout(pollDeploy, 15000));
-              } else {
-                bodyEl.innerHTML += "-";
-                setTimeout(pollDeploy, 15000);
-              }
-            })
-            .catch(() => setTimeout(pollDeploy, 15000));
-        };
-        setTimeout(pollDeploy, 20000); // Inizia il primo controllo dopo 20 secondi
-      });
+        const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
+        fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+          .then(res => res.json())
+          .then(deployments => {
+            const latestDeployment = deployments.find(d => d.sha === newCommitSha);
+            if (latestDeployment) {
+              fetch(latestDeployment.statuses_url, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+                .then(res => res.json())
+                .then(statuses => {
+                  const latestStatus = statuses[0];
+                  if (latestStatus && latestStatus.state === 'success') {
+                    bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+                    setTimeout(() => window.location.reload(), 2000);
+                  } else {
+                    bodyEl.innerHTML += ".";
+                    setTimeout(pollDeploy, 15000);
+                  }
+                }).catch(() => setTimeout(pollDeploy, 15000));
+            } else {
+              bodyEl.innerHTML += "-";
+              setTimeout(pollDeploy, 15000);
+            }
+          }).catch(() => setTimeout(pollDeploy, 15000));
+      };
+      setTimeout(pollDeploy, 20000);
+    });
   };
 
   editor.addAction('custom-body-editor', bodyEditorAction);
