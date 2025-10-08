@@ -124,20 +124,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // Forza la sincronizzazione dei dati di SimplyEdit prima di leggerli
-          editor.fireEvent('databinding:valuechanged', document.body);
+          // FORZA la risincronizzazione del modello dati interno di SimplyEdit con lo stato attuale del DOM
+          const freshData = editor.list.get(document);
+          editor.currentData = freshData;
 
-          // Esegui il processo di "stash" per ottenere i dati più recenti in localStorage
-          editor.data.stash();
-          
-          const allDataString = localStorage.data;
-          if (allDataString) {
-            const allData = JSON.parse(allDataString);
-            const pageData = allData[currentPageKey] || {};
-            jsonEditor.setValue(JSON.stringify(pageData, null, 2));
-          } else {
-            jsonEditor.setValue("// Impossibile recuperare i dati da localStorage.");
-          }
+          // Ora che editor.currentData è aggiornato, possiamo leggerlo
+          const pageData = editor.currentData[currentPageKey] || {};
+          jsonEditor.setValue(JSON.stringify(pageData, null, 2));
           setTimeout(() => jsonEditor.refresh(), 1);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
