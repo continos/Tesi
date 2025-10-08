@@ -228,6 +228,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
             }
             // Usa l'hash dell'ultimo commit (quello dell'HTML) per il polling
             const newCommitSha = result.commitSha;
+            const { repoUser, repoName } = editor.storage;
             bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In   attesa del deploy...`;
             const pollDeploy = () => {
               const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
