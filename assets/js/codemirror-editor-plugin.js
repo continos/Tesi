@@ -32,36 +32,36 @@ document.addEventListener('simply-toolbars-loaded', function() {
       display: 'flex', flexDirection: 'column', position: 'relative'
     });
 
-  modalContent.innerHTML = `
-    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
-      <div id="editor-tabs">
-        <button class="editor-tab active" data-editor="html">HTML Body</button>
-        <button class="editor-tab" data-editor="json">JSON Data</button>
+    modalContent.innerHTML = `
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
+        <div id="editor-tabs">
+          <button class="editor-tab active" data-editor="html">HTML Body</button>
+          <button class="editor-tab" data-editor="json">JSON Data</button>
+        </div>
+        <div>
+          <button id="modal-format-code" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Formatta</button>
+          <button id="modal-apply-preview" style="padding: 8px 15px; background-color: #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica Anteprima</button>
+          <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
+        </div>
       </div>
-      <div>
-        <button id="modal-format-code" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Formatta</button>
-        <button id="modal-apply-preview" style="padding: 8px 15px; background-color: #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica Anteprima</button>
-        <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
+      <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
+        <div id="html-editor-wrapper" class="editor-wrapper active">
+          <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
+        </div>
+        <div id="json-editor-wrapper" class="editor-wrapper">
+          <textarea id="json-editor-textarea">Caricamento JSON da GitHub...</textarea>
+        </div>
       </div>
-    </div>
-    <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
-      <div id="html-editor-wrapper" class="editor-wrapper active">
-        <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
-      </div>
-      <div id="json-editor-wrapper" class="editor-wrapper">
-        <textarea id="json-editor-textarea">Caricamento JSON da GitHub...</textarea>
-      </div>
-    </div>
-    <style>
-      .editor-tab { padding: 8px 12px; border: 1px solid #44475a; background-color: #282a36; color: #f8f8f2; cursor: pointer; }
-      .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
-      .editor-wrapper { display: none; width: 100%; height: 100%; }
-      .editor-wrapper.active { display: block; }
-      .CodeMirror { height: 100% !important; }
-      .CodeMirror-foldgutter { width: 15px; }
-      .CodeMirror-foldmarker { color: #8be9fd; cursor: pointer; }
-    </style>
-  `;
+      <style>
+        .editor-tab { padding: 8px 12px; border: 1px solid #44475a; background-color: #282a36; color: #f8f8f2; cursor: pointer; }
+        .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
+        .editor-wrapper { display: none; width: 100%; height: 100%; }
+        .editor-wrapper.active { display: block; }
+        .CodeMirror { height: 100% !important; }
+        .CodeMirror-foldgutter { width: 15px; }
+        .CodeMirror-foldmarker { color: #8be9fd; cursor: pointer; }
+      </style>
+    `;
 
     let pageData = {}; // Conterrà la sezione del data.json per la pagina corrente
 
@@ -90,26 +90,44 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
       });
     });
-
-  document.getElementById('modal-format-code').onclick = () => {
-    const activeTab = modalContent.querySelector('.editor-tab.active').dataset.editor;
-    
-    if (activeTab === 'html' && htmlEditor) {
-      // Per HTML, usa una semplice indentazione
-      const range = { from: htmlEditor.getCursor(true), to: htmlEditor.getCursor(false) };
-      htmlEditor.autoFormatRange(range.from, range.to);
-    } else if (activeTab === 'json' && jsonEditor) {
-      // Per JSON, formatta l'intero documento
-      try {
-        const jsonContent = jsonEditor.getValue();
-        const parsedJson = JSON.parse(jsonContent);
-        const formattedJson = JSON.stringify(parsedJson, null, 2);
-        jsonEditor.setValue(formattedJson);
-      } catch (e) {
-        alert("Errore nella formattazione JSON: " + e.message);
+    // BOTTONE FORMATTA
+    document.getElementById('modal-format-code').onclick = () => {
+      const activeTab = modalContent.querySelector('.editor-tab.active').dataset.editor;
+      
+      if (activeTab === 'html' && htmlEditor) {
+        // Formattazione HTML semplice - indentazione di tutto il documento
+        const code = htmlEditor.getValue();
+        const lines = code.split('\n');
+        let indentLevel = 0;
+        const formattedLines = lines.map(line => {
+          const trimmed = line.trim();
+          if (trimmed.startsWith('</')) {
+            indentLevel = Math.max(0, indentLevel - 1);
+          }
+          
+          const indentedLine = '  '.repeat(indentLevel) + trimmed;
+          
+          if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>') && !trimmed.startsWith('<!')) {
+            indentLevel++;
+          }
+          
+          return indentedLine;
+        });
+        
+        htmlEditor.setValue(formattedLines.join('\n'));
+        
+      } else if (activeTab === 'json' && jsonEditor) {
+        // Per JSON, formatta l'intero documento
+        try {
+          const jsonContent = jsonEditor.getValue();
+          const parsedJson = JSON.parse(jsonContent);
+          const formattedJson = JSON.stringify(parsedJson, null, 2);
+          jsonEditor.setValue(formattedJson);
+        } catch (e) {
+          alert("Errore nella formattazione JSON: " + e.message);
+        }
       }
-    }
-  };
+    };
 
     // --- LOGICA DI CARICAMENTO DATI ---
     let filePath = window.location.pathname;
