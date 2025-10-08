@@ -11,15 +11,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
-      if (htmlEditor) {
-        htmlEditor.focus();
-        htmlEditor.refresh();
-      }
-      if (jsonEditor) {
-        jsonEditor.refresh();
-        jsonEditor.focus();
-      }
-        return;
+      if (htmlEditor) htmlEditor.refresh();
+      if (jsonEditor) jsonEditor.refresh();
+      return;
     }
 
     const modalOverlay = document.createElement('div');
@@ -61,6 +55,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
         .editor-wrapper { display: none; width: 100%; height: 100%; }
         .editor-wrapper.active { display: block; }
+        .CodeMirror { height: 100%; }
       </style>
     `;
 
@@ -68,6 +63,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
+    
+    modalContent.addEventListener('wheel', function(event) {
+          event.stopPropagation();
+      });
 
     const htmlTextarea = document.getElementById('html-editor-textarea');
     const jsonTextarea = document.getElementById('json-editor-textarea');
