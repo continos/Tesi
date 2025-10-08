@@ -5,8 +5,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
   console.log('Toolbars loaded, adding GitHub-powered HTML editor plugin.');
 
-  let htmlEditor, jsonEditor; // Riferimenti globali agli editor
+  let htmlEditor, jsonEditor, cssEditor; // Riferimenti globali agli editor
   let currentPageKey = ''; // Variabile globale per memorizzare la pageKey
+  let cssFiles = {}; // { filename: content }
+  let currentCssFile = ''; // File CSS attualmente selezionato
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -36,6 +38,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
         <div id="editor-tabs">
           <button class="editor-tab active" data-editor="html">HTML Body</button>
+          <button class="editor-tab" data-editor="css">CSS Files</button>
           <button class="editor-tab" data-editor="json">JSON Data</button>
         </div>
         <div>
@@ -43,9 +46,15 @@ document.addEventListener('simply-toolbars-loaded', function() {
           <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
         </div>
       </div>
+      <div id="css-files-tabs" style="display: none; border-bottom: 1px solid #44475a; padding: 5px 0; flex-shrink: 0;">
+        <!-- Qui appariranno i bottoni dei file CSS -->
+      </div>
       <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
         <div id="html-editor-wrapper" class="editor-wrapper active">
           <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
+        </div>
+        <div id="css-editor-wrapper" class="editor-wrapper">
+          <textarea id="css-editor-textarea">Seleziona un file CSS dal menu sopra...</textarea>
         </div>
         <div id="json-editor-wrapper" class="editor-wrapper">
           <textarea id="json-editor-textarea">Caricamento JSON da GitHub...</textarea>
@@ -59,6 +68,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
         .CodeMirror { height: 100% !important; }
         .CodeMirror-foldgutter { width: 15px; }
         .CodeMirror-foldmarker { color: #8be9fd; cursor: pointer; }
+        #css-files-tabs { display: none; }
+        .css-file-tab { padding: 6px 10px; margin: 0 2px; border: 1px solid #44475a; background-color: #282a36; color: #f8f8f2; cursor: pointer; }
+        .css-file-tab.active { background-color: #44475a; border-color: #8be9fd; }
       </style>
     `;
 
@@ -72,6 +84,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       });
 
     const htmlTextarea = document.getElementById('html-editor-textarea');
+    const cssTextArea = document.getElementById('css-editor-textarea');
     const jsonTextarea = document.getElementById('json-editor-textarea');
 
     // --- GESTIONE SCHEDE ---
@@ -84,9 +97,18 @@ document.addEventListener('simply-toolbars-loaded', function() {
         editorWrappers.forEach(wrapper => wrapper.classList.remove('active'));
         button.classList.add('active');
         modalContent.querySelector(`#${editorId}-editor-wrapper`).classList.add('active');
+        // Mostra/nascondi tab dei file CSS
+        const cssFilesTabs = document.getElementById('css-files-tabs');
+        if (editorId === 'css') {
+          cssFilesTabs.style.display = 'block';
+          loadCSSFiles(); // Carica i file CSS quando si seleziona la tab
+        } else {
+          cssFilesTabs.style.display = 'none';
+        }
         // Refresh dell'editor quando diventa visibile
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
+        if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
     });
     /* BOTTONE FORMATTA
@@ -127,6 +149,77 @@ document.addEventListener('simply-toolbars-loaded', function() {
         }
       }
     };*/
+
+    // Logica caricamento file css
+    const loadCSSFiles = () => {
+      const cssFilesTabs = document.getElementById('css-files-tabs');
+      cssFilesTabs.innerHTML = '<span style="color: #f8f8f2; padding: 0 10px;">Caricamento file CSS...</span>';
+      
+      // Trova tutti i link CSS nel documento
+      const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+      const cssFilesList = cssLinks.map(link => {
+        const href = link.getAttribute('href');
+        // Estrai solo il nome file, rimuovi query string e fragment
+        return href.split('?')[0].split('#')[0];
+      }).filter(filename => filename && !filename.startsWith('http')); // Solo file locali
+      
+      // Carica ogni file CSS
+      cssFiles = {};
+      let filesLoaded = 0;
+      
+      if (cssFilesList.length === 0) {
+        cssFilesTabs.innerHTML = '<span style="color: #ff5555; padding: 0 10px;">Nessun file CSS locale trovato</span>';
+        return;
+      }
+      
+      cssFilesList.forEach(filename => {
+        editor.storage.repo.read(editor.storage.repoBranch, filename, (err, content) => {
+          filesLoaded++;
+          
+          if (err) {
+            cssFiles[filename] = `/* Errore nel caricamento di ${filename} */`;
+          } else {
+            cssFiles[filename] = content;
+          }
+          
+          // Quando tutti i file sono caricati, mostra i tab
+          if (filesLoaded === cssFilesList.length) {
+            renderCSSTabs();
+          }
+        });
+      });
+    };
+
+    const renderCSSTabs = () => {
+      const cssFilesTabs = document.getElementById('css-files-tabs');
+      cssFilesTabs.innerHTML = '';
+      
+      Object.keys(cssFiles).forEach(filename => {
+        const tab = document.createElement('button');
+        tab.className = 'css-file-tab';
+        tab.textContent = filename;
+        tab.dataset.filename = filename;
+        
+        tab.addEventListener('click', () => {
+          // Rimuovi active da tutti i tab CSS
+          document.querySelectorAll('.css-file-tab').forEach(t => t.classList.remove('active'));
+          // Attiva il tab cliccato
+          tab.classList.add('active');
+          // Carica il contenuto nel editor
+          currentCssFile = filename;
+          cssEditor.setValue(cssFiles[filename]);
+          setTimeout(() => cssEditor.refresh(), 1);
+        });
+        
+        cssFilesTabs.appendChild(tab);
+      });
+      
+      // Attiva il primo tab
+      const firstTab = cssFilesTabs.querySelector('.css-file-tab');
+      if (firstTab) {
+        firstTab.click();
+      }
+    };
 
     // --- LOGICA DI CARICAMENTO DATI ---
     let filePath = window.location.pathname;
@@ -174,14 +267,41 @@ document.addEventListener('simply-toolbars-loaded', function() {
       });
       jsonEditor.setSize('100%', '100%');
     });
+    
+    // 3. Carica CSS
+    cssEditor = CodeMirror.fromTextArea(cssTextarea, {
+      lineNumbers: true, mode: 'css', theme: 'dracula', lineWrapping: true,
+      foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+    cssEditor.setSize('100%', '100%');
+
     // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor) { alert('Editor non pronti.'); return; }
+      if (!htmlEditor || !jsonEditor || !cssEditor) { alert('Editor non pronti.'); return; }
       try {
           const newPageData = JSON.parse(jsonEditor.getValue());
           editor.currentData[currentPageKey] = newPageData;
 
           const newBodyHtml = htmlEditor.getValue();
+          // Applica CSS modificato se c'è un file selezionato
+          if (currentCssFile && cssEditor) {
+            cssFiles[currentCssFile] = cssEditor.getValue();
+            
+            // Trova e aggiorna il link CSS corrispondente
+            const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+            cssLinks.forEach(link => {
+              const href = link.getAttribute('href').split('?')[0].split('#')[0];
+              if (href === currentCssFile) {
+                // Crea un nuovo tag style con il CSS modificato
+                const newStyle = document.createElement('style');
+                newStyle.innerHTML = cssEditor.getValue();
+                document.head.appendChild(newStyle);
+                // Disabilita il link originale
+                link.disabled = true;
+              }
+            });
+          }
+
           Array.from(document.body.children).forEach(child => {
               if (child.id !== 'dual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
                   child.remove();
@@ -206,6 +326,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     };
   };
 
+  // LOGICA PULSANTE COMMIT 
   const saveHtmlAction = function() {
     if (!htmlEditor || !jsonEditor) {
       alert("Apri prima l'editor 'Edit Page' per caricare i contenuti.");
@@ -243,16 +364,24 @@ document.addEventListener('simply-toolbars-loaded', function() {
     editor.plugins.dialog.open(dialog);
     const bodyEl = dialog.querySelector('.simply-dialog-body');
 
-    /*editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
-      if (result.error) {
-        bodyEl.textContent = 'Errore: ' + result.message;
-        return;
-      }
-      
-      const newCommitSha = result.commitSha;
-      const { repoUser, repoName } = editor.storage;
-      bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In attesa del deploy...`;*/
+    const saveOperations = [];
 
+    // 1. Salva i file CSS modificati
+    Object.keys(cssFiles).forEach(filename => {
+      const originalContent = cssFiles[filename]; // dove il contenuto originale salvato
+      if (cssEditor && currentCssFile === filename && cssEditor.getValue() !== originalContent) {
+        saveOperations.push((callback) => {
+          bodyEl.textContent = `Salvataggio ${filename}...`;
+          editor.storage.repo.write(editor.storage.repoBranch, filename, cssEditor.getValue(), `Update ${filename} for ${currentPageKey}`, (err) => {
+            if(err) { bodyEl.textContent = `Errore salvataggio ${filename}`; return; }
+            callback();
+          });
+        });
+      }
+    });
+
+    // 2. Salva JSON
+    saveOperations.push((callback) => {
       bodyEl.textContent = 'Salvataggio di data.json...';
       editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, currentJsonContent) => {
         let allData = {};
@@ -261,46 +390,62 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
         editor.storage.repo.write(editor.storage.repoBranch, 'data.json', JSON.stringify(allData, null, 2), `Update data for ${currentPageKey}`, (err, commit1) => {
           if(err) { bodyEl.textContent = 'Errore salvataggio data.json'; return; }
-
-          bodyEl.textContent = 'Salvataggio del file HTML...';
-          editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
-            if (result.error) {
-                bodyEl.textContent = 'Errore: ' + result.message;
-                return;
-            }
-            // Usa l'hash dell'ultimo commit (quello dell'HTML) per il polling
-            const newCommitSha = result.commitSha;
-            const { repoUser, repoName } = editor.storage;
-            bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In   attesa del deploy...`;
-            const pollDeploy = () => {
-              const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
-              fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
-                .then(res => res.json())
-                .then(deployments => {
-                  const latestDeployment = deployments.find(d => d.sha === newCommitSha);
-                  if (latestDeployment) {
-                    fetch(latestDeployment.statuses_url, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
-                      .then(res => res.json())
-                      .then(statuses => {
-                        const latestStatus = statuses[0];
-                        if (latestStatus && latestStatus.state === 'success') {
-                          bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
-                          setTimeout(() => window.location.reload(), 2000);
-                        } else {
-                          bodyEl.innerHTML += ".";
-                          setTimeout(pollDeploy, 15000);
-                        }
-                      }).catch(() => setTimeout(pollDeploy, 15000));
-                  } else {
-                    bodyEl.innerHTML += "-";
-                    setTimeout(pollDeploy, 15000);
-                  }
-                }).catch(() => setTimeout(pollDeploy, 15000));
-            };
-            setTimeout(pollDeploy, 20000);
-          });
+          callback();
         });
       });
+    });
+
+    // 3. Salva HTML
+    saveOperations.push((callback) => {
+      bodyEl.textContent = 'Salvataggio del file HTML...';
+      editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
+        if (result.error) {
+            bodyEl.textContent = 'Errore: ' + result.message;
+            return;
+        }
+        // Usa l'hash dell'ultimo commit (quello dell'HTML) per il polling
+        const newCommitSha = result.commitSha;
+        const { repoUser, repoName } = editor.storage;
+        bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In   attesa del deploy...`;
+        const pollDeploy = () => {
+          const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
+          fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+            .then(res => res.json())
+            .then(deployments => {
+              const latestDeployment = deployments.find(d => d.sha === newCommitSha);
+              if (latestDeployment) {
+                fetch(latestDeployment.statuses_url, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
+                  .then(res => res.json())
+                  .then(statuses => {
+                    const latestStatus = statuses[0];
+                    if (latestStatus && latestStatus.state === 'success') {
+                      bodyEl.innerHTML = "Deploy completato! La pagina verrà ricaricata.";
+                      setTimeout(() => window.location.reload(), 2000);
+                    } else {
+                      bodyEl.innerHTML += ".";
+                      setTimeout(pollDeploy, 15000);
+                    }
+                  }).catch(() => setTimeout(pollDeploy, 15000));
+              } else {
+                bodyEl.innerHTML += "-";
+                setTimeout(pollDeploy, 15000);
+              }
+            }).catch(() => setTimeout(pollDeploy, 15000));
+        };
+        setTimeout(pollDeploy, 20000);
+        callback();
+      });
+    });
+    // Esegui le operazioni in sequenza
+    const executeSaves = (index) => {
+      if (index < saveOperations.length) {
+        saveOperations[index](() => executeSaves(index + 1));
+      } else if (saveOperations.length === 0) {
+        bodyEl.textContent = 'Nessuna modifica da salvare.';
+      }
+    };
+
+    executeSaves(0);
   };
 
   editor.addAction('custom-body-editor', bodyEditorAction);
