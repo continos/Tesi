@@ -55,7 +55,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
         .editor-wrapper { display: none; width: 100%; height: 100%; }
         .editor-wrapper.active { display: block; }
-        .CodeMirror { height: 100%; }
       </style>
     `;
 
