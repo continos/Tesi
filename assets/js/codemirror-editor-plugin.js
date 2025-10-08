@@ -309,7 +309,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         editor.data.apply(editor.currentData, document.body);
         
         // NON CHIUDERE IL MODAL - mantieni gli editor aperti
-        // modalOverlay.style.display = 'none';
+        modalOverlay.style.display = 'none';
         
       } catch (e) {
         alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
