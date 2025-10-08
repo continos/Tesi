@@ -11,8 +11,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
-      if (htmlEditor) htmlEditor.refresh();
-      if (jsonEditor) jsonEditor.refresh();
+      if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
+      if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
       return;
     }
 
@@ -63,7 +63,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
-    
+
     modalContent.addEventListener('wheel', function(event) {
           event.stopPropagation();
       });
@@ -82,8 +82,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
         button.classList.add('active');
         modalContent.querySelector(`#${editorId}-editor-wrapper`).classList.add('active');
         // Refresh dell'editor quando diventa visibile
-        if (editorId === 'html' && htmlEditor) htmlEditor.refresh();
-        if (editorId === 'json' && jsonEditor) jsonEditor.refresh();
+        if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
+        if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
       });
     });
 
