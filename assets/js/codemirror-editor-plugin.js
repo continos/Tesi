@@ -269,7 +269,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     
     // 3. Carica CSS
-    cssEditor = CodeMirror.fromTextArea(cssTextarea, {
+    cssEditor = CodeMirror.fromTextArea(cssTextArea, {
       lineNumbers: true, mode: 'css', theme: 'dracula', lineWrapping: true,
       foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
     });
