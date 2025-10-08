@@ -124,12 +124,17 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // Usa editor.list.get(document) per forzare una ri-scansione del DOM,
-          // bypassando la cache di editor.data.get() e ottenendo lo stato più recente.
-          console.log("ricaricando data.json");
-          const allData = editor.list.get(document);
-          const pageData = allData[currentPageKey] || {};
-          jsonEditor.setValue(JSON.stringify(pageData, null, 2));
+          // Esegui il processo di "stash" per sincronizzare e ottenere i dati più recenti.
+          editor.data.stash();
+          // Leggi la stringa JSON risultante, che è la fonte di verità più affidabile.
+          const allDataString = localStorage.data;
+          if (allDataString) {
+            const allData = JSON.parse(allDataString);
+            const pageData = allData[currentPageKey] || {};
+            jsonEditor.setValue(JSON.stringify(pageData, null, 2));
+          } else {
+            jsonEditor.setValue("// Impossibile recuperare i dati da localStorage.");
+          }
           setTimeout(() => jsonEditor.refresh(), 1);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
