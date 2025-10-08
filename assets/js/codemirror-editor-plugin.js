@@ -123,7 +123,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
         }
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
-        if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
+        if (editorId === 'json' && jsonEditor) {
+          // RICARICA SEMPRE IL JSON DALLO STATO ATTUALE DI SIMPLYEDIT
+          const allData = editor.currentData;
+          const pageData = allData[currentPageKey] || {};
+          jsonEditor.setValue(JSON.stringify(pageData, null, 2));
+          setTimeout(() => jsonEditor.refresh(), 1);
+        }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
     });
