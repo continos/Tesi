@@ -6,6 +6,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
   console.log('Toolbars loaded, adding GitHub-powered HTML editor plugin.');
 
   let htmlEditor, jsonEditor; // Riferimenti globali agli editor
+  let currentPageKey = ''; // Variabile globale per memorizzare la pageKey
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -95,7 +96,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
         filePath = filePath.substring(repoPrefix.length);
       }
     }
-    const pageKey = filePath; // La chiave per il data.json
+    // Aggiorna la variabile globale currentPageKey
+    currentPageKey = filePath; // La chiave per il data.json
     if (filePath.startsWith('/')) {
       filePath = filePath.substring(1);
     }
@@ -123,7 +125,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         return;
       }
       const allData = JSON.parse(dataJsonContent);
-      pageData = allData[pageKey] || {};
+      pageData = allData[currentPageKey] || {};
       jsonTextarea.value = JSON.stringify(pageData, null, 2); // Formattato per leggibilità
       jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
         lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true
@@ -135,7 +137,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       if (!htmlEditor || !jsonEditor) { alert('Editor non pronti.'); return; }
       try {
           const newPageData = JSON.parse(jsonEditor.getValue());
-          editor.currentData[pageKey] = newPageData;
+          editor.currentData[currentPageKey] = newPageData;
 
           const newBodyHtml = htmlEditor.getValue();
           Array.from(document.body.children).forEach(child => {
@@ -169,6 +171,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
     }
     if (!confirm("Sei sicuro di voler salvare le modifiche all'HTML e JSON? L'azione creerà fino a due nuovi commit.")) {
         return;
+    }
+
+    // Verifica che currentPageKey sia definita
+    if (!currentPageKey) {
+      alert("Errore: impossibile determinare la pagina corrente. Apri prima l'editor 'Edit Page'.");
+      return;
     }
 
     const newBodyHtml = htmlEditor.getValue();
@@ -207,9 +215,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
       editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, currentJsonContent) => {
         let allData = {};
         if (!err) allData = JSON.parse(currentJsonContent);
-        allData[pageKey] = newPageData;
+        allData[currentPageKey] = newPageData;
 
-        editor.storage.repo.write(editor.storage.repoBranch, 'data.json', JSON.stringify(allData, null, 2), `Update data for ${pageKey}`, (err, commit1) => {
+        editor.storage.repo.write(editor.storage.repoBranch, 'data.json', JSON.stringify(allData, null, 2), `Update data for ${currentPageKey}`, (err, commit1) => {
           if(err) { bodyEl.textContent = 'Errore salvataggio data.json'; return; }
 
           bodyEl.textContent = 'Salvataggio del file HTML...';
