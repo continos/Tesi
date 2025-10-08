@@ -124,10 +124,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          console.log("aggiornamento data.json")
-          // Esegui il processo di "stash" per sincronizzare e ottenere i dati più recenti.
+          // Forza la sincronizzazione dei dati di SimplyEdit prima di leggerli
+          editor.fireEvent('databinding:valuechanged', document.body);
+
+          // Esegui il processo di "stash" per ottenere i dati più recenti in localStorage
           editor.data.stash();
-          // Leggi la stringa JSON risultante, che è la fonte di verità più affidabile.
+          
           const allDataString = localStorage.data;
           if (allDataString) {
             const allData = JSON.parse(allDataString);
