@@ -159,7 +159,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
       const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
       const cssFilesList = cssLinks.map(link => {
         const href = link.getAttribute('href');
-        // Estrai solo il nome file, rimuovi query string e fragment
+        if (!href || href.startsWith('data:') || href.startsWith('http') || !href.includes('.css')) {
+          return null;
+        }
+        // Estrae solo il nome file, rimuove query string e fragment
         return href.split('?')[0].split('#')[0];
       }).filter(filename => filename && !filename.startsWith('http')); // Solo file locali
       
