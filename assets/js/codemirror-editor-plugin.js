@@ -126,6 +126,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (editorId === 'json' && jsonEditor) {
           // Usa editor.list.get(document) per forzare una ri-scansione del DOM,
           // bypassando la cache di editor.data.get() e ottenendo lo stato più recente.
+          console.log("ricaricando data.json");
           const allData = editor.list.get(document);
           const pageData = allData[currentPageKey] || {};
           jsonEditor.setValue(JSON.stringify(pageData, null, 2));
