@@ -89,7 +89,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
       });
     });
-    // BOTTONE FORMATTA
+    /* BOTTONE FORMATTA
     document.getElementById('modal-format-code').onclick = () => {
       const activeTab = modalContent.querySelector('.editor-tab.active').dataset.editor;
       
@@ -126,7 +126,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           alert("Errore nella formattazione JSON: " + e.message);
         }
       }
-    };
+    };*/
 
     // --- LOGICA DI CARICAMENTO DATI ---
     let filePath = window.location.pathname;
