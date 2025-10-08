@@ -15,7 +15,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
     if (existingModal) {
       existingModal.style.display = 'flex';
       if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
+      if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
       if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
+      // Mostra/nascondi i tab CSS correttamente
+      const activeTab = existingModal.querySelector('.editor-tab.active');
+      if (activeTab && activeTab.dataset.editor === 'css') {
+        document.getElementById('css-files-tabs').style.display = 'block';
+      }
       return;
     }
 
