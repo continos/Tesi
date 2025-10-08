@@ -321,6 +321,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
         });
         
         editor.data.apply(editor.currentData, document.body);
+        // FORZA LA RE-INIZIALIZZAZIONE DI TUTTI GLI EDITOR SUL NUOVO DOM
+        editor.editmode.makeEditable(document.body);
         
         // NON CHIUDERE IL MODAL - mantieni gli editor aperti
         modalOverlay.style.display = 'none';
