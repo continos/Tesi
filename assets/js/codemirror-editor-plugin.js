@@ -11,9 +11,15 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
-      if (htmlEditor) htmlEditor.refresh();
-      if (jsonEditor) jsonEditor.refresh();
-      return;
+      if (htmlEditor) {
+        htmlEditor.focus();
+        htmlEditor.refresh();
+      }
+      if (jsonEditor) {
+        jsonEditor.refresh();
+        jsonEditor.focus();
+      }
+        return;
     }
 
     const modalOverlay = document.createElement('div');
