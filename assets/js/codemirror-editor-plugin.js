@@ -221,7 +221,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           if(err) { bodyEl.textContent = 'Errore salvataggio data.json'; return; }
 
           bodyEl.textContent = 'Salvataggio del file HTML...';
-          editor.storage.saveHtmlBlock(githubPath, 'body', newBodyHtml, (result) => {
+          editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
             if (result.error) {
                 bodyEl.textContent = 'Errore: ' + result.message;
                 return;
