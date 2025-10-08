@@ -9,18 +9,21 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let currentPageKey = ''; // Variabile globale per memorizzare la pageKey
   let cssFiles = {}; // { filename: content }
   let currentCssFile = ''; // File CSS attualmente selezionato
+  let modalInitialized = false; // Aggiungi questo flag
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
-      if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
-      if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
-      if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
-      // Mostra/nascondi i tab CSS correttamente
-      const activeTab = existingModal.querySelector('.editor-tab.active');
-      if (activeTab && activeTab.dataset.editor === 'css') {
-        document.getElementById('css-files-tabs').style.display = 'block';
+      if (modalInitialized) {
+        if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
+        if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
+        if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
+        // Mostra/nascondi i tab CSS correttamente
+        const activeTab = existingModal.querySelector('.editor-tab.active');
+        if (activeTab && activeTab.dataset.editor === 'css') {
+          document.getElementById('css-files-tabs').style.display = 'block';
+        }
       }
       return;
     }
@@ -333,6 +336,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     document.getElementById('modal-close-button').onclick = () => {
       modalOverlay.style.display = 'none';
     };
+    modalInitialized = true;
   };
 
   // LOGICA PULSANTE COMMIT 
