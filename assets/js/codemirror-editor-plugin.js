@@ -32,7 +32,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
 
     modalContent.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
         <div id="editor-tabs">
           <button class="editor-tab active" data-editor="html">HTML Body</button>
           <button class="editor-tab" data-editor="json">JSON Data</button>
