@@ -2,14 +2,19 @@ document.addEventListener('simply-toolbars-loaded', function() {
   if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
+  if (typeof CodeMirror === 'undefined') {
+    console.error('CodeMirror non è caricato nella pagina');
+    return;
+  }
 
   console.log('Toolbars loaded, adding GitHub-powered HTML editor plugin.');
 
-  let htmlEditor, jsonEditor, cssEditor; // Riferimenti globali agli editor
-  let currentPageKey = ''; // Variabile globale per memorizzare la pageKey
-  let cssFiles = {}; // { filename: content }
-  let currentCssFile = ''; // File CSS attualmente selezionato
-  let modalInitialized = false; // Aggiungi questo flag
+  let htmlEditor, jsonEditor, cssEditor;
+  let currentPageKey = '';
+  let cssFiles = {};
+  let currentCssFile = '';
+  let modalInitialized = false;
+  let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -19,7 +24,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
         if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
         if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
-        // Mostra/nascondi i tab CSS correttamente
         const activeTab = existingModal.querySelector('.editor-tab.active');
         if (activeTab && activeTab.dataset.editor === 'css') {
           document.getElementById('css-files-tabs').style.display = 'block';
@@ -56,7 +60,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         </div>
       </div>
       <div id="css-files-tabs" style="display: none; border-bottom: 1px solid #44475a; padding: 5px 0; flex-shrink: 0;">
-        <!-- Qui appariranno i bottoni dei file CSS -->
       </div>
       <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
         <div id="html-editor-wrapper" class="editor-wrapper active">
@@ -83,20 +86,20 @@ document.addEventListener('simply-toolbars-loaded', function() {
       </style>
     `;
 
-    let pageData = {}; // Conterrà la sezione del data.json per la pagina corrente
+    let pageData = {};
 
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 
     modalContent.addEventListener('wheel', function(event) {
-          event.stopPropagation();
-      });
+      event.stopPropagation();
+    });
 
     const htmlTextarea = document.getElementById('html-editor-textarea');
     const cssTextArea = document.getElementById('css-editor-textarea');
     const jsonTextarea = document.getElementById('json-editor-textarea');
 
-    // --- GESTIONE SCHEDE ---
+    // GESTIONE SCHEDE
     const tabButtons = modalContent.querySelectorAll('.editor-tab');
     const editorWrappers = modalContent.querySelectorAll('.editor-wrapper');
     tabButtons.forEach(button => {
@@ -106,76 +109,39 @@ document.addEventListener('simply-toolbars-loaded', function() {
         editorWrappers.forEach(wrapper => wrapper.classList.remove('active'));
         button.classList.add('active');
         modalContent.querySelector(`#${editorId}-editor-wrapper`).classList.add('active');
-        // Mostra/nascondi tab dei file CSS
+        
         const cssFilesTabs = document.getElementById('css-files-tabs');
         if (editorId === 'css') {
           cssFilesTabs.style.display = 'block';
-          loadCSSFiles(); // Carica i file CSS quando si seleziona la tab
+          // CARICA I FILE CSS SOLO LA PRIMA VOLTA
+          if (!cssFilesLoaded) {
+            loadCSSFiles();
+            cssFilesLoaded = true;
+          }
         } else {
           cssFilesTabs.style.display = 'none';
         }
-        // Refresh dell'editor quando diventa visibile
+        
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
     });
-    /* BOTTONE FORMATTA
-    document.getElementById('modal-format-code').onclick = () => {
-      const activeTab = modalContent.querySelector('.editor-tab.active').dataset.editor;
-      
-      if (activeTab === 'html' && htmlEditor) {
-        // Formattazione HTML semplice - indentazione di tutto il documento
-        const code = htmlEditor.getValue();
-        const lines = code.split('\n');
-        let indentLevel = 0;
-        const formattedLines = lines.map(line => {
-          const trimmed = line.trim();
-          if (trimmed.startsWith('</')) {
-            indentLevel = Math.max(0, indentLevel - 1);
-          }
-          
-          const indentedLine = '  '.repeat(indentLevel) + trimmed;
-          
-          if (trimmed.startsWith('<') && !trimmed.startsWith('</') && !trimmed.endsWith('/>') && !trimmed.startsWith('<!')) {
-            indentLevel++;
-          }
-          
-          return indentedLine;
-        });
-        
-        htmlEditor.setValue(formattedLines.join('\n'));
-        
-      } else if (activeTab === 'json' && jsonEditor) {
-        // Per JSON, formatta l'intero documento
-        try {
-          const jsonContent = jsonEditor.getValue();
-          const parsedJson = JSON.parse(jsonContent);
-          const formattedJson = JSON.stringify(parsedJson, null, 2);
-          jsonEditor.setValue(formattedJson);
-        } catch (e) {
-          alert("Errore nella formattazione JSON: " + e.message);
-        }
-      }
-    };*/
 
     // Logica caricamento file css
     const loadCSSFiles = () => {
       const cssFilesTabs = document.getElementById('css-files-tabs');
       cssFilesTabs.innerHTML = '<span style="color: #f8f8f2; padding: 0 10px;">Caricamento file CSS...</span>';
       
-      // Trova tutti i link CSS nel documento
       const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
       const cssFilesList = cssLinks.map(link => {
         const href = link.getAttribute('href');
         if (!href || href.startsWith('data:') || href.startsWith('http') || !href.includes('.css')) {
           return null;
         }
-        // Estrae solo il nome file, rimuove query string e fragment
         return href.split('?')[0].split('#')[0];
-      }).filter(filename => filename && !filename.startsWith('http')); // Solo file locali
+      }).filter(filename => filename && !filename.startsWith('http'));
       
-      // Carica ogni file CSS
       cssFiles = {};
       let filesLoaded = 0;
       
@@ -194,7 +160,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
             cssFiles[filename] = content;
           }
           
-          // Quando tutti i file sono caricati, mostra i tab
           if (filesLoaded === cssFilesList.length) {
             renderCSSTabs();
           }
@@ -213,64 +178,30 @@ document.addEventListener('simply-toolbars-loaded', function() {
         tab.dataset.filename = filename;
         
         tab.addEventListener('click', () => {
-          // Rimuove active da tutti i tab CSS
           document.querySelectorAll('.css-file-tab').forEach(t => t.classList.remove('active'));
-          // Attiva il tab cliccato
           tab.classList.add('active');
-          // Solo se il file non è già caricato, lo si carica
-          if (!cssFiles[filename] || typeof cssFiles[filename] === 'string') {
-            currentCssFile = filename;
-            cssEditor.setValue(cssFiles[filename] || '/* Caricamento... */');
-            setTimeout(() => cssEditor.refresh(), 1);
-            
-            // Carica il file se non è già stato caricato
-            if (!cssFiles[filename] || cssFiles[filename].startsWith('/*')) {
-              loadSingleCSSFile(filename, tab);
-            }
-          } else {
-            // Se già caricato, usa il contenuto corrente
-            currentCssFile = filename;
-            cssEditor.setValue(cssFiles[filename]);
-            setTimeout(() => cssEditor.refresh(), 1);
+          
+          // SALVA LE MODIFICHE DEL FILE PRECEDENTE
+          if (currentCssFile && cssEditor) {
+            cssFiles[currentCssFile] = cssEditor.getValue();
           }
+          
+          // CARICA IL NUOVO FILE
+          currentCssFile = filename;
+          cssEditor.setValue(cssFiles[filename] || '/* Caricamento... */');
+          setTimeout(() => cssEditor.refresh(), 1);
         });
         
         cssFilesTabs.appendChild(tab);
       });
       
-      // Attiva il primo tab
       const firstTab = cssFilesTabs.querySelector('.css-file-tab');
       if (firstTab) {
         firstTab.click();
       }
     };
 
-    const loadSingleCSSFile = (filename, tab) => {
-      // Se abbiamo già contenuto modificato, non ricaricare
-      if (cssFiles[filename] && !cssFiles[filename].startsWith('/*')) {
-        return;
-      }
-      
-      editor.storage.repo.read(editor.storage.repoBranch, filename, (err, content) => {
-        if (err) {
-          cssFiles[filename] = `/* Errore nel caricamento di ${filename} */`;
-          if (tab) tab.innerHTML = `${filename} <span style="color: #ff5555;">(errore)</span>`;
-        } else {
-          // Sovrascrivi SOLO se non abbiamo modifiche non salvate
-          if (!cssFiles[filename] || cssFiles[filename].startsWith('/*')) {
-            cssFiles[filename] = content;
-          }
-          if (tab) tab.innerHTML = filename;
-          
-          if (currentCssFile === filename && cssEditor) {
-            cssEditor.setValue(cssFiles[filename]);
-            setTimeout(() => cssEditor.refresh(), 1);
-          }
-        }
-      });
-    };
-
-    // --- LOGICA DI CARICAMENTO DATI ---
+    // LOGICA DI CARICAMENTO DATI
     let filePath = window.location.pathname;
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
       const repoPrefix = '/' + editor.storage.repoName;
@@ -278,8 +209,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         filePath = filePath.substring(repoPrefix.length);
       }
     }
-    // Aggiorna la variabile globale currentPageKey
-    currentPageKey = filePath; // La chiave per il data.json
+    currentPageKey = filePath;
     if (filePath.startsWith('/')) {
       filePath = filePath.substring(1);
     }
@@ -309,7 +239,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       }
       const allData = JSON.parse(dataJsonContent);
       pageData = allData[currentPageKey] || {};
-      jsonTextarea.value = JSON.stringify(pageData, null, 2); // Formattato per leggibilità
+      jsonTextarea.value = JSON.stringify(pageData, null, 2);
       jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
         lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
         foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
@@ -326,53 +256,74 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor || !cssEditor) { alert('Editor non pronti.'); return; }
+      if (!htmlEditor || !jsonEditor || !cssEditor) { 
+        alert('Editor non pronti.'); 
+        return; 
+      }
+      
       try {
-          const newPageData = JSON.parse(jsonEditor.getValue());
-          editor.currentData[currentPageKey] = newPageData;
+        // SALVA LE MODIFICHE CSS CORRENTI
+        if (currentCssFile && cssEditor) {
+          cssFiles[currentCssFile] = cssEditor.getValue();
+        }
+        
+        let newPageData;
+        try {
+          newPageData = JSON.parse(jsonEditor.getValue());
+        } catch (e) {
+          alert("Errore nella sintassi JSON: " + e.message);
+          return;
+        }
+        editor.currentData[currentPageKey] = newPageData;
 
-          const newBodyHtml = htmlEditor.getValue();
-          // Applica CSS modificato prima di qualsiasi ricarica
-          if (currentCssFile && cssEditor) {
-            cssFiles[currentCssFile] = cssEditor.getValue();
-            
-            // Trova e aggiorna il link CSS corrispondente
-            const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-            cssLinks.forEach(link => {
-              const href = link.getAttribute('href').split('?')[0].split('#')[0];
-              if (href === currentCssFile) {
-                // Crea un nuovo tag style con il CSS modificato
-                const newStyle = document.createElement('style');
-                newStyle.innerHTML = cssEditor.getValue();
-                document.head.appendChild(newStyle);
-                // Disabilita il link originale
-                link.disabled = true;
-              }
-            });
+        const newBodyHtml = htmlEditor.getValue();
+        
+        // Applica CSS modificato
+        if (currentCssFile && cssEditor) {
+          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+          cssLinks.forEach(link => {
+            const href = link.getAttribute('href').split('?')[0].split('#')[0];
+            if (href === currentCssFile) {
+              const newStyle = document.createElement('style');
+              newStyle.innerHTML = cssEditor.getValue();
+              document.head.appendChild(newStyle);
+              link.disabled = true;
+            }
+          });
+        }
+
+        Array.from(document.body.children).forEach(child => {
+          if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
+            child.remove();
           }
-
-          Array.from(document.body.children).forEach(child => {
-              if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
-                  child.remove();
-              }
-          });
-          const tempBody = document.createElement('body');
-          tempBody.innerHTML = newBodyHtml;
-          Array.from(tempBody.children).forEach(newNode => {
-              if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
-                  document.body.appendChild(newNode);
-              }
-          });
-          editor.data.apply(editor.currentData, document.body);
-          modalOverlay.style.display = 'none';
+        });
+        
+        const tempBody = document.createElement('body');
+        tempBody.innerHTML = newBodyHtml;
+        Array.from(tempBody.children).forEach(newNode => {
+          if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
+            document.body.appendChild(newNode);
+          }
+        });
+        
+        editor.data.apply(editor.currentData, document.body);
+        
+        // NON CHIUDERE IL MODAL - mantieni gli editor aperti
+        // modalOverlay.style.display = 'none';
+        
       } catch (e) {
-          alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
+        alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
       }
     };
 
     document.getElementById('modal-close-button').onclick = () => {
+      // SALVA LE MODIFICHE CSS PRIMA DI CHIUDERE
+      if (currentCssFile && cssEditor) {
+        cssFiles[currentCssFile] = cssEditor.getValue();
+      }
       modalOverlay.style.display = 'none';
     };
+    
     modalInitialized = true;
   };
 
@@ -383,13 +334,17 @@ document.addEventListener('simply-toolbars-loaded', function() {
       return;
     }
     if (!confirm("Sei sicuro di voler salvare le modifiche all'HTML e JSON? L'azione creerà fino a due nuovi commit.")) {
-        return;
+      return;
     }
 
-    // Verifica che currentPageKey sia definita
     if (!currentPageKey) {
       alert("Errore: impossibile determinare la pagina corrente. Apri prima l'editor 'Edit Page'.");
       return;
+    }
+
+    // SALVA LE MODIFICHE CSS CORRENTI
+    if (currentCssFile && cssEditor) {
+      cssFiles[currentCssFile] = cssEditor.getValue();
     }
 
     const newBodyHtml = htmlEditor.getValue();
@@ -418,16 +373,24 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     // 1. Salva i file CSS modificati
     Object.keys(cssFiles).forEach(filename => {
-      const originalContent = cssFiles[filename]; // dove il contenuto originale salvato
-      if (cssEditor && currentCssFile === filename && cssEditor.getValue() !== originalContent) {
-        saveOperations.push((callback) => {
+      saveOperations.push((callback) => {
+        // Ricarica il contenuto originale per confronto
+        editor.storage.repo.read(editor.storage.repoBranch, filename, (err, originalContent) => {
+          if (err || cssFiles[filename] === originalContent) {
+            callback();
+            return;
+          }
+          
           bodyEl.textContent = `Salvataggio ${filename}...`;
-          editor.storage.repo.write(editor.storage.repoBranch, filename, cssEditor.getValue(), `Update ${filename} for ${currentPageKey}`, (err) => {
-            if(err) { bodyEl.textContent = `Errore salvataggio ${filename}`; return; }
+          editor.storage.repo.write(editor.storage.repoBranch, filename, cssFiles[filename], `Update ${filename} for ${currentPageKey}`, (err) => {
+            if(err) { 
+              bodyEl.textContent = `Errore salvataggio ${filename}`; 
+              return; 
+            }
             callback();
           });
         });
-      }
+      });
     });
 
     // 2. Salva JSON
@@ -439,7 +402,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
         allData[currentPageKey] = newPageData;
 
         editor.storage.repo.write(editor.storage.repoBranch, 'data.json', JSON.stringify(allData, null, 2), `Update data for ${currentPageKey}`, (err, commit1) => {
-          if(err) { bodyEl.textContent = 'Errore salvataggio data.json'; return; }
+          if(err) { 
+            bodyEl.textContent = 'Errore salvataggio data.json'; 
+            return; 
+          }
           callback();
         });
       });
@@ -450,13 +416,14 @@ document.addEventListener('simply-toolbars-loaded', function() {
       bodyEl.textContent = 'Salvataggio del file HTML...';
       editor.storage.saveHtmlBlock(filePath, 'body', newBodyHtml, (result) => {
         if (result.error) {
-            bodyEl.textContent = 'Errore: ' + result.message;
-            return;
+          bodyEl.textContent = 'Errore: ' + result.message;
+          return;
         }
-        // Usa l'hash dell'ultimo commit (quello dell'HTML) per il polling
+        
         const newCommitSha = result.commitSha;
         const { repoUser, repoName } = editor.storage;
-        bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In   attesa del deploy...`;
+        bodyEl.innerHTML = `Commit ${newCommitSha.substring(0,7)} creato! <br> In attesa del deploy...`;
+        
         const pollDeploy = () => {
           const apiUrl = `https://api.github.com/repos/${repoUser}/${repoName}/deployments`;
           fetch(apiUrl, { headers: { 'Accept': 'application/vnd.github.v3+json' } })
@@ -486,7 +453,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         callback();
       });
     });
-    // Esegui le operazioni in sequenza
+
     const executeSaves = (index) => {
       if (index < saveOperations.length) {
         saveOperations[index](() => executeSaves(index + 1));
