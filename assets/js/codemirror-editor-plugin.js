@@ -124,6 +124,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
+          console.log("aggiornamento data.json")
           // Esegui il processo di "stash" per sincronizzare e ottenere i dati più recenti.
           editor.data.stash();
           // Leggi la stringa JSON risultante, che è la fonte di verità più affidabile.
