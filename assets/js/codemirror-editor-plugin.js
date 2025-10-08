@@ -213,14 +213,26 @@ document.addEventListener('simply-toolbars-loaded', function() {
         tab.dataset.filename = filename;
         
         tab.addEventListener('click', () => {
-          // Rimuovi active da tutti i tab CSS
+          // Rimuove active da tutti i tab CSS
           document.querySelectorAll('.css-file-tab').forEach(t => t.classList.remove('active'));
           // Attiva il tab cliccato
           tab.classList.add('active');
-          // Carica il contenuto nel editor
-          currentCssFile = filename;
-          cssEditor.setValue(cssFiles[filename]);
-          setTimeout(() => cssEditor.refresh(), 1);
+          // Solo se il file non è già caricato, lo si carica
+          if (!cssFiles[filename] || typeof cssFiles[filename] === 'string') {
+            currentCssFile = filename;
+            cssEditor.setValue(cssFiles[filename] || '/* Caricamento... */');
+            setTimeout(() => cssEditor.refresh(), 1);
+            
+            // Carica il file se non è già stato caricato
+            if (!cssFiles[filename] || cssFiles[filename].startsWith('/*')) {
+              loadSingleCSSFile(filename, tab);
+            }
+          } else {
+            // Se già caricato, usa il contenuto corrente
+            currentCssFile = filename;
+            cssEditor.setValue(cssFiles[filename]);
+            setTimeout(() => cssEditor.refresh(), 1);
+          }
         });
         
         cssFilesTabs.appendChild(tab);
@@ -231,6 +243,31 @@ document.addEventListener('simply-toolbars-loaded', function() {
       if (firstTab) {
         firstTab.click();
       }
+    };
+
+    const loadSingleCSSFile = (filename, tab) => {
+      // Se abbiamo già contenuto modificato, non ricaricare
+      if (cssFiles[filename] && !cssFiles[filename].startsWith('/*')) {
+        return;
+      }
+      
+      editor.storage.repo.read(editor.storage.repoBranch, filename, (err, content) => {
+        if (err) {
+          cssFiles[filename] = `/* Errore nel caricamento di ${filename} */`;
+          if (tab) tab.innerHTML = `${filename} <span style="color: #ff5555;">(errore)</span>`;
+        } else {
+          // Sovrascrivi SOLO se non abbiamo modifiche non salvate
+          if (!cssFiles[filename] || cssFiles[filename].startsWith('/*')) {
+            cssFiles[filename] = content;
+          }
+          if (tab) tab.innerHTML = filename;
+          
+          if (currentCssFile === filename && cssEditor) {
+            cssEditor.setValue(cssFiles[filename]);
+            setTimeout(() => cssEditor.refresh(), 1);
+          }
+        }
+      });
     };
 
     // --- LOGICA DI CARICAMENTO DATI ---
@@ -295,7 +332,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           editor.currentData[currentPageKey] = newPageData;
 
           const newBodyHtml = htmlEditor.getValue();
-          // Applica CSS modificato se c'è un file selezionato
+          // Applica CSS modificato prima di qualsiasi ricarica
           if (currentCssFile && cssEditor) {
             cssFiles[currentCssFile] = cssEditor.getValue();
             
@@ -315,14 +352,14 @@ document.addEventListener('simply-toolbars-loaded', function() {
           }
 
           Array.from(document.body.children).forEach(child => {
-              if (child.id !== 'dual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
+              if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
                   child.remove();
               }
           });
           const tempBody = document.createElement('body');
           tempBody.innerHTML = newBodyHtml;
           Array.from(tempBody.children).forEach(newNode => {
-              if (newNode.id !== 'dual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
+              if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
                   document.body.appendChild(newNode);
               }
           });
