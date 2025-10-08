@@ -325,6 +325,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
         editor.data.apply(editor.currentData, document.body);
         // FORZA LA RE-INIZIALIZZAZIONE DI TUTTI GLI EDITOR SUL NUOVO DOM
         editor.editmode.makeEditable(document.body);
+
+        // FORZA UN AGGIORNAMENTO GLOBALE per renderizzare le liste create dinamicamente
+        setTimeout(() => editor.fireEvent('databinding:valuechanged', document.body), 100);
         
         // NON CHIUDERE IL MODAL - mantieni gli editor aperti
         modalOverlay.style.display = 'none';
