@@ -3218,24 +3218,24 @@
 					return key && key.trim() != '';
 				},
 				followLink : function(target, evt) {
-				// Funzione di navigazione personalizzata per lo storage GitHub
-				let normalizedPath = target.pathname;
-				if (window.location.hostname.includes('github.io') && this.repoName) {
-					const repoPrefix = '/' + this.repoName;
-					if (normalizedPath.startsWith(repoPrefix)) {
-					normalizedPath = normalizedPath.substring(repoPrefix.length);
-					if (!normalizedPath.startsWith('/')) {
-						normalizedPath = '/' + normalizedPath;
+					// Funzione di navigazione personalizzata per lo storage GitHub
+					let normalizedPath = target.pathname;
+					if (window.location.hostname.includes('github.io') && this.repoName) {
+						const repoPrefix = '/' + this.repoName;
+						if (normalizedPath.startsWith(repoPrefix)) {
+						normalizedPath = normalizedPath.substring(repoPrefix.length);
+						if (!normalizedPath.startsWith('/')) {
+							normalizedPath = '/' + normalizedPath;
+						}
+						}
 					}
+			
+					if (typeof editor.currentData[normalizedPath] == "undefined") {
+						this.page.save(target.href);
+						evt.preventDefault();
+					} else {
+						document.location.href = target.href + "#simply-edit";
 					}
-				}
-		
-				if (typeof editor.currentData[normalizedPath] == "undefined") {
-					this.page.save(target.href);
-					evt.preventDefault();
-				} else {
-					document.location.href = target.href + "#simply-edit";
-				}
 				},
 				deletePages: function(itemsToDelete) {
 					return new Promise((resolve, reject) => {
@@ -3466,27 +3466,27 @@
 					}
 					})
 					.then(response => {
-					if (response.status === 404) {
-						console.log('Custom Storage [githubApiStorage]: data.json non trovato (404). Restituisco dati vuoti.');
-						return null;
-					}
-					if (!response.ok) {
-						throw new Error(`Errore di rete dall'API GitHub: ${response.statusText}`);
-					}
-					return response.json();
+						if (response.status === 404) {
+							console.log('Custom Storage [githubApiStorage]: data.json non trovato (404). Restituisco dati vuoti.');
+							return null;
+						}
+						if (!response.ok) {
+							throw new Error(`Errore di rete dall'API GitHub: ${response.statusText}`);
+						}
+						return response.json();
 					})
 					.then(data => {
-					if (!data || !data.content) {
-						callback('{}');
-						return;
-					}
-					const content = atob(data.content);
-					console.log('Custom Storage [githubApiStorage]: Dati caricati e decodificati con successo.');
-					callback(content);
+						if (!data || !data.content) {
+							callback('{}');
+							return;
+						}
+						const content = atob(data.content);
+						console.log('Custom Storage [githubApiStorage]: Dati caricati e decodificati con successo.');
+						callback(content);
 					})
 					.catch(error => {
-					console.error('Custom Storage [githubApiStorage]: Errore durante il caricamento via API:', error);
-					callback('{}');
+						console.error('Custom Storage [githubApiStorage]: Errore durante il caricamento via API:', error);
+						callback('{}');
 					});
 				},
 				saveTemplate : function(pageTemplate, callback) {

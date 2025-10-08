@@ -124,8 +124,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // RICARICA SEMPRE IL JSON DALLO STATO ATTUALE DI SIMPLYEDIT
-          const allData = editor.currentData;
+          // Usa editor.data.get(document) per leggere lo stato corrente del DOM,
+          // che è più affidabile di editor.currentData per le modifiche strutturali non salvate.
+          const allData = editor.data.get(document);
           const pageData = allData[currentPageKey] || {};
           jsonEditor.setValue(JSON.stringify(pageData, null, 2));
           setTimeout(() => jsonEditor.refresh(), 1);
