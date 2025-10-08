@@ -39,7 +39,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
           <button class="editor-tab" data-editor="json">JSON Data</button>
         </div>
         <div>
-          <button id="modal-format-code" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Formatta</button>
           <button id="modal-apply-preview" style="padding: 8px 15px; background-color: #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica Anteprima</button>
           <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
         </div>
