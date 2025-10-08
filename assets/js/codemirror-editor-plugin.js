@@ -32,33 +32,36 @@ document.addEventListener('simply-toolbars-loaded', function() {
       display: 'flex', flexDirection: 'column', position: 'relative'
     });
 
-    modalContent.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
-        <div id="editor-tabs">
-          <button class="editor-tab active" data-editor="html">HTML Body</button>
-          <button class="editor-tab" data-editor="json">JSON Data</button>
-        </div>
-        <div>
-          <button id="modal-apply-preview" style="padding: 8px 15px; background-color: #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica Anteprima</button>
-          <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
-        </div>
+  modalContent.innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #44475a; flex-shrink: 0;">
+      <div id="editor-tabs">
+        <button class="editor-tab active" data-editor="html">HTML Body</button>
+        <button class="editor-tab" data-editor="json">JSON Data</button>
       </div>
-      <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
-        <div id="html-editor-wrapper" class="editor-wrapper active">
-          <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
-        </div>
-        <div id="json-editor-wrapper" class="editor-wrapper">
-          <textarea id="json-editor-textarea">Caricamento JSON da GitHub...</textarea>
-        </div>
+      <div>
+        <button id="modal-format-code" style="padding: 8px 15px; background-color: #50fa7b; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Formatta</button>
+        <button id="modal-apply-preview" style="padding: 8px 15px; background-color: #8be9fd; color: #282a36; border: none; cursor: pointer; margin-right: 10px;">Applica Anteprima</button>
+        <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
       </div>
-      <style>
-        .editor-tab { padding: 8px 12px; border: 1px solid #44475a; background-color: #282a36; color: #f8f8f2; cursor: pointer; }
-        .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
-        .editor-wrapper { display: none; width: 100%; height: 100%; }
-        .editor-wrapper.active { display: block; }
-        .CodeMirror { height: 100% !important; }
-      </style>
-    `;
+    </div>
+    <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
+      <div id="html-editor-wrapper" class="editor-wrapper active">
+        <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
+      </div>
+      <div id="json-editor-wrapper" class="editor-wrapper">
+        <textarea id="json-editor-textarea">Caricamento JSON da GitHub...</textarea>
+      </div>
+    </div>
+    <style>
+      .editor-tab { padding: 8px 12px; border: 1px solid #44475a; background-color: #282a36; color: #f8f8f2; cursor: pointer; }
+      .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
+      .editor-wrapper { display: none; width: 100%; height: 100%; }
+      .editor-wrapper.active { display: block; }
+      .CodeMirror { height: 100% !important; }
+      .CodeMirror-foldgutter { width: 15px; }
+      .CodeMirror-foldmarker { color: #8be9fd; cursor: pointer; }
+    </style>
+  `;
 
     let pageData = {}; // Conterrà la sezione del data.json per la pagina corrente
 
@@ -88,6 +91,26 @@ document.addEventListener('simply-toolbars-loaded', function() {
       });
     });
 
+  document.getElementById('modal-format-code').onclick = () => {
+    const activeTab = modalContent.querySelector('.editor-tab.active').dataset.editor;
+    
+    if (activeTab === 'html' && htmlEditor) {
+      // Per HTML, usa una semplice indentazione
+      const range = { from: htmlEditor.getCursor(true), to: htmlEditor.getCursor(false) };
+      htmlEditor.autoFormatRange(range.from, range.to);
+    } else if (activeTab === 'json' && jsonEditor) {
+      // Per JSON, formatta l'intero documento
+      try {
+        const jsonContent = jsonEditor.getValue();
+        const parsedJson = JSON.parse(jsonContent);
+        const formattedJson = JSON.stringify(parsedJson, null, 2);
+        jsonEditor.setValue(formattedJson);
+      } catch (e) {
+        alert("Errore nella formattazione JSON: " + e.message);
+      }
+    }
+  };
+
     // --- LOGICA DI CARICAMENTO DATI ---
     let filePath = window.location.pathname;
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -112,7 +135,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
       const doc = parser.parseFromString(fileContent, 'text/html');
       htmlTextarea.value = doc.body.innerHTML;
       htmlEditor = CodeMirror.fromTextArea(htmlTextarea, {
-        lineNumbers: true, mode: 'htmlmixed', theme: 'dracula', lineWrapping: true
+        lineNumbers: true, mode: 'htmlmixed', theme: 'dracula', lineWrapping: true, foldGutter:true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], matchTags: {bothTags: true}, autoCloseTags: true 
       });
       htmlEditor.setSize('100%', '100%');
       setTimeout(() => htmlEditor.refresh(), 1);
@@ -128,7 +152,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
       pageData = allData[currentPageKey] || {};
       jsonTextarea.value = JSON.stringify(pageData, null, 2); // Formattato per leggibilità
       jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
-        lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true
+        lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
+        foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
       });
       jsonEditor.setSize('100%', '100%');
     });
