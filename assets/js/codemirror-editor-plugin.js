@@ -42,7 +42,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           <button id="modal-close-button" style="padding: 8px 15px; background-color: #6272a4; color: white; border: none; cursor: pointer;">Chiudi</button>
         </div>
       </div>
-      <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px;">
+      <div id="editor-container" style="flex-grow: 1; position: relative; margin-top: 10px; overflow: hidden; min-height: 0;">
         <div id="html-editor-wrapper" class="editor-wrapper active">
           <textarea id="html-editor-textarea">Caricamento HTML da GitHub...</textarea>
         </div>
@@ -55,6 +55,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         .editor-tab.active { background-color: #44475a; border-bottom-color: #44475a; }
         .editor-wrapper { display: none; width: 100%; height: 100%; }
         .editor-wrapper.active { display: block; }
+        .CodeMirror { height: 100% !important; }
       </style>
     `;
 
