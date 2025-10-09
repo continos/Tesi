@@ -299,29 +299,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
       }
       
       try {
-        // SALVA LE MODIFICHE CSS CORRENTI
+        // SALVA LE MODIFICHE CSS CORRENTI (logica invariata)
         if (currentCssFile && cssEditor) {
           cssFiles[currentCssFile] = cssEditor.getValue();
-        }
-        
-        let newPageData;
-        try {
-          newPageData = JSON.parse(jsonEditor.getValue());
-        } catch (e) {
-          alert("Errore nella sintassi JSON: " + e.message);
-          return;
-        }
-        // "Spacchetta" l'oggetto virtuale e aggiorna le sezioni corrette in editor.currentData
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            editor.currentData[path] = newPageData[path];
-          }
-        }
-
-        const newBodyHtml = htmlEditor.getValue();
-        
-        // Applica CSS modificato
-        if (currentCssFile && cssEditor) {
           const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
           cssLinks.forEach(link => {
             const href = link.getAttribute('href').split('?')[0].split('#')[0];
@@ -329,37 +309,44 @@ document.addEventListener('simply-toolbars-loaded', function() {
               const newStyle = document.createElement('style');
               newStyle.innerHTML = cssEditor.getValue();
               document.head.appendChild(newStyle);
-              link.disabled = true;
+              if(link.parentNode) link.parentNode.removeChild(link);
             }
           });
         }
 
-        Array.from(document.body.children).forEach(child => {
-          if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
-            child.remove();
-          }
-        });
-        
-        const tempBody = document.createElement('body');
-        tempBody.innerHTML = newBodyHtml;
-        Array.from(tempBody.children).forEach(newNode => {
-          if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
-            document.body.appendChild(newNode);
-          }
-        });
-        
-        editor.data.apply(editor.currentData, document.body);
-        // FORZA LA RE-INIZIALIZZAZIONE DI TUTTI GLI EDITOR SUL NUOVO DOM
-        editor.editmode.makeEditable(document.body);
+        // --- INIZIO NUOVA LOGICA ---
 
-        // FORZA UN AGGIORNAMENTO GLOBALE per renderizzare le liste create dinamicamente
-        //setTimeout(() => editor.fireEvent('databinding:valuechanged', document.body), 100);
-        
-        // NON CHIUDERE IL MODAL - mantieni gli editor aperti
+        // 1. Salva i nodi DOM essenziali di SimplyEdit
+        const simplyEditorNode = document.getElementById('simply-editor');
+        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
+
+        // 2. Sostituisci l'HTML del body
+        const newBodyHtml = htmlEditor.getValue();
+        document.body.innerHTML = newBodyHtml;
+
+        // 3. Reinserisci i nodi essenziali nel nuovo body
+        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
+        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
+
+        // 4. Aggiorna il modello dati di SimplyEdit con il contenuto del JSON editor
+        const newPageData = JSON.parse(jsonEditor.getValue());
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            editor.currentData[path] = newPageData[path];
+          }
+        }
+
+        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM
+        console.log("Forcing SimplyEdit re-initialization on new DOM...");
+        editor.data.apply(editor.currentData, document);
+        editor.editmode.makeEditable(document);
+
+        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
         modalOverlay.style.display = 'none';
-        
+
       } catch (e) {
-        alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
+        alert("Errore nell'applicare l'anteprima: " + e.message);
+        console.error(e);
       }
     };
 
