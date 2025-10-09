@@ -375,10 +375,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
   };
 
   // LOGICA PULSANTE COMMIT 
-  const saveHtmlAction = function() {
+  const saveHtmlAction = async function() {
     // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
-    // Assicura che i dati letti siano quelli più recenti, anche se il modale non è stato aperto.
-    if (editor.currentData) {
+    // Trasformato in una funzione asincrona per garantire che i dati siano caricati prima di procedere.
+    const syncEditors = async () => {
+      if (!editor.currentData) return;
+
       const freshData = editor.list.get(document);
       editor.currentData = freshData;
 
@@ -397,8 +399,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       if (jsonEditor) {
         jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
       }
-      
-      // Sincronizza anche l'editor HTML
+
       if (htmlEditor) {
         let filePath = window.location.pathname;
         if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -410,19 +411,27 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (filePath.startsWith('/')) {
           filePath = filePath.substring(1);
         }
-        editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
-          if (!err) {
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(fileContent, 'text/html');
-            htmlEditor.setValue(doc.body.innerHTML);
-          }
+        
+        // Usa una Promise per attendere il caricamento asincrono dell'HTML
+        await new Promise(resolve => {
+          editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
+            if (!err) {
+              const parser = new DOMParser();
+              const doc = parser.parseFromString(fileContent, 'text/html');
+              htmlEditor.setValue(doc.body.innerHTML);
+            }
+            resolve(); // Risolvi la promise anche in caso di errore per non bloccare tutto
+          });
         });
       }
-    }
+    };
+
+    await syncEditors(); // Attendi il completamento della sincronizzazione
     // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
 
     if (!htmlEditor || !jsonEditor) {
-      alert("Apri prima l'editor 'Edit Page' per caricare i contenuti.");
+      // Questo controllo ora è ridondante se il modale non è mai stato aperto, ma lo teniamo per sicurezza.
+      alert("L'editor non è stato inizializzato. Apri prima 'Edit Page'.");
       return;
     }
     if (!confirm("Sei sicuro di voler salvare le modifiche all'HTML e JSON? L'azione creerà fino a due nuovi commit.")) {
