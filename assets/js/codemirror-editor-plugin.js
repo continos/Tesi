@@ -303,6 +303,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       console.log('Syncing with live data before preview...');
       const freshData = editor.list.get(document);
       editor.currentData = freshData;
+      console.log(`${editor.currentData}`);
       const pathsInUse = new Set([currentPageKey]);
       document.querySelectorAll('[data-simply-path]').forEach(el => {
         pathsInUse.add(el.getAttribute('data-simply-path'));
