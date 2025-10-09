@@ -125,7 +125,30 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          setTimeout(() => jsonEditor.refresh(), 1);
+          // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
+          setTimeout(() => {
+            // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
+            const freshData = editor.list.get(document);
+            editor.currentData = freshData;
+
+            // Raccogli tutti i path usati nella pagina corrente
+            const pathsInUse = new Set([currentPageKey]); // Aggiungi sempre il path della pagina corrente
+            document.querySelectorAll('[data-simply-path]').forEach(el => {
+              pathsInUse.add(el.getAttribute('data-simply-path'));
+            });
+
+            // Costruisci un oggetto JSON virtuale con solo i dati pertinenti
+            const relevantData = {};
+            pathsInUse.forEach(path => {
+              if (editor.currentData[path]) {
+                relevantData[path] = editor.currentData[path];
+              }
+            });
+
+            // Popola l'editor con i dati pertinenti
+            jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+            setTimeout(() => jsonEditor.refresh(), 1);
+          }, 150);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
@@ -279,6 +302,26 @@ document.addEventListener('simply-toolbars-loaded', function() {
         alert('Editor non pronti.'); 
         return; 
       }
+
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
+      console.log('Syncing with live data before preview...');
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      console.log(`${editor.currentData}`);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
       
       try {
         // SALVA LE MODIFICHE CSS CORRENTI (logica invariata)
