@@ -267,37 +267,27 @@ document.addEventListener('simply-toolbars-loaded', function() {
       setTimeout(() => htmlEditor.refresh(), 1);
     });
 
-    // 2. Carica JSON
-    console.log("primo caricamento json");
-    editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, dataJsonContent) => {
-      if (err) {
-        jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
-        return;
-      }
-      const allData = JSON.parse(dataJsonContent);
-      pageData = allData[currentPageKey] || {};
-      jsonTextarea.value = JSON.stringify(pageData, null, 2);
-      jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
-        lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
-        foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
-      });
-      jsonEditor.setSize('100%', '100%');
+    // 2. Sincronizza i dati e Carica JSON
+    const freshData = editor.list.get(document);
+    editor.currentData = freshData;
 
-      // AGGIORNA IL CONTENUTO JSON ALL'APERTURA DEL MODALE
-      const freshData = editor.list.get(document);
-      editor.currentData = freshData;
-      const pathsInUse = new Set([currentPageKey]);
-      document.querySelectorAll('[data-simply-path]').forEach(el => {
-        pathsInUse.add(el.getAttribute('data-simply-path'));
-      });
-      const relevantData = {};
-      pathsInUse.forEach(path => {
-        if (editor.currentData[path]) {
-          relevantData[path] = editor.currentData[path];
-        }
-      });
-      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+    const pathsInUse = new Set([currentPageKey]);
+    document.querySelectorAll('[data-simply-path]').forEach(el => {
+      pathsInUse.add(el.getAttribute('data-simply-path'));
     });
+    const relevantData = {};
+    pathsInUse.forEach(path => {
+      if (editor.currentData[path]) {
+        relevantData[path] = editor.currentData[path];
+      }
+    });
+    
+    jsonTextarea.value = JSON.stringify(relevantData, null, 2);
+    jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
+      lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
+      foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+    jsonEditor.setSize('100%', '100%');
     
     // 3. Carica CSS
     cssEditor = CodeMirror.fromTextArea(cssTextArea, {
