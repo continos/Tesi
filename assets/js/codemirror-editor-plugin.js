@@ -124,8 +124,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
-          setTimeout(() => {
             // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
             const freshData = editor.list.get(document);
             editor.currentData = freshData;
@@ -147,7 +145,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
             // Popola l'editor con i dati pertinenti
             jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
             setTimeout(() => jsonEditor.refresh(), 1);
-          }, 150);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
@@ -226,7 +223,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       }
     };
 
-    // LOGICA DI CARICAMENTO DATI
+    /* LOGICA DI CARICAMENTO DATI
     let filePath = window.location.pathname;
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
       const repoPrefix = '/' + editor.storage.repoName;
@@ -293,7 +290,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       lineNumbers: true, mode: 'css', theme: 'dracula', lineWrapping: true,
       foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
     });
-    cssEditor.setSize('100%', '100%');
+    cssEditor.setSize('100%', '100%');*/
 
     /* LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
@@ -376,7 +373,76 @@ document.addEventListener('simply-toolbars-loaded', function() {
         console.error(e);
       }
     };*/
-    // MODIFICA LA SEZIONE "LOGICA PULSANTE ANTEPRIMA"
+    
+    // LOGICA DI CARICAMENTO DATI
+    let filePath = window.location.pathname;
+    if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
+      const repoPrefix = '/' + editor.storage.repoName;
+      if (filePath.startsWith(repoPrefix)) {
+        filePath = filePath.substring(repoPrefix.length);
+      }
+    }
+    currentPageKey = filePath;
+    if (filePath.startsWith('/')) {
+      filePath = filePath.substring(1);
+    }
+
+    // 1. Carica HTML
+    editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
+      if (err) {
+        htmlTextarea.value = "Errore nel caricamento del file HTML da GitHub.";
+        return;
+      }
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(fileContent, 'text/html');
+      htmlTextarea.value = doc.body.innerHTML;
+      htmlEditor = CodeMirror.fromTextArea(htmlTextarea, {
+        lineNumbers: true, mode: 'htmlmixed', theme: 'dracula', lineWrapping: true, foldGutter:true,
+        gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"], matchTags: {bothTags: true}, autoCloseTags: true 
+      });
+      htmlEditor.setSize('100%', '100%');
+      setTimeout(() => htmlEditor.refresh(), 1);
+    });
+
+    // 2. Carica JSON DAL DOM CORRENTE (non da GitHub!)
+    console.log('Caricamento JSON dal DOM corrente all\'apertura modale...');
+
+    // IMPORTANTE: Sincronizza con il DOM all'apertura del modale
+    const freshData = editor.list.get(document);
+    editor.currentData = freshData;
+
+    const pathsInUse = new Set([currentPageKey]);
+    document.querySelectorAll('[data-simply-path]').forEach(el => {
+      pathsInUse.add(el.getAttribute('data-simply-path'));
+    });
+
+    const relevantData = {};
+    pathsInUse.forEach(path => {
+      if (editor.currentData[path]) {
+        relevantData[path] = editor.currentData[path];
+      }
+    });
+
+    jsonTextarea.value = JSON.stringify(relevantData, null, 2);
+    jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
+      lineNumbers: true, 
+      mode: { name: 'javascript', json: true }, 
+      theme: 'dracula', 
+      lineWrapping: true, 
+      foldGutter: true, 
+      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+    jsonEditor.setSize('100%', '100%');
+    setTimeout(() => jsonEditor.refresh(), 50);
+
+    // 3. Carica CSS
+    cssEditor = CodeMirror.fromTextArea(cssTextArea, {
+      lineNumbers: true, mode: 'css', theme: 'dracula', lineWrapping: true,
+      foldGutter: true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    });
+    cssEditor.setSize('100%', '100%');
+
+    // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
       if (!htmlEditor || !jsonEditor || !cssEditor) { 
         alert('Editor non pronti.'); 
