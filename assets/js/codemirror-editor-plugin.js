@@ -297,6 +297,25 @@ document.addEventListener('simply-toolbars-loaded', function() {
         alert('Editor non pronti.'); 
         return; 
       }
+
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
+      console.log('Syncing with live data before preview...');
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
       
       try {
         // SALVA LE MODIFICHE CSS CORRENTI (logica invariata)
@@ -314,8 +333,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
           });
         }
 
-        // --- INIZIO NUOVA LOGICA ---
-
         // 1. Salva i nodi DOM essenziali di SimplyEdit
         const simplyEditorNode = document.getElementById('simply-editor');
         const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
@@ -328,11 +345,10 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
         if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
 
-        // 4. Aggiorna il modello dati di SimplyEdit con il contenuto del JSON editor
-        const newPageData = JSON.parse(jsonEditor.getValue());
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            editor.currentData[path] = newPageData[path];
+        // 4. Aggiorna il modello dati di SimplyEdit usando i dati FRESCHI, non quelli dell'editor
+        for (const path in relevantData) {
+          if (Object.prototype.hasOwnProperty.call(relevantData, path)) {
+            editor.currentData[path] = relevantData[path];
           }
         }
 
@@ -340,7 +356,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         console.log("Forcing SimplyEdit re-initialization on new DOM...");
         editor.data.apply(editor.currentData, document);
         
-        // Aggiungi un piccolo ritardo per permettere al DOM e ai binding di stabilizzarsi
         setTimeout(() => {
           console.log("Activating edit mode on the new DOM...");
           editor.editmode.makeEditable(document);
