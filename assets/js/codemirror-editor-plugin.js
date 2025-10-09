@@ -125,30 +125,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
-          setTimeout(() => {
-            // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
-            const freshData = editor.list.get(document);
-            editor.currentData = freshData;
-
-            // Raccogli tutti i path usati nella pagina corrente
-            const pathsInUse = new Set([currentPageKey]); // Aggiungi sempre il path della pagina corrente
-            document.querySelectorAll('[data-simply-path]').forEach(el => {
-              pathsInUse.add(el.getAttribute('data-simply-path'));
-            });
-
-            // Costruisci un oggetto JSON virtuale con solo i dati pertinenti
-            const relevantData = {};
-            pathsInUse.forEach(path => {
-              if (editor.currentData[path]) {
-                relevantData[path] = editor.currentData[path];
-              }
-            });
-
-            // Popola l'editor con i dati pertinenti
-            jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-            setTimeout(() => jsonEditor.refresh(), 1);
-          }, 150);
+          setTimeout(() => jsonEditor.refresh(), 1);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
@@ -296,34 +273,61 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');
 
-    // LOGICA PULSANTE ANTEPRIMA (HARD RELOAD)
+    // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !originalPageHTML) {
-        alert('Editor o HTML originale non pronti.');
-        return;
+      if (!htmlEditor || !jsonEditor || !cssEditor) { 
+        alert('Editor non pronti.'); 
+        return; 
       }
-
-      console.log("Applying preview via Hard Reload...");
-
+      
       try {
-        // 1. Prendi il nuovo body dall'editor
+        // SALVA LE MODIFICHE CSS CORRENTI (logica invariata)
+        if (currentCssFile && cssEditor) {
+          cssFiles[currentCssFile] = cssEditor.getValue();
+          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+          cssLinks.forEach(link => {
+            const href = link.getAttribute('href').split('?')[0].split('#')[0];
+            if (href === currentCssFile) {
+              const newStyle = document.createElement('style');
+              newStyle.innerHTML = cssEditor.getValue();
+              document.head.appendChild(newStyle);
+              if(link.parentNode) link.parentNode.removeChild(link);
+            }
+          });
+        }
+
+        // 1. Salva i nodi DOM essenziali di SimplyEdit
+        const simplyEditorNode = document.getElementById('simply-editor');
+        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
+
+        // 2. Sostituisci l'HTML del body
         const newBodyHtml = htmlEditor.getValue();
+        document.body.innerHTML = newBodyHtml;
 
-        // 2. Crea un documento virtuale dal sorgente originale
-        const parser = new DOMParser();
-        const newDoc = parser.parseFromString(originalPageHTML, 'text/html');
+        // 3. Reinserisci i nodi essenziali nel nuovo body
+        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
+        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
 
-        // 3. Sostituisci il body nel documento virtuale
-        newDoc.body.innerHTML = newBodyHtml;
+        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
+        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
+        const newPageData = JSON.parse(jsonEditor.getValue());
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            dataForApply[path] = newPageData[path];
+          }
+        }
 
-        // 4. Aggiungi un marcatore per dire allo script di riaprire la modale
-        const markerScript = newDoc.createElement('script');
-        markerScript.textContent = `sessionStorage.setItem('simply-reopen-editor', 'true');`;
-        newDoc.body.appendChild(markerScript);
+        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
+        console.log("Forcing SimplyEdit re-initialization on new DOM...");
+        editor.data.apply(dataForApply, document);
+        
+        setTimeout(() => {
+          console.log("Activating edit mode on the new DOM...");
+          editor.editmode.makeEditable(document);
+        }, 100);
 
-        // 5. Sovrascrivi il DOM della pagina live con il nuovo documento completo
-        // Questo causerà un re-rendering completo e la riesecuzione di tutti gli script
-        document.documentElement.innerHTML = newDoc.documentElement.innerHTML;
+        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
+        modalOverlay.style.display = 'none';
 
       } catch (e) {
         alert("Errore nell'applicare l'anteprima: " + e.message);
