@@ -431,7 +431,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
       editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, currentJsonContent) => {
         let allData = {};
         if (!err) allData = JSON.parse(currentJsonContent);
-        allData[currentPageKey] = newPageData;
+        // "Spacchetta" l'oggetto virtuale dall'editor e aggiorna l'oggetto dati completo
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            allData[path] = newPageData[path];
+          }
+        }
 
         editor.storage.repo.write(editor.storage.repoBranch, 'data.json', JSON.stringify(allData, null, 2), `Update data for ${currentPageKey}`, (err, commit1) => {
           if(err) { 
