@@ -1,62 +1,83 @@
 {
-	"/vocbench/": {
-		"topNavBar": [
-			{
-				"link": {
-					"href": "/",
-					"class": "topNavBarButton",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Home.png\" alt=\"Home\">",
-					"name": null
-				}
-			},
-			{
-				"link": {
-					"href": "/doc",
-					"class": "topNavBarButton",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Documentation.png\" alt=\"Documentation\">",
-					"name": null
-				}
-			},
-			{
-				"link": {
-					"href": "/downloads",
-					"class": "topNavBarButton",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Downloads.png\" alt=\"Downloads\">",
-					"name": null
-				}
-			},
-			{
-				"link": {
-					"href": "/support",
-					"class": "topNavBarButton",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Support.png\" alt=\"Support\">",
-					"name": null
-				}
-			},
-			{
-				"link": {
-					"href": "/aboutus",
-					"class": "topNavBarButton",
-					"alt": null,
-					"title": null,
-					"innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/AboutUs.png\" alt=\"About us\">",
-					"name": null
-				}
-			}
-		]
-	},
-	"/vocbench.html": {
-		"pageTitle": "VocBench Replica",
-		"leftSidebarContent": "\n        <h3>Navigazione</h3>\n        <p>Contenuto della barra laterale sinistra. Modificabile.</p>\n        <ul>\n            <li>Link 1</li>\n            <li>Link 2</li>\n        </ul>\n    ",
-		"rightSidebarContent": "\n        <h3>On this page</h3>\n        <p>Contenuto della barra laterale destra. Modificabile.</p>\n    ",
-		"mainContent": "\n  <h1>VocBench</h1>\n  <p><strong style=\"color: #047370\">VocBench </strong>is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\">Ontolex-lemon</a> lexicons and generic RDF datasets.</p>\n\n  <p>Designed to meet the needs of semantic web and linked data environments,&nbsp;VocBench&nbsp;development has also been driven by the feedback gathered from a <a href=\"support/community.jsf\">community of users</a> made of public organizations, companies and independent users looking for open source solutions for maintaining their ontologies, thesauri, code lists and authority resources.  </p>\n  <p><strong style=\"color: #047370\">VocBench </strong>(or, simply, <strong style=\"color: #047370\">VB</strong>)  business and data access layers are realized by <a href=\"http://semanticturkey.uniroma2.it/\" rel=\"nofollow\">Semantic Turkey</a>, an open-source platform for Knowledge Acquisition and Management realized by the <a href=\"http://art.uniroma2.it/\" rel=\"nofollow\">ART Research Group</a> at the <a href=\"http://www.uniroma2.it/\">University of Rome Tor Vergata</a>.  </p>\n  <p><strong style=\"color: #047370\">VocBench </strong>offers a powerful editing environment, with facilities for management of OWL ontologies, SKOS/SKOS-XL thesauri, OntoLex lexicons and any sort of RDF dataset. It aims to set new standards for flexibility, openness and expressive power as a free and open source RDF modelling platform.</p>\n  <p>Initially funded by the <a href=\"http://ec.europa.eu/\">European Commission</a> <a href=\"http://ec.europa.eu/isa/isa2/\">ISA\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0083\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0083\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0082\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0082\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0083\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u0082\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u0082\u00c3\u0083\u00c2\u0082\u00c3\u0082\u00c2\u00b2 programme</a> and currently by the Digital Europe Programme <a href=\"https://digital-strategy.ec.europa.eu/activities/digital-programme\">(DIGITAL</a>), the development of <strong style=\"color: #047370\">VocBench</strong> is managed by the <a href=\"http://publications.europa.eu/\">Publications Office of the EU</a> under contract with <a href=\"https://www.eurodyn.com/\">European Dynamics</a>.</p>\n  <p>Download links for the sources and binaries of VocBench are available on the <a href=\"downloads\">downloads page</a></p>\n  <p>&nbsp;</p>\n  <img src=\"https://vocbench.uniroma2.it/images/OverallPicture_VB3.png\" alt=\"Overall Picture of VocBench\" class=\"screenshot\">\n  <p>&nbsp;</p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t"
-	}
+  "/vocbench/": {
+    "topNavBar": [
+      {
+        "link": {
+          "href": "/",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Home.png\" alt=\"Home\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/doc",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Documentation.png\" alt=\"Documentation\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/downloads",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Downloads.png\" alt=\"Downloads\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/support",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Support.png\" alt=\"Support\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/aboutus",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/AboutUs.png\" alt=\"About us\">",
+          "name": null
+        }
+      }
+    ]
+  },
+  "/vocbench.html": {
+    "leftNavBarContent": [
+      {
+        "link": {
+          "href": "/doc/history.html",
+          "class": "leftNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "history",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/doc/publications.html",
+          "class": "leftNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "publications",
+          "name": null
+        }
+      }
+    ],
+    "pageTitle": "VocBench Replica",
+    "rightSidebarContent": "\n        <h3>On this page</h3>\n        <p>Contenuto della barra laterale destra. Modificabile.</p>\n    ",
+    "mainContent": "\n  <h1>VocBench</h1>\n  <p><strong style=\"color: #047370\">VocBench </strong>is a web-based, multilingual, collaborative development platform for managing <a href=\"https://www.w3.org/TR/owl2-overview/\">OWL</a> ontologies, <a href=\"https://www.w3.org/TR/skos-reference/\">SKOS</a>(/<a href=\"https://www.w3.org/TR/skos-reference/skos-xl.html\">XL</a>) thesauri, <a href=\"https://www.w3.org/2016/05/ontolex/\">Ontolex-lemon</a> lexicons and generic RDF datasets.</p>\n\n  <p>Designed to meet the needs of semantic web and linked data environments,&nbsp;VocBench&nbsp;development has also been driven by the feedback gathered from a <a href=\"support/community.jsf\">community of users</a> made of public organizations, companies and independent users looking for open source solutions for maintaining their ontologies, thesauri, code lists and authority resources.  </p>\n  <p><strong style=\"color: #047370\">VocBench </strong>(or, simply, <strong style=\"color: #047370\">VB</strong>)  business and data access layers are realized by <a href=\"http://semanticturkey.uniroma2.it/\" rel=\"nofollow\">Semantic Turkey</a>, an open-source platform for Knowledge Acquisition and Management realized by the <a href=\"http://art.uniroma2.it/\" rel=\"nofollow\">ART Research Group</a> at the <a href=\"http://www.uniroma2.it/\">University of Rome Tor Vergata</a>.  </p>\n  <p><strong style=\"color: #047370\">VocBench </strong>offers a powerful editing environment, with facilities for management of OWL ontologies, SKOS/SKOS-XL thesauri, OntoLex lexicons and any sort of RDF dataset. It aims to set new standards for flexibility, openness and expressive power as a free and open source RDF modelling platform.</p>\n  <p>Initially funded by the <a href=\"http://ec.europa.eu/\">European Commission</a> <a href=\"http://ec.europa.eu/isa/isa2/\">ISAÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂÃÂ² programme</a> and currently by the Digital Europe Programme <a href=\"https://digital-strategy.ec.europa.eu/activities/digital-programme\">(DIGITAL</a>), the development of <strong style=\"color: #047370\">VocBench</strong> is managed by the <a href=\"http://publications.europa.eu/\">Publications Office of the EU</a> under contract with <a href=\"https://www.eurodyn.com/\">European Dynamics</a>.</p>\n  <p>Download links for the sources and binaries of VocBench are available on the <a href=\"downloads\">downloads page</a></p>\n  <p>&nbsp;</p>\n  <img src=\"https://vocbench.uniroma2.it/images/OverallPicture_VB3.png\" alt=\"Overall Picture of VocBench\" class=\"screenshot\">\n  <p>&nbsp;</p>\n\t\t\t\t\t\t\n\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t"
+  }
 }
