@@ -16,22 +16,36 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let modalInitialized = false;
   let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
 
-  const bodyEditorAction = function() {
-    const existingModal = document.getElementById('manual-editor-modal-overlay');
-    if (existingModal) {
-      existingModal.style.display = 'flex';
-      if (modalInitialized) {
-        if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
-        if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
-        if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
-        const activeTab = existingModal.querySelector('.editor-tab.active');
-        if (activeTab && activeTab.dataset.editor === 'css') {
-          document.getElementById('css-files-tabs').style.display = 'block';
+      const bodyEditorAction = function() {
+        const existingModal = document.getElementById('manual-editor-modal-overlay');
+        if (existingModal) {
+          existingModal.style.display = 'flex';
+  
+          // Esegui la logica di sincronizzazione del JSON, come richiesto.
+          if (jsonEditor) {
+            setTimeout(() => {
+              const freshData = editor.list.get(document);
+              editor.currentData = freshData;
+              const pathsInUse = new Set([currentPageKey]);
+              document.querySelectorAll('[data-simply-path]').forEach(el => {
+                pathsInUse.add(el.getAttribute('data-simply-path'));
+              });
+              const relevantData = {};
+              pathsInUse.forEach(path => {
+                if (editor.currentData[path]) {
+                  relevantData[path] = editor.currentData[path];
+                }
+              });
+              jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+              setTimeout(() => jsonEditor.refresh(), 1);
+            }, 150); // Manteniamo un piccolo ritardo per stabilità
+          }
+  
+          if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
+          if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
+          
+          return;
         }
-      }
-      return;
-    }
-
     const modalOverlay = document.createElement('div');
     modalOverlay.id = 'manual-editor-modal-overlay';
     Object.assign(modalOverlay.style, {
