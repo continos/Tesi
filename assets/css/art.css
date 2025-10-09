@@ -13,6 +13,7 @@ color: #000000;
 .std {
 font: small Verdana, Arial, Helvetica, sans-serif;
 font-size: 10pt;
+  weight:10px;
 }
 
 .art #container { 
