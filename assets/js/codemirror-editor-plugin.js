@@ -124,13 +124,26 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-          // FORZA la risincronizzazione del modello dati interno di SimplyEdit con lo stato attuale del DOM
+          // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
           const freshData = editor.list.get(document);
           editor.currentData = freshData;
 
-          // Ora che editor.currentData è aggiornato, possiamo leggerlo
-          const pageData = editor.currentData[currentPageKey] || {};
-          jsonEditor.setValue(JSON.stringify(pageData, null, 2));
+          // Raccogli tutti i path usati nella pagina corrente
+          const pathsInUse = new Set([currentPageKey]); // Aggiungi sempre il path della pagina corrente
+          document.querySelectorAll('[data-simply-path]').forEach(el => {
+            pathsInUse.add(el.getAttribute('data-simply-path'));
+          });
+
+          // Costruisci un oggetto JSON virtuale con solo i dati pertinenti
+          const relevantData = {};
+          pathsInUse.forEach(path => {
+            if (editor.currentData[path]) {
+              relevantData[path] = editor.currentData[path];
+            }
+          });
+
+          // Popola l'editor con i dati pertinenti
+          jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
           setTimeout(() => jsonEditor.refresh(), 1);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
