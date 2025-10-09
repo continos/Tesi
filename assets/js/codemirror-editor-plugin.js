@@ -296,7 +296,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
           alert("Errore nella sintassi JSON: " + e.message);
           return;
         }
-        editor.currentData[currentPageKey] = newPageData;
+        // "Spacchetta" l'oggetto virtuale e aggiorna le sezioni corrette in editor.currentData
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            editor.currentData[path] = newPageData[path];
+          }
+        }
 
         const newBodyHtml = htmlEditor.getValue();
         
