@@ -1,4 +1,16 @@
 document.addEventListener('simply-toolbars-loaded', function() {
+  // Logica per riaprire la modale dopo l'anteprima
+  if (sessionStorage.getItem('simply-reopen-editor') === 'true') {
+    sessionStorage.removeItem('simply-reopen-editor');
+    // Assicurati che l'azione esista prima di chiamarla
+    if (window.editor && editor.actions['custom-body-editor']) {
+      // Usa un timeout per dare alla UI il tempo di stabilizzarsi
+      setTimeout(() => {
+        editor.actions['custom-body-editor']();
+      }, 100);
+    }
+  }
+
   if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
@@ -15,6 +27,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let currentCssFile = '';
   let modalInitialized = false;
   let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
+  let originalPageHTML = ''; // Variabile per memorizzare l'HTML originale
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -245,6 +258,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         htmlTextarea.value = "Errore nel caricamento del file HTML da GitHub.";
         return;
       }
+      originalPageHTML = fileContent; // Memorizza l'intero contenuto HTML originale
       const parser = new DOMParser();
       const doc = parser.parseFromString(fileContent, 'text/html');
       htmlTextarea.value = doc.body.innerHTML;
@@ -294,81 +308,34 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');
 
-    // LOGICA PULSANTE ANTEPRIMA
+    // LOGICA PULSANTE ANTEPRIMA (HARD RELOAD)
     document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor || !cssEditor) { 
-        alert('Editor non pronti.'); 
-        return; 
+      if (!htmlEditor || !originalPageHTML) {
+        alert('Editor o HTML originale non pronti.');
+        return;
       }
 
-      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
-      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
-      console.log('Syncing with live data before preview...');
-      const freshData = editor.list.get(document);
-      editor.currentData = freshData;
-      console.log(`${editor.currentData}`);
-      const pathsInUse = new Set([currentPageKey]);
-      document.querySelectorAll('[data-simply-path]').forEach(el => {
-        pathsInUse.add(el.getAttribute('data-simply-path'));
-      });
-      const relevantData = {};
-      pathsInUse.forEach(path => {
-        if (editor.currentData[path]) {
-          relevantData[path] = editor.currentData[path];
-        }
-      });
-      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
-      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
-      
+      console.log("Applying preview via Hard Reload...");
+
       try {
-        // SALVA LE MODIFICHE CSS CORRENTI (logica invariata)
-        if (currentCssFile && cssEditor) {
-          cssFiles[currentCssFile] = cssEditor.getValue();
-          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-          cssLinks.forEach(link => {
-            const href = link.getAttribute('href').split('?')[0].split('#')[0];
-            if (href === currentCssFile) {
-              const newStyle = document.createElement('style');
-              newStyle.innerHTML = cssEditor.getValue();
-              document.head.appendChild(newStyle);
-              if(link.parentNode) link.parentNode.removeChild(link);
-            }
-          });
-        }
-
-        // 1. Salva i nodi DOM essenziali di SimplyEdit
-        const simplyEditorNode = document.getElementById('simply-editor');
-        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
-
-        // 2. Sostituisci l'HTML del body
+        // 1. Prendi il nuovo body dall'editor
         const newBodyHtml = htmlEditor.getValue();
-        document.body.innerHTML = newBodyHtml;
 
-        // 3. Reinserisci i nodi essenziali nel nuovo body
-        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
-        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
+        // 2. Crea un documento virtuale dal sorgente originale
+        const parser = new DOMParser();
+        const newDoc = parser.parseFromString(originalPageHTML, 'text/html');
 
-        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
-        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
-        const newPageData = JSON.parse(jsonEditor.getValue());
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            dataForApply[path] = newPageData[path];
-          }
-        }
+        // 3. Sostituisci il body nel documento virtuale
+        newDoc.body.innerHTML = newBodyHtml;
 
-        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
-        console.log("Forcing SimplyEdit re-initialization on new DOM...");
-        editor.data.apply(dataForApply, document);
-        
-        setTimeout(() => {
-          console.log("Activating edit mode on the new DOM...");
-          editor.editmode.makeEditable(document);
-        }, 100);
+        // 4. Aggiungi un marcatore per dire allo script di riaprire la modale
+        const markerScript = newDoc.createElement('script');
+        markerScript.textContent = `sessionStorage.setItem('simply-reopen-editor', 'true');`;
+        newDoc.body.appendChild(markerScript);
 
-        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
-        modalOverlay.style.display = 'none';
+        // 5. Sovrascrivi il DOM della pagina live con il nuovo documento completo
+        // Questo causerà un re-rendering completo e la riesecuzione di tutti gli script
+        document.documentElement.innerHTML = newDoc.documentElement.innerHTML;
 
       } catch (e) {
         alert("Errore nell'applicare l'anteprima: " + e.message);
