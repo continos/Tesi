@@ -349,16 +349,18 @@ document.addEventListener('simply-toolbars-loaded', function() {
         if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
         if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
 
-        // 4. Aggiorna il modello dati di SimplyEdit usando i dati FRESCHI, non quelli dell'editor
-        for (const path in relevantData) {
-          if (Object.prototype.hasOwnProperty.call(relevantData, path)) {
-            editor.currentData[path] = relevantData[path];
+        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
+        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
+        const newPageData = JSON.parse(jsonEditor.getValue());
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            dataForApply[path] = newPageData[path];
           }
         }
 
-        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM
+        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
         console.log("Forcing SimplyEdit re-initialization on new DOM...");
-        editor.data.apply(editor.currentData, document);
+        editor.data.apply(dataForApply, document);
         
         setTimeout(() => {
           console.log("Activating edit mode on the new DOM...");
