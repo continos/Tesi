@@ -267,6 +267,21 @@ document.addEventListener('simply-toolbars-loaded', function() {
         foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
       });
       jsonEditor.setSize('100%', '100%');
+
+      // AGGIORNA IL CONTENUTO JSON ALL'APERTURA DEL MODALE
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
     });
     
     // 3. Carica CSS
