@@ -373,7 +373,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
         console.error(e);
       }
     };*/
-    
     // LOGICA DI CARICAMENTO DATI
     let filePath = window.location.pathname;
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
