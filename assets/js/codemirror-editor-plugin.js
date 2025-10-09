@@ -387,6 +387,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
     };
     
     modalInitialized = true;
+
+    // Simula un click sulla tab JSON per forzare la sincronizzazione iniziale
+    setTimeout(() => {
+      modalContent.querySelector('.editor-tab[data-editor="json"]').click();
+      // E poi torna alla tab HTML di default
+      modalContent.querySelector('.editor-tab[data-editor="html"]').click();
+    }, 200); // Un ritardo leggermente superiore per assicurarsi che tutto sia pronto
   };
 
   // LOGICA PULSANTE COMMIT 
