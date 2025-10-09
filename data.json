@@ -482,7 +482,47 @@
           "class": "topNavBarButton",
           "alt": null,
           "title": null,
-          "innerHTML": "",
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Home.png\" alt=\"Home\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/doc",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Documentation.png\" alt=\"Documentation\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/downloads",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Downloads.png\" alt=\"Downloads\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/support",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/Support.png\" alt=\"Support\">",
+          "name": null
+        }
+      },
+      {
+        "link": {
+          "href": "/aboutus",
+          "class": "topNavBarButton",
+          "alt": null,
+          "title": null,
+          "innerHTML": "<img data-simply-src=\"https://vocbench.uniroma2.it/images/AboutUs.png\" alt=\"About us\">",
           "name": null
         }
       }
