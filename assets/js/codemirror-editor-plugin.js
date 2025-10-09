@@ -335,17 +335,17 @@ document.addEventListener('simply-toolbars-loaded', function() {
             const newBodyHtml = htmlEditor.getValue();
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = newBodyHtml;
-            const newMainContent = tempDiv.querySelector('main.main');
-            const oldMain = document.querySelector('main.main');
+            const newBodyContent = tempDiv.querySelector('body');
+            const oldBody = document.querySelector('body');
     
-            if (newMainContent && oldMain) {
-              oldMain.innerHTML = newMainContent.innerHTML;
+            if (newBodyContent && oldBody) {
+              oldBody.innerHTML = newBodyContent.innerHTML;
               // Lascia che SimplyEdit aggiorni il DOM in base ai nuovi dati e lo renda editabile
-              editor.data.apply(editor.currentData, oldMain);
-              editor.editmode.makeEditable(oldMain);
-              setTimeout(() => editor.fireEvent('databinding:valuechanged', oldMain), 100);
+              editor.data.apply(editor.currentData, oldBody);
+              editor.editmode.makeEditable(oldBody);
+              setTimeout(() => editor.fireEvent('databinding:valuechanged', oldBody), 100);
             } else {
-                console.error("Elemento <main> non trovato nel DOM o nell'HTML dell'editor.");
+                console.error("Elemento <Body> non trovato nel DOM o nell'HTML dell'editor.");
             }
     
             modalOverlay.style.display = 'none';
