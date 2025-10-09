@@ -292,68 +292,95 @@ document.addEventListener('simply-toolbars-loaded', function() {
     cssEditor.setSize('100%', '100%');
 
     // LOGICA PULSANTE ANTEPRIMA
-        document.getElementById('modal-apply-preview').onclick = () => {
-          try {
-            // Sincronizza e ottieni i dati JSON più recenti
-            editor.currentData = editor.list.get(document);
-            const pathsInUse = new Set([currentPageKey]);
-            document.querySelectorAll('[data-simply-path]').forEach(el => {
-              pathsInUse.add(el.getAttribute('data-simply-path'));
-            });
-            const relevantData = {};
-            pathsInUse.forEach(path => {
-              if (editor.currentData[path]) {
-                relevantData[path] = editor.currentData[path];
-              }
-            });
-            if (jsonEditor) {
-              jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-            }
-    
-            // Applica le modifiche JSON in memoria
-            let dataFromEditor = JSON.parse(jsonEditor.getValue());
-            for (const path in dataFromEditor) {
-              if (Object.prototype.hasOwnProperty.call(dataFromEditor, path)) {
-                editor.currentData[path] = dataFromEditor[path];
-              }
-            }
-    
-            // Applica le modifiche CSS
-            if (currentCssFile && cssEditor) {
-              cssFiles[currentCssFile] = cssEditor.getValue();
-              const styleId = 'custom-css-preview-' + currentCssFile;
-              let styleTag = document.getElementById(styleId);
-              if (!styleTag) {
-                styleTag = document.createElement('style');
-                styleTag.id = styleId;
-                document.head.appendChild(styleTag);
-              }
-              styleTag.innerHTML = cssEditor.getValue();
-            }
-    
-            // SOSTITUZIONE MIRATA DELL'HTML
-            const newBodyHtml = htmlEditor.getValue();
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = newBodyHtml;
-            const newBodyContent = tempDiv.querySelector('body');
-            const oldBody = document.querySelector('body');
-    
-            if (newBodyContent && oldBody) {
-              oldBody.innerHTML = newBodyContent.innerHTML;
-              // Lascia che SimplyEdit aggiorni il DOM in base ai nuovi dati e lo renda editabile
-              editor.data.apply(editor.currentData, oldBody);
-              editor.editmode.makeEditable(oldBody);
-              setTimeout(() => editor.fireEvent('databinding:valuechanged', oldBody), 100);
-            } else {
-                console.error("Elemento <Body> non trovato nel DOM o nell'HTML dell'editor.");
-            }
-    
-            modalOverlay.style.display = 'none';
-    
-          } catch (e) {
-            alert("Errore nell'applicare l'anteprima: " + e.message);
+    document.getElementById('modal-apply-preview').onclick = () => {
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Sincronizza i dati prima di qualsiasi operazione per evitare di usare valori stantii dagli editor.
+      editor.currentData = editor.list.get(document);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      if (jsonEditor) {
+        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      }
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
+
+      if (!htmlEditor || !jsonEditor || !cssEditor) { 
+        alert('Editor non pronti.'); 
+        return; 
+      }
+      
+      try {
+        // SALVA LE MODIFICHE CSS CORRENTI
+        if (currentCssFile && cssEditor) {
+          cssFiles[currentCssFile] = cssEditor.getValue();
+        }
+        
+        let newPageData;
+        try {
+          newPageData = JSON.parse(jsonEditor.getValue());
+        } catch (e) {
+          alert("Errore nella sintassi JSON: " + e.message);
+          return;
+        }
+        // "Spacchetta" l'oggetto virtuale e aggiorna le sezioni corrette in editor.currentData
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            editor.currentData[path] = newPageData[path];
           }
-        };
+        }
+
+        const newBodyHtml = htmlEditor.getValue();
+        
+        // Applica CSS modificato
+        if (currentCssFile && cssEditor) {
+          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+          cssLinks.forEach(link => {
+            const href = link.getAttribute('href').split('?')[0].split('#')[0];
+            if (href === currentCssFile) {
+              const newStyle = document.createElement('style');
+              newStyle.innerHTML = cssEditor.getValue();
+              document.head.appendChild(newStyle);
+              link.disabled = true;
+            }
+          });
+        }
+
+        Array.from(document.body.children).forEach(child => {
+          if (child.id !== 'manual-editor-modal-overlay' && child.id !== 'simply-editor' && child.tagName !== 'SCRIPT') {
+            child.remove();
+          }
+        });
+        
+        const tempBody = document.createElement('body');
+        tempBody.innerHTML = newBodyHtml;
+        Array.from(tempBody.children).forEach(newNode => {
+          if (newNode.id !== 'manual-editor-modal-overlay' && newNode.id !== 'simply-editor' && newNode.tagName !== 'SCRIPT') {
+            document.body.appendChild(newNode);
+          }
+        });
+        
+        editor.data.apply(editor.currentData, document.body);
+        // FORZA LA RE-INIZIALIZZAZIONE DI TUTTI GLI EDITOR SUL NUOVO DOM
+        editor.editmode.makeEditable(document.body);
+
+        // FORZA UN AGGIORNAMENTO GLOBALE per renderizzare le liste create dinamicamente
+        setTimeout(() => editor.fireEvent('databinding:valuechanged', document.body), 100);
+        
+        // NON CHIUDERE IL MODAL - mantieni gli editor aperti
+        modalOverlay.style.display = 'none';
+        
+      } catch (e) {
+        alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
+      }
+    };
+
     document.getElementById('modal-close-button').onclick = () => {
       // SALVA LE MODIFICHE CSS PRIMA DI CHIUDERE
       if (currentCssFile && cssEditor) {
