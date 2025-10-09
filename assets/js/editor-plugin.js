@@ -313,33 +313,23 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor || !cssEditor) { 
-        alert('Editor non pronti.'); 
-        return; 
+      if (!htmlEditor || !jsonEditor || !cssEditor) {
+        alert('Editor non pronti.');
+        return;
       }
 
-      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
-      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
-      console.log('Syncing with live data before preview...');
-      const freshData = editor.list.get(document);
-      editor.currentData = freshData;
-      console.log(`${editor.currentData}`);
-      const pathsInUse = new Set([currentPageKey]);
-      document.querySelectorAll('[data-simply-path]').forEach(el => {
-        pathsInUse.add(el.getAttribute('data-simply-path'));
-      });
-      const relevantData = {};
-      pathsInUse.forEach(path => {
-        if (editor.currentData[path]) {
-          relevantData[path] = editor.currentData[path];
-        }
-      });
-      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
-      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
-      
       try {
-        // SALVA LE MODIFICHE CSS CORRENTI 
+        // 1. Leggi i dati JSON modificati dall'editor. Questa è la nuova fonte di verità.
+        const editedJsonData = JSON.parse(jsonEditor.getValue());
+
+        // 2. Aggiorna lo stato dati principale di SimplyEdit con le modifiche.
+        for (const path in editedJsonData) {
+          if (Object.prototype.hasOwnProperty.call(editedJsonData, path)) {
+            editor.currentData[path] = editedJsonData[path];
+          }
+        }
+
+        // 3. Applica le modifiche CSS (se presenti)
         if (currentCssFile && cssEditor) {
           cssFiles[currentCssFile] = cssEditor.getValue();
           const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
@@ -354,30 +344,21 @@ document.addEventListener('simply-toolbars-loaded', function() {
           });
         }
 
-        // 1. Salva i nodi DOM essenziali di SimplyEdit
+        // 4. Salva i nodi DOM essenziali di SimplyEdit
         const simplyEditorNode = document.getElementById('simply-editor');
         const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
 
-        // 2. Sostituisci l'HTML del body
+        // 5. Sostituisci l'HTML del body con quello dell'editor HTML
         const newBodyHtml = htmlEditor.getValue();
         document.body.innerHTML = newBodyHtml;
 
-        // 3. Reinserisci i nodi essenziali nel nuovo body
+        // 6. Reinserisci i nodi essenziali nel nuovo body
         if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
         if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
 
-        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
-        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
-        const newPageData = JSON.parse(jsonEditor.getValue());
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            dataForApply[path] = newPageData[path];
-          }
-        }
-
-        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
-        console.log("Forcing SimplyEdit re-initialization on new DOM...");
-        editor.data.apply(dataForApply, document);
+        // 7. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando i dati aggiornati
+        console.log("Forcing SimplyEdit re-initialization on new DOM with updated data...");
+        editor.data.apply(editor.currentData, document);
         
         setTimeout(() => {
           console.log("Activating edit mode on the new DOM...");
