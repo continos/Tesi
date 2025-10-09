@@ -290,87 +290,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');*/
 
-    /* LOGICA PULSANTE ANTEPRIMA
-    document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor || !cssEditor) { 
-        alert('Editor non pronti.'); 
-        return; 
-      }
-
-      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
-      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
-      console.log('Syncing with live data before preview...');
-      const freshData = editor.list.get(document);
-      editor.currentData = freshData;
-      console.log(`${editor.currentData}`);
-      const pathsInUse = new Set([currentPageKey]);
-      document.querySelectorAll('[data-simply-path]').forEach(el => {
-        pathsInUse.add(el.getAttribute('data-simply-path'));
-      });
-      const relevantData = {};
-      pathsInUse.forEach(path => {
-        if (editor.currentData[path]) {
-          relevantData[path] = editor.currentData[path];
-        }
-      });
-      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
-      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
-      
-      try {
-        // SALVA LE MODIFICHE CSS CORRENTI 
-        if (currentCssFile && cssEditor) {
-          cssFiles[currentCssFile] = cssEditor.getValue();
-          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-          cssLinks.forEach(link => {
-            const href = link.getAttribute('href').split('?')[0].split('#')[0];
-            if (href === currentCssFile) {
-              const newStyle = document.createElement('style');
-              newStyle.innerHTML = cssEditor.getValue();
-              document.head.appendChild(newStyle);
-              if(link.parentNode) link.parentNode.removeChild(link);
-            }
-          });
-        }
-
-        // 1. Salva i nodi DOM essenziali di SimplyEdit
-        const simplyEditorNode = document.getElementById('simply-editor');
-        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
-
-        // 2. Sostituisci l'HTML del body
-        const newBodyHtml = htmlEditor.getValue();
-        document.body.innerHTML = newBodyHtml;
-
-        // 3. Reinserisci i nodi essenziali nel nuovo body
-        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
-        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
-
-        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
-        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
-        const newPageData = JSON.parse(jsonEditor.getValue());
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            dataForApply[path] = newPageData[path];
-          }
-        }
-
-        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
-        console.log("Forcing SimplyEdit re-initialization on new DOM...");
-        editor.data.apply(dataForApply, document);
-        
-        setTimeout(() => {
-          console.log("Activating edit mode on the new DOM...");
-          editor.editmode.makeEditable(document);
-        }, 100);
-
-        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
-        modalOverlay.style.display = 'none';
-
-      } catch (e) {
-        alert("Errore nell'applicare l'anteprima: " + e.message);
-        console.error(e);
-      }
-    };*/
     // LOGICA DI CARICAMENTO DATI
     let filePath = window.location.pathname;
     if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
@@ -556,6 +475,87 @@ document.addEventListener('simply-toolbars-loaded', function() {
         console.error('Errore dettagliato:', e);
       }
     };
+    /* LOGICA PULSANTE ANTEPRIMA
+    document.getElementById('modal-apply-preview').onclick = () => {
+      if (!htmlEditor || !jsonEditor || !cssEditor) { 
+        alert('Editor non pronti.'); 
+        return; 
+      }
+
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
+      console.log('Syncing with live data before preview...');
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      console.log(`${editor.currentData}`);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
+      
+      try {
+        // SALVA LE MODIFICHE CSS CORRENTI 
+        if (currentCssFile && cssEditor) {
+          cssFiles[currentCssFile] = cssEditor.getValue();
+          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+          cssLinks.forEach(link => {
+            const href = link.getAttribute('href').split('?')[0].split('#')[0];
+            if (href === currentCssFile) {
+              const newStyle = document.createElement('style');
+              newStyle.innerHTML = cssEditor.getValue();
+              document.head.appendChild(newStyle);
+              if(link.parentNode) link.parentNode.removeChild(link);
+            }
+          });
+        }
+
+        // 1. Salva i nodi DOM essenziali di SimplyEdit
+        const simplyEditorNode = document.getElementById('simply-editor');
+        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
+
+        // 2. Sostituisci l'HTML del body
+        const newBodyHtml = htmlEditor.getValue();
+        document.body.innerHTML = newBodyHtml;
+
+        // 3. Reinserisci i nodi essenziali nel nuovo body
+        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
+        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
+
+        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
+        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
+        const newPageData = JSON.parse(jsonEditor.getValue());
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            dataForApply[path] = newPageData[path];
+          }
+        }
+
+        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
+        console.log("Forcing SimplyEdit re-initialization on new DOM...");
+        editor.data.apply(dataForApply, document);
+        
+        setTimeout(() => {
+          console.log("Activating edit mode on the new DOM...");
+          editor.editmode.makeEditable(document);
+        }, 100);
+
+        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
+        modalOverlay.style.display = 'none';
+
+      } catch (e) {
+        alert("Errore nell'applicare l'anteprima: " + e.message);
+        console.error(e);
+      }
+    };*/
 
     document.getElementById('modal-close-button').onclick = () => {
       // SALVA LE MODIFICHE CSS PRIMA DI CHIUDERE
