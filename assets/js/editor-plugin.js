@@ -14,17 +14,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let cssFiles = {};
   let currentCssFile = '';
   let modalInitialized = false;
-  let cssFilesLoaded = false;
-  let originalPageHTML = ''; // IMPORTANTE: memorizza l'HTML completo originale
+  let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
     if (existingModal) {
       existingModal.style.display = 'flex';
       if (modalInitialized) {
-        // Sincronizza i dati PRIMA di mostrare il modale
-        syncAllEditors();
-        
         if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
         if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
         if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
@@ -90,6 +86,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
       </style>
     `;
 
+    let pageData = {};
+
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 
@@ -100,38 +98,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
     const htmlTextarea = document.getElementById('html-editor-textarea');
     const cssTextArea = document.getElementById('css-editor-textarea');
     const jsonTextarea = document.getElementById('json-editor-textarea');
-
-    // FUNZIONE DI SINCRONIZZAZIONE CENTRALIZZATA
-    const syncAllEditors = () => {
-      console.log('Syncing all editors with current data...');
-      
-      // Cattura i dati freschi dal DOM corrente
-      const freshData = editor.list.get(document);
-      editor.currentData = freshData;
-
-      // Raccogli tutti i path usati
-      const pathsInUse = new Set([currentPageKey]);
-      document.querySelectorAll('[data-simply-path]').forEach(el => {
-        pathsInUse.add(el.getAttribute('data-simply-path'));
-      });
-
-      const relevantData = {};
-      pathsInUse.forEach(path => {
-        if (editor.currentData[path]) {
-          relevantData[path] = editor.currentData[path];
-        }
-      });
-
-      // Aggiorna l'editor JSON
-      if (jsonEditor) {
-        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-      }
-
-      // Aggiorna l'editor HTML con il body corrente renderizzato
-      if (htmlEditor) {
-        htmlEditor.setValue(document.body.innerHTML);
-      }
-    };
 
     // GESTIONE SCHEDE
     const tabButtons = modalContent.querySelectorAll('.editor-tab');
@@ -147,6 +113,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         const cssFilesTabs = document.getElementById('css-files-tabs');
         if (editorId === 'css') {
           cssFilesTabs.style.display = 'block';
+          // CARICA I FILE CSS SOLO LA PRIMA VOLTA
           if (!cssFilesLoaded) {
             loadCSSFiles();
             cssFilesLoaded = true;
@@ -155,13 +122,33 @@ document.addEventListener('simply-toolbars-loaded', function() {
           cssFilesTabs.style.display = 'none';
         }
         
-        // Sincronizza quando passi al tab JSON
-        if (editorId === 'json') {
-          syncAllEditors();
-        }
-        
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
-        if (editorId === 'json' && jsonEditor) setTimeout(() => jsonEditor.refresh(),1);
+        if (editorId === 'json' && jsonEditor) {
+          // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
+          setTimeout(() => {
+            // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
+            const freshData = editor.list.get(document);
+            editor.currentData = freshData;
+
+            // Raccogli tutti i path usati nella pagina corrente
+            const pathsInUse = new Set([currentPageKey]); // Aggiungi sempre il path della pagina corrente
+            document.querySelectorAll('[data-simply-path]').forEach(el => {
+              pathsInUse.add(el.getAttribute('data-simply-path'));
+            });
+
+            // Costruisci un oggetto JSON virtuale con solo i dati pertinenti
+            const relevantData = {};
+            pathsInUse.forEach(path => {
+              if (editor.currentData[path]) {
+                relevantData[path] = editor.currentData[path];
+              }
+            });
+
+            // Popola l'editor con i dati pertinenti
+            jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+            setTimeout(() => jsonEditor.refresh(), 1);
+          }, 150);
+        }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
     });
@@ -219,10 +206,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
           document.querySelectorAll('.css-file-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           
+          // SALVA LE MODIFICHE DEL FILE PRECEDENTE
           if (currentCssFile && cssEditor) {
             cssFiles[currentCssFile] = cssEditor.getValue();
           }
           
+          // CARICA IL NUOVO FILE
           currentCssFile = filename;
           cssEditor.setValue(cssFiles[filename] || '/* Caricamento... */');
           setTimeout(() => cssEditor.refresh(), 1);
@@ -250,13 +239,13 @@ document.addEventListener('simply-toolbars-loaded', function() {
       filePath = filePath.substring(1);
     }
 
-    // 1. Carica HTML originale da GitHub
+    // 1. Carica HTML
     editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
       if (err) {
         htmlTextarea.value = "Errore nel caricamento del file HTML da GitHub.";
         return;
       }
-      originalPageHTML = fileContent;
+      originalPageHTML = fileContent; // Memorizza l'intero contenuto HTML originale
       const parser = new DOMParser();
       const doc = parser.parseFromString(fileContent, 'text/html');
       htmlTextarea.value = doc.body.innerHTML;
@@ -274,16 +263,29 @@ document.addEventListener('simply-toolbars-loaded', function() {
         jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
         return;
       }
-      
-      jsonTextarea.value = dataJsonContent;
+      const allData = JSON.parse(dataJsonContent);
+      pageData = allData[currentPageKey] || {};
+      jsonTextarea.value = JSON.stringify(pageData, null, 2);
       jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
         lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
         foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
       });
       jsonEditor.setSize('100%', '100%');
 
-      // Sincronizza con i dati correnti
-      syncAllEditors();
+      // AGGIORNA IL CONTENUTO JSON ALL'APERTURA DEL MODALE
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
     });
     
     // 3. Carica CSS
@@ -293,15 +295,35 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');
 
-    // LOGICA PULSANTE ANTEPRIMA - VERSIONE CORRETTA
+    // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
       if (!htmlEditor || !jsonEditor || !cssEditor) { 
         alert('Editor non pronti.'); 
         return; 
       }
 
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Cattura SEMPRE i dati più freschi direttamente da SimplyEdit prima di ogni azione.
+      console.log('Syncing with live data before preview...');
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+      console.log(`${editor.currentData}`);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      // Aggiorna l'editor JSON per coerenza visiva, ma non lo leggeremo più per questa operazione.
+      jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
+      
       try {
-        // 1. SALVA LE MODIFICHE CSS CORRENTI 
+        // SALVA LE MODIFICHE CSS CORRENTI 
         if (currentCssFile && cssEditor) {
           cssFiles[currentCssFile] = cssEditor.getValue();
           const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
@@ -316,38 +338,37 @@ document.addEventListener('simply-toolbars-loaded', function() {
           });
         }
 
-        // 2. Prepara i nuovi dati JSON
-        const newJsonData = JSON.parse(jsonEditor.getValue());
-        
-        // 3. Salva i nodi essenziali di SimplyEdit
+        // 1. Salva i nodi DOM essenziali di SimplyEdit
         const simplyEditorNode = document.getElementById('simply-editor');
         const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
 
-        // 4. Sostituisci l'HTML del body
+        // 2. Sostituisci l'HTML del body
         const newBodyHtml = htmlEditor.getValue();
         document.body.innerHTML = newBodyHtml;
 
-        // 5. Reinserisci i nodi essenziali
+        // 3. Reinserisci i nodi essenziali nel nuovo body
         if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
         if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
 
-        // 6. APPLICA I DATI JSON PRIMA di re-inizializzare SimplyEdit
-        console.log("Applying JSON data to new DOM...");
-        editor.currentData = newJsonData;
-        editor.data.apply(newJsonData, document);
+        // 4. Crea un CLONE dei dati per il rendering, per non corrompere l'oggetto principale
+        const dataForApply = JSON.parse(JSON.stringify(editor.currentData));
+        const newPageData = JSON.parse(jsonEditor.getValue());
+        for (const path in newPageData) {
+          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
+            dataForApply[path] = newPageData[path];
+          }
+        }
+
+        // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM usando il CLONE
+        console.log("Forcing SimplyEdit re-initialization on new DOM...");
+        editor.data.apply(dataForApply, document);
         
-        // 7. Attendi che il DOM si stabilizzi, poi attiva l'editmode
         setTimeout(() => {
           console.log("Activating edit mode on the new DOM...");
           editor.editmode.makeEditable(document);
-          
-          // 8. Aggiorna gli editor per riflettere il nuovo stato
-          setTimeout(() => {
-            syncAllEditors();
-          }, 100);
         }, 100);
 
-        alert("Anteprima applicata con successo!");
+        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
         modalOverlay.style.display = 'none';
 
       } catch (e) {
@@ -357,6 +378,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     };
 
     document.getElementById('modal-close-button').onclick = () => {
+      // SALVA LE MODIFICHE CSS PRIMA DI CHIUDERE
       if (currentCssFile && cssEditor) {
         cssFiles[currentCssFile] = cssEditor.getValue();
       }
@@ -368,7 +390,9 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
   // LOGICA PULSANTE COMMIT 
   const saveHtmlAction = async function() {
-    const syncEditorsAsync = async () => {
+    // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+    // Trasformato in una funzione asincrona per garantire che i dati siano caricati prima di procedere.
+    const syncEditors = async () => {
       if (!editor.currentData) return;
 
       const freshData = editor.list.get(document);
@@ -402,6 +426,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           filePath = filePath.substring(1);
         }
         
+        // Usa una Promise per attendere il caricamento asincrono dell'HTML
         await new Promise(resolve => {
           editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
             if (!err) {
@@ -409,15 +434,17 @@ document.addEventListener('simply-toolbars-loaded', function() {
               const doc = parser.parseFromString(fileContent, 'text/html');
               htmlEditor.setValue(doc.body.innerHTML);
             }
-            resolve();
+            resolve(); // Risolvi la promise anche in caso di errore per non bloccare tutto
           });
         });
       }
     };
 
-    await syncEditorsAsync();
+    await syncEditors(); // Attendi il completamento della sincronizzazione
+    // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
 
     if (!htmlEditor || !jsonEditor) {
+      // Questo controllo ora è ridondante se il modale non è mai stato aperto, ma lo teniamo per sicurezza.
       alert("L'editor non è stato inizializzato. Apri prima 'Edit Page'.");
       return;
     }
@@ -430,6 +457,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       return;
     }
 
+    // SALVA LE MODIFICHE CSS CORRENTI
     if (currentCssFile && cssEditor) {
       cssFiles[currentCssFile] = cssEditor.getValue();
     }
@@ -461,6 +489,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     // 1. Salva i file CSS modificati
     Object.keys(cssFiles).forEach(filename => {
       saveOperations.push((callback) => {
+        // Ricarica il contenuto originale per confronto
         editor.storage.repo.read(editor.storage.repoBranch, filename, (err, originalContent) => {
           if (err || cssFiles[filename] === originalContent) {
             callback();
@@ -483,6 +512,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     saveOperations.push((callback) => {
       bodyEl.textContent = 'Salvataggio di data.json...';
 
+      // PRIMA di salvare, assicurati che i dati siano aggiornati dal DOM
       editor.currentData = editor.list.get(document);
 
       editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, currentJsonContent) => {
@@ -495,6 +525,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           }
         }
 
+        // "Spacchetta" i dati aggiornati e li unisce con l'oggetto dati completo
         for (const path in editor.currentData) {
           if (Object.prototype.hasOwnProperty.call(editor.currentData, path)) {
             allData[path] = editor.currentData[path];
