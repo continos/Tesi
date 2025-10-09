@@ -124,6 +124,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
+            console.log("caricamento json con click");
           // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
           setTimeout(() => {
             // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
@@ -258,6 +259,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
 
     // 2. Carica JSON
+    console.log("primo caricamento json");
     editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, dataJsonContent) => {
       if (err) {
         jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
