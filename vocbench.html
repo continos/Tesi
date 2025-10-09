@@ -57,13 +57,13 @@
 					</div>				
 		</div>
 
-		<div id="leftSideBar" data-simply-field="leftSidebarContent">
-			<h3>Navigazione</h3>
-			<p>Contenuto della barra laterale sinistra. Modificabile.</p>
-			<ul>
-				<li>Link 1</li>
-				<li>Link 2</li>
-			</ul>
+		<div id="leftSideBar">
+			<div id="leftNavBar" data-simply-list="leftNavbarContent" data-simply-sortable>
+            <template data-simply-template="leftNavBarButton">
+              <a class="leftNavBarButton" data-simply-field="link" href="/">
+              </a>
+         	</template>
+          </div>
 		</div>
 
 		<div id="rightSideBar" data-simply-field="rightSidebarContent">
