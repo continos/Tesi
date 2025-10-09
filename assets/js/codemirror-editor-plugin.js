@@ -293,6 +293,24 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
     // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
+      // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+      // Sincronizza i dati prima di qualsiasi operazione per evitare di usare valori stantii dagli editor.
+      editor.currentData = editor.list.get(document);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+      if (jsonEditor) {
+        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      }
+      // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
+
       if (!htmlEditor || !jsonEditor || !cssEditor) { 
         alert('Editor non pronti.'); 
         return; 
