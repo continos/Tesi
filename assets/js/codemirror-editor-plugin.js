@@ -361,6 +361,51 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
   // LOGICA PULSANTE COMMIT 
   const saveHtmlAction = function() {
+    // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
+    // Assicura che i dati letti siano quelli più recenti, anche se il modale non è stato aperto.
+    if (editor.currentData) {
+      const freshData = editor.list.get(document);
+      editor.currentData = freshData;
+
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (editor.currentData[path]) {
+          relevantData[path] = editor.currentData[path];
+        }
+      });
+
+      if (jsonEditor) {
+        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      }
+      
+      // Sincronizza anche l'editor HTML
+      if (htmlEditor) {
+        let filePath = window.location.pathname;
+        if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
+          const repoPrefix = '/' + editor.storage.repoName;
+          if (filePath.startsWith(repoPrefix)) {
+            filePath = filePath.substring(repoPrefix.length);
+          }
+        }
+        if (filePath.startsWith('/')) {
+          filePath = filePath.substring(1);
+        }
+        editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
+          if (!err) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(fileContent, 'text/html');
+            htmlEditor.setValue(doc.body.innerHTML);
+          }
+        });
+      }
+    }
+    // --- FINE BLOCCO DI SINCRONIZZAZIONE ---
+
     if (!htmlEditor || !jsonEditor) {
       alert("Apri prima l'editor 'Edit Page' per caricare i contenuti.");
       return;
