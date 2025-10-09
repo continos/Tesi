@@ -201,7 +201,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
           document.querySelectorAll('.css-file-tab').forEach(t => t.classList.remove('active'));
           tab.classList.add('active');
           
-          // SALVA LE MODIFICHE DEL FILE PRECEDENTE
+          // SALVA LE MODIFICHE DEL FILE PRECEDENTE 
           if (currentCssFile && cssEditor) {
             cssFiles[currentCssFile] = cssEditor.getValue();
           }
