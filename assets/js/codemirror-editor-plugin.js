@@ -1,16 +1,4 @@
 document.addEventListener('simply-toolbars-loaded', function() {
-  // Logica per riaprire la modale dopo l'anteprima
-  if (sessionStorage.getItem('simply-reopen-editor') === 'true') {
-    sessionStorage.removeItem('simply-reopen-editor');
-    // Assicurati che l'azione esista prima di chiamarla
-    if (window.editor && editor.actions['custom-body-editor']) {
-      // Usa un timeout per dare alla UI il tempo di stabilizzarsi
-      setTimeout(() => {
-        editor.actions['custom-body-editor']();
-      }, 100);
-    }
-  }
-
   if (!window.editor || !editor.storage.saveHtmlBlock) {
     return;
   }
