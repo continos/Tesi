@@ -133,31 +133,19 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
         if (editorId === 'html' && htmlEditor) setTimeout(() => htmlEditor.refresh(),1);
         if (editorId === 'json' && jsonEditor) {
-            console.log("caricamento json con click");
-          // Aggiungi un ritardo per assicurarti che il DOM sia stabile dopo un'eventuale anteprima
-          setTimeout(() => {
-            // Sincronizza il modello dati interno di SimplyEdit con lo stato attuale del DOM
-            const freshData = editor.list.get(document);
-            editor.currentData = freshData;
-
-            // Raccogli tutti i path usati nella pagina corrente
-            const pathsInUse = new Set([currentPageKey]); // Aggiungi sempre il path della pagina corrente
-            document.querySelectorAll('[data-simply-path]').forEach(el => {
-              pathsInUse.add(el.getAttribute('data-simply-path'));
-            });
-
-            // Costruisci un oggetto JSON virtuale con solo i dati pertinenti
-            const relevantData = {};
-            pathsInUse.forEach(path => {
-              if (editor.currentData[path]) {
-                relevantData[path] = editor.currentData[path];
-              }
-            });
-
-            // Popola l'editor con i dati pertinenti
-            jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-            setTimeout(() => jsonEditor.refresh(), 1);
-          }, 150);
+          // Usa sempre editor.currentData come fonte di verità, che è già stato aggiornato.
+          const pathsInUse = new Set([currentPageKey]);
+          document.querySelectorAll('[data-simply-path]').forEach(el => {
+            pathsInUse.add(el.getAttribute('data-simply-path'));
+          });
+          const relevantData = {};
+          pathsInUse.forEach(path => {
+            if (editor.currentData[path]) {
+              relevantData[path] = editor.currentData[path];
+            }
+          });
+          jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+          setTimeout(() => jsonEditor.refresh(), 1);
         }
         if (editorId === 'css' && cssEditor) setTimeout(() => cssEditor.refresh(),1);
       });
