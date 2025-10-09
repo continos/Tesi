@@ -16,32 +16,32 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let modalInitialized = false;
   let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
 
-          const bodyEditorAction = function() {
-            const existingModal = document.getElementById('manual-editor-modal-overlay');
-            if (existingModal) {
-              existingModal.style.display = 'flex';
+  const bodyEditorAction = function() {
+    const existingModal = document.getElementById('manual-editor-modal-overlay');
+    if (existingModal) {
+      existingModal.style.display = 'flex';
+
+      // Usa l'oggetto in memoria `editor.currentData` come fonte di verità, non il DOM.
+      if (jsonEditor) {
+        const pathsInUse = new Set([currentPageKey]);
+        document.querySelectorAll('[data-simply-path]').forEach(el => {
+          pathsInUse.add(el.getAttribute('data-simply-path'));
+        });
+        const relevantData = {};
+        pathsInUse.forEach(path => {
+          if (editor.currentData[path]) {
+            relevantData[path] = editor.currentData[path];
+          }
+        });
+        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+      }
+
+      if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
+      if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
+      if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
       
-              // Usa l'oggetto in memoria `editor.currentData` come fonte di verità, non il DOM.
-              if (jsonEditor) {
-                const pathsInUse = new Set([currentPageKey]);
-                document.querySelectorAll('[data-simply-path]').forEach(el => {
-                  pathsInUse.add(el.getAttribute('data-simply-path'));
-                });
-                const relevantData = {};
-                pathsInUse.forEach(path => {
-                  if (editor.currentData[path]) {
-                    relevantData[path] = editor.currentData[path];
-                  }
-                });
-                jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-              }
-      
-              if (htmlEditor) setTimeout(() => htmlEditor.refresh(), 1);
-              if (cssEditor) setTimeout(() => cssEditor.refresh(), 1);
-              if (jsonEditor) setTimeout(() => jsonEditor.refresh(), 1);
-              
-              return;
-            }    const modalOverlay = document.createElement('div');
+      return;
+    }    const modalOverlay = document.createElement('div');
     modalOverlay.id = 'manual-editor-modal-overlay';
     Object.assign(modalOverlay.style, {
       position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
@@ -268,8 +268,8 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
 
     // 2. Sincronizza i dati e Carica JSON
-    const freshData = editor.list.get(document);
-    editor.currentData = freshData;
+    //const freshData = editor.list.get(document);
+    //editor.currentData = freshData;
 
     const pathsInUse = new Set([currentPageKey]);
     document.querySelectorAll('[data-simply-path]').forEach(el => {
