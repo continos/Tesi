@@ -295,7 +295,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');
 
-    /* LOGICA PULSANTE ANTEPRIMA
+    // LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
       if (!htmlEditor || !jsonEditor || !cssEditor) { 
         alert('Editor non pronti.'); 
@@ -374,123 +374,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
       } catch (e) {
         alert("Errore nell'applicare l'anteprima: " + e.message);
         console.error(e);
-      }
-    };*/
-    // MODIFICA LA SEZIONE "LOGICA PULSANTE ANTEPRIMA"
-    document.getElementById('modal-apply-preview').onclick = () => {
-      if (!htmlEditor || !jsonEditor || !cssEditor) { 
-        alert('Editor non pronti.'); 
-        return; 
-      }
-
-      console.log('=== INIZIO APPLICAZIONE ANTEPRIMA ===');
-      
-      try {
-        // STEP 1: Sincronizza SEMPRE con i dati più recenti dal DOM
-        console.log('Step 1: Sincronizzazione dati dal DOM...');
-        const freshData = editor.list.get(document);
-        editor.currentData = freshData;
-        
-        // STEP 2: Raccogli tutti i path utilizzati
-        const pathsInUse = new Set([currentPageKey]);
-        document.querySelectorAll('[data-simply-path]').forEach(el => {
-          pathsInUse.add(el.getAttribute('data-simply-path'));
-        });
-        
-        // STEP 3: Costruisci i dati rilevanti
-        const relevantData = {};
-        pathsInUse.forEach(path => {
-          if (editor.currentData[path]) {
-            relevantData[path] = editor.currentData[path];
-          }
-        });
-        
-        console.log('Dati sincronizzati:', relevantData);
-        
-        // STEP 4: Applica CSS se necessario
-        if (currentCssFile && cssEditor) {
-          cssFiles[currentCssFile] = cssEditor.getValue();
-          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
-          cssLinks.forEach(link => {
-            const href = link.getAttribute('href').split('?')[0].split('#')[0];
-            if (href === currentCssFile) {
-              const newStyle = document.createElement('style');
-              newStyle.setAttribute('data-custom-css', currentCssFile);
-              newStyle.innerHTML = cssEditor.getValue();
-              document.head.appendChild(newStyle);
-              if(link.parentNode) link.parentNode.removeChild(link);
-            }
-          });
-        }
-
-        // STEP 5: Salva i nodi essenziali
-        const simplyEditorNode = document.getElementById('simply-editor');
-        const modalOverlayNode = document.getElementById('manual-editor-modal-overlay');
-
-        // STEP 6: Sostituisci l'HTML del body
-        const newBodyHtml = htmlEditor.getValue();
-        document.body.innerHTML = newBodyHtml;
-
-        // STEP 7: Reinserisci i nodi essenziali
-        if (simplyEditorNode) document.body.appendChild(simplyEditorNode);
-        if (modalOverlayNode) document.body.appendChild(modalOverlayNode);
-
-        // STEP 8: Prepara i dati per l'applicazione
-        // IMPORTANTE: Parti dai dati freschi appena sincronizzati
-        const dataForApply = JSON.parse(JSON.stringify(relevantData));
-        
-        // Merge con eventuali modifiche dall'editor JSON
-        try {
-          const jsonEditorData = JSON.parse(jsonEditor.getValue());
-          for (const path in jsonEditorData) {
-            if (Object.prototype.hasOwnProperty.call(jsonEditorData, path)) {
-              dataForApply[path] = jsonEditorData[path];
-            }
-          }
-        } catch (jsonError) {
-          console.warn('Errore parsing JSON editor:', jsonError);
-        }
-
-        console.log('Dati da applicare al nuovo DOM:', dataForApply);
-
-        // STEP 9: Applica i dati al nuovo DOM
-        editor.data.apply(dataForApply, document);
-        
-        // STEP 10: Rendi editabile il nuovo DOM
-        setTimeout(() => {
-          console.log("Attivazione modalità edit sul nuovo DOM...");
-          editor.editmode.makeEditable(document);
-          
-          // STEP 11: CRITICO - Forza un nuovo sync dopo il render
-          setTimeout(() => {
-            console.log('Step 11: Re-sincronizzazione post-render...');
-            const postRenderData = editor.list.get(document);
-            editor.currentData = postRenderData;
-            
-            // Aggiorna l'editor JSON con i dati appena applicati
-            const updatedPathsInUse = new Set([currentPageKey]);
-            document.querySelectorAll('[data-simply-path]').forEach(el => {
-              updatedPathsInUse.add(el.getAttribute('data-simply-path'));
-            });
-            
-            const updatedRelevantData = {};
-            updatedPathsInUse.forEach(path => {
-              if (editor.currentData[path]) {
-                updatedRelevantData[path] = editor.currentData[path];
-              }
-            });
-            
-            jsonEditor.setValue(JSON.stringify(updatedRelevantData, null, 2));
-            console.log('=== ANTEPRIMA COMPLETATA - DATI AGGIORNATI ===');
-          }, 200);
-        }, 100);
-
-        alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
-        modalOverlay.style.display = 'none';
-
-      } catch (e) {
-        alert("Errore nell'applicare l'anteprima: " + e.message);
-        console.error('Errore dettagliato:', e);
       }
     };
 
