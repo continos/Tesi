@@ -497,13 +497,24 @@ document.addEventListener('simply-toolbars-loaded', function() {
     // 2. Salva JSON
     saveOperations.push((callback) => {
       bodyEl.textContent = 'Salvataggio di data.json...';
+
+      // PRIMA di salvare, assicurati che i dati siano aggiornati dal DOM
+      editor.currentData = editor.list.get(document);
+
       editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, currentJsonContent) => {
         let allData = {};
-        if (!err) allData = JSON.parse(currentJsonContent);
-        // "Spacchetta" l'oggetto virtuale dall'editor e aggiorna l'oggetto dati completo
-        for (const path in newPageData) {
-          if (Object.prototype.hasOwnProperty.call(newPageData, path)) {
-            allData[path] = newPageData[path];
+        if (!err) {
+          try {
+            allData = JSON.parse(currentJsonContent);
+          } catch (e) {
+            console.error('Errore nel parsing del data.json esistente', e);
+          }
+        }
+
+        // "Spacchetta" i dati aggiornati e li unisce con l'oggetto dati completo
+        for (const path in editor.currentData) {
+          if (Object.prototype.hasOwnProperty.call(editor.currentData, path)) {
+            allData[path] = editor.currentData[path];
           }
         }
 
