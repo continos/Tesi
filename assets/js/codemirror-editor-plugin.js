@@ -86,8 +86,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
       </style>
     `;
 
-    let pageData = {};
-
     modalOverlay.appendChild(modalContent);
     document.body.appendChild(modalOverlay);
 
