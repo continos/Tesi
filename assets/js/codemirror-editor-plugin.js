@@ -339,7 +339,12 @@ document.addEventListener('simply-toolbars-loaded', function() {
         // 5. Forza la re-inizializzazione di SimplyEdit sul nuovo DOM
         console.log("Forcing SimplyEdit re-initialization on new DOM...");
         editor.data.apply(editor.currentData, document);
-        editor.editmode.makeEditable(document);
+        
+        // Aggiungi un piccolo ritardo per permettere al DOM e ai binding di stabilizzarsi
+        setTimeout(() => {
+          console.log("Activating edit mode on the new DOM...");
+          editor.editmode.makeEditable(document);
+        }, 100);
 
         alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
         modalOverlay.style.display = 'none';
