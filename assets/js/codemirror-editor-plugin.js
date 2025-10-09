@@ -253,7 +253,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
       setTimeout(() => htmlEditor.refresh(), 1);
     });
 
-    // 2. Carica JSON
+    /* 2. Carica JSON
     editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, dataJsonContent) => {
       if (err) {
         jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
@@ -282,6 +282,46 @@ document.addEventListener('simply-toolbars-loaded', function() {
         }
       });
       jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+    });*/
+    // 2. Carica JSON 
+    editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, dataJsonContent) => {
+      if (err) {
+        jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
+        return;
+      }
+      
+      try {
+        const allData = JSON.parse(dataJsonContent);
+        
+        // Ottieni i dati attuali dal DOM per il merge
+        const currentDomData = editor.list.get(document);
+        
+        // Fonde i dati del file con quelli del DOM
+        const mergedData = { ...allData, ...currentDomData };
+        
+        // Prepara i dati rilevanti per l'editor
+        const pathsInUse = new Set([currentPageKey]);
+        document.querySelectorAll('[data-simply-path]').forEach(el => {
+          pathsInUse.add(el.getAttribute('data-simply-path'));
+        });
+        
+        const relevantData = {};
+        pathsInUse.forEach(path => {
+          if (mergedData[path]) {
+            relevantData[path] = mergedData[path];
+          }
+        });
+        
+        jsonTextarea.value = JSON.stringify(relevantData, null, 2);
+        jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
+          lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
+          foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+        });
+        jsonEditor.setSize('100%', '100%');
+
+      } catch (e) {
+        jsonTextarea.value = "Errore nel parsing di data.json: " + e.message;
+      }
     });
     
     // 3. Carica CSS
@@ -291,7 +331,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     });
     cssEditor.setSize('100%', '100%');
 
-    // LOGICA PULSANTE ANTEPRIMA
+    /* LOGICA PULSANTE ANTEPRIMA
     document.getElementById('modal-apply-preview').onclick = () => {
       // --- INIZIO BLOCCO DI SINCRONIZZAZIONE ---
       // Sincronizza i dati prima di qualsiasi operazione per evitare di usare valori stantii dagli editor.
@@ -378,6 +418,119 @@ document.addEventListener('simply-toolbars-loaded', function() {
         
       } catch (e) {
         alert("Errore nell'applicare l'anteprima. Controlla la sintassi del JSON.\n"+ e.message);
+      }
+    };*/
+    // LOGICA PULSANTE ANTEPRIMA - SOSTITUISCI QUESTA PARTE
+    document.getElementById('modal-apply-preview').onclick = () => {
+      if (!htmlEditor || !jsonEditor || !cssEditor) { 
+        alert('Editor non pronti.'); 
+        return; 
+      }
+      
+      try {
+        // 1. PRIMA applica il CSS modificato (se presente)
+        if (currentCssFile && cssEditor) {
+          cssFiles[currentCssFile] = cssEditor.getValue();
+          
+          const cssLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'));
+          cssLinks.forEach(link => {
+            const href = link.getAttribute('href').split('?')[0].split('#')[0];
+            if (href === currentCssFile) {
+              const newStyle = document.createElement('style');
+              newStyle.innerHTML = cssEditor.getValue();
+              document.head.appendChild(newStyle);
+              link.disabled = true;
+            }
+          });
+        }
+
+        // 2. PREPARA I NUOVI DATI JSON - FONDENDOLI CON I DATI ESISTENTI
+        let jsonUpdates;
+        try {
+          jsonUpdates = JSON.parse(jsonEditor.getValue());
+        } catch (e) {
+          alert("Errore nella sintassi JSON: " + e.message);
+          return;
+        }
+
+        // IMPORTANTE: Ottieni i dati attuali dal DOM invece di sovrascrivere tutto
+        const currentDomData = editor.list.get(document);
+        
+        // Fonde i nuovi dati con quelli esistenti
+        const mergedData = { ...currentDomData };
+        
+        // Applica solo gli aggiornamenti dai campi modificati nell'editor JSON
+        Object.keys(jsonUpdates).forEach(path => {
+          mergedData[path] = jsonUpdates[path];
+        });
+
+        // 3. APPLICA IL NUOVO HTML
+        const newBodyHtml = htmlEditor.getValue();
+        
+        // Salva gli elementi che non vogliamo rimuovere
+        const elementsToPreserve = Array.from(document.body.children).filter(child => 
+          child.id === 'manual-editor-modal-overlay' || 
+          child.id === 'simply-editor' || 
+          child.tagName === 'SCRIPT'
+        );
+
+        // Rimuovi tutto tranne gli elementi preservati
+        Array.from(document.body.children).forEach(child => {
+          if (!elementsToPreserve.includes(child)) {
+            child.remove();
+          }
+        });
+
+        // Aggiungi il nuovo HTML
+        const tempBody = document.createElement('body');
+        tempBody.innerHTML = newBodyHtml;
+        Array.from(tempBody.children).forEach(newNode => {
+          if (newNode.id !== 'manual-editor-modal-overlay' && 
+              newNode.id !== 'simply-editor' && 
+              newNode.tagName !== 'SCRIPT') {
+            document.body.appendChild(newNode);
+          }
+        });
+
+        // 4. APPLICA I DATI FUSI al nuovo DOM
+        editor.currentData = mergedData;
+        editor.data.apply(editor.currentData, document.body);
+
+        // 5. RE-INIZIALIZZA GLI EDITOR SUL NUOVO DOM
+        editor.editmode.makeEditable(document.body);
+
+        // 6. AGGIORNA L'EDITOR JSON CON I DATI FUSI (per coerenza)
+        const pathsInUse = new Set([currentPageKey]);
+        document.querySelectorAll('[data-simply-path]').forEach(el => {
+          pathsInUse.add(el.getAttribute('data-simply-path'));
+        });
+        
+        const relevantData = {};
+        pathsInUse.forEach(path => {
+          if (editor.currentData[path]) {
+            relevantData[path] = editor.currentData[path];
+          }
+        });
+        
+        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
+        
+        // 7. FORZA UN AGGIORNAMENTO PER LE LISTE DINAMICHE
+        setTimeout(() => {
+          editor.fireEvent('databinding:valuechanged', document.body);
+          // Refresh degli editor dopo l'aggiornamento
+          setTimeout(() => {
+            if (htmlEditor) htmlEditor.refresh();
+            if (jsonEditor) jsonEditor.refresh();
+            if (cssEditor) cssEditor.refresh();
+          }, 100);
+        }, 100);
+
+        // NON CHIUDERE IL MODAL - mantieni gli editor aperti
+        // modalOverlay.style.display = 'none';
+        
+      } catch (e) {
+        alert("Errore nell'applicare l'anteprima: " + e.message);
+        console.error(e);
       }
     };
 
