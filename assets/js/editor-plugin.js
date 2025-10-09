@@ -267,33 +267,35 @@ document.addEventListener('simply-toolbars-loaded', function() {
       setTimeout(() => htmlEditor.refresh(), 1);
     });
 
-    // 2. Inizializza l'editor JSON e poi popola i dati con un ritardo per evitare race conditions
-    jsonTextarea.value = 'Caricamento dati...'; // Testo placeholder
-    jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
-      lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
-      foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+    // 2. Carica JSON direttamente da GitHub per garantire dati puliti all'avvio
+    editor.storage.repo.read(editor.storage.repoBranch, 'data.json', (err, dataJsonContent) => {
+      if (err) {
+        jsonTextarea.value = "Errore nel caricamento di data.json da GitHub.";
+        jsonEditor = CodeMirror.fromTextArea(jsonTextarea, { lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula' });
+        jsonEditor.setSize('100%', '100%');
+        return;
+      }
+      
+      const allData = JSON.parse(dataJsonContent);
+      const pathsInUse = new Set([currentPageKey]);
+      document.querySelectorAll('[data-simply-path]').forEach(el => {
+        pathsInUse.add(el.getAttribute('data-simply-path'));
+      });
+      const relevantData = {};
+      pathsInUse.forEach(path => {
+        if (allData[path]) {
+          relevantData[path] = allData[path];
+        }
+      });
+
+      jsonTextarea.value = JSON.stringify(relevantData, null, 2);
+      jsonEditor = CodeMirror.fromTextArea(jsonTextarea, {
+        lineNumbers: true, mode: { name: 'javascript', json: true }, theme: 'dracula', lineWrapping: true, 
+        foldGutter:true, gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+      });
+      jsonEditor.setSize('100%', '100%');
+      setTimeout(() => jsonEditor.refresh(), 1);
     });
-    jsonEditor.setSize('100%', '100%');
-
-    setTimeout(() => {
-        console.log("Sincronizzazione dati iniziale per l'editor...");
-        const freshData = editor.list.get(document);
-        editor.currentData = freshData;
-
-        const pathsInUse = new Set([currentPageKey]);
-        document.querySelectorAll('[data-simply-path]').forEach(el => {
-            pathsInUse.add(el.getAttribute('data-simply-path'));
-        });
-        const relevantData = {};
-        pathsInUse.forEach(path => {
-            if (editor.currentData[path]) {
-                relevantData[path] = editor.currentData[path];
-            }
-        });
-        
-        jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
-        setTimeout(() => jsonEditor.refresh(), 1); // Refresh dopo aver impostato il valore
-    }, 250); // Ritardo per garantire che il DOM sia stabile
     
     // 3. Carica CSS
     cssEditor = CodeMirror.fromTextArea(cssTextArea, {
