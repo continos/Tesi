@@ -441,6 +441,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
     }
 
     const newBodyHtml = htmlEditor.getValue();
+    console.log("DEBUG: Contenuto HTML che sta per essere salvato:", newBodyHtml); // Aggiunto per debug
     const newPageData = JSON.parse(jsonEditor.getValue());
     let filePath = window.location.pathname;
 
