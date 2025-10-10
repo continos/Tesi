@@ -347,6 +347,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         }, 100);
 
         alert("Anteprima applicata. SimplyEdit è stato re-inizializzato sul nuovo contenuto.");
+        console.log("stato html editor dopo anteprima: ",htmlEditor.getValue());
         modalOverlay.style.display = 'none';
 
       } catch (e) {
