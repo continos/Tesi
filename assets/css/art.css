@@ -204,6 +204,11 @@ a.structure:link, a.structure:visited {
  text-decoration: none
 }
 
+a.structure img {
+max-height: 80px;
+max-width: 100px;
+}
+
 .isa a {
  font: normal 30px Arial,serif;
  color: #336699;
