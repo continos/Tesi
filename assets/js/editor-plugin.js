@@ -15,6 +15,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
   let currentCssFile = '';
   let modalInitialized = false;
   let cssFilesLoaded = false; // FLAG per evitare ricaricamenti
+  let htmlContentForCommit = ''; // Variabile per conservare l'HTML
 
   const bodyEditorAction = function() {
     const existingModal = document.getElementById('manual-editor-modal-overlay');
@@ -331,6 +332,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
 
         // 5. Sostituisci l'HTML del body con quello dell'editor HTML
         const newBodyHtml = htmlEditor.getValue();
+        htmlContentForCommit = newBodyHtml;
         document.body.innerHTML = newBodyHtml;
 
         // 6. Reinserisci i nodi essenziali nel nuovo body
@@ -393,7 +395,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
         jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
       }
 
-      if (htmlEditor) {
+      /*if (htmlEditor) {
         let filePath = window.location.pathname;
         if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
           const repoPrefix = '/' + editor.storage.repoName;
@@ -416,7 +418,7 @@ document.addEventListener('simply-toolbars-loaded', function() {
             resolve(); // Risolvi la promise anche in caso di errore per non bloccare tutto
           });
         });
-      }
+      }*/
     };
 
     await syncEditors(); // Attendi il completamento della sincronizzazione
