@@ -434,7 +434,12 @@
 		"data-simply-page-template": "blank-template.html"
 	},
 	"/cartella1/file1.html": {
-		"topics": [],
+		"topics": [
+			{
+				"title": "Topic Title",
+				"body": "\n                              <p>Topic body content goes here.</p>\n                          "
+			}
+		],
 		"data-simply-page-template": "research-template.html",
 		"pageTitle": "Nuova Pagina",
 		"sections": [
