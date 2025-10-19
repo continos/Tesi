@@ -48,7 +48,9 @@
 		bindingParents : [],
 		transformers: {},
 		data : {
-			getDataPath : function(field) {
+			// Determina il percorso dei dati basato su data-simply-path    
+			// Gestisce percorsi relativi/assoluti
+			getDataPath : function(field) {				
 				var parent = field;
 				while (parent && parent.parentNode) {
 					var parentPath = parent.getAttribute("data-simply-path");
@@ -99,6 +101,7 @@
 				return path; // Restituisci il percorso pulito
 				//return location.pathname;
 			},
+			// Applica i dati al DOM e gestisce field e list
 			apply : function(data, target) {
 				if (typeof data === "undefined") {
 					data = {};
@@ -171,9 +174,9 @@
 			},
 			get : function(target) {
 				if (target == document && editor.currentData) {
-					return editor.currentData;
+					return editor.currentData; // Dati già in memoria
 				} else if (target.dataBinding) {
-					return target.dataBinding.get();
+					return target.dataBinding.get(); // Da data binding
 				} else {
 					var stashedFields = target.querySelectorAll("[data-simply-stashed]");
 					for (i=0; i<stashedFields.length; i++) {
@@ -182,17 +185,21 @@
 					if (target.nodeType == document.ELEMENT_NODE) {
 						target.removeAttribute("data-simply-stashed");
 					}
-
+					// estrazione dati da modulo list
 					return editor.list.get(target);
 				}
 			},
 			stash : function() {
+				// evento pre-salvataggio
 				editor.fireEvent("simply-stash", document);
+				// estrazione dati dalle fonti
 				var dataSources = document.querySelectorAll("[data-simply-data]");
 				for (var i=0; i<dataSources.length; i++) {
 					editor.list.get(dataSources[i]);
 				}
+				// salva in local storage
 				localStorage.data = editor.data.stringify(editor.currentData);
+				// evento post salvataggio
 				editor.fireEvent("simply-stashed", document);
 			},
 			stringify : function(data) {
@@ -213,6 +220,7 @@
 			},
 			save : function() {
 				editor.storage.connect( function() {
+					// prepara i dati
 					editor.data.stash();
 					if (editor.actions['simply-beforesave']) {
 						editor.actions['simply-beforesave']();
@@ -225,7 +233,7 @@
 						result.newData = localStorage.data;
 						var savedEvent = editor.fireEvent("simply-data-saved", document, result);
 						editor.loadedData = result.newData;
-
+						// gestione errori/successo
 						if (result && result.error) {
 							if (editor.actions['simply-aftersave-error']) {
 								editor.actions['simply-aftersave-error'](result);
@@ -242,6 +250,7 @@
 					};
 
 					var executeSave = function() {
+						// salva tutte le data sources
 						for (var source in editor.dataSources) {
 							if (editor.dataSources[source].save && typeof editor.dataSources[source].stash != 'undefined') {
 								for (var i=0; i<editor.dataSources[source].stash.length; i++) {
@@ -249,7 +258,7 @@
 								}
 							}
 						}
-
+						// salva dati principali
 						editor.storage.save(localStorage.data, saveCallback);
 					};
 
@@ -3451,7 +3460,7 @@
 					return editor.storage.file.save("data.json", data, callback);
 				},
 				// Caricamento: legge il file data.json tramite l'API per bypassare la cache
-				load: function(callback) {
+				load : function(callback) {
 					console.log('Custom Storage [githubApiStorage]: Caricamento dati via API...');
 
 					const apiUrl = `https://api.github.com/repos/${this.repoUser}/${this.repoName}/contents/${this.dataFile}?ref=${this.repoBranch}`;
@@ -3459,8 +3468,7 @@
 
 					fetch(cacheBustUrl, {
 					headers: {
-						// L'autenticazione non è necessaria per leggere un file pubblico,
-						// ma può aiutare con i rate limit dell'API.
+						// L'autenticazione non è necessaria per leggere un file pubblico, ma può aiutare con i rate limit dell'API.
 						// Se il repo è privato, questa parte è FONDAMENTALE.
 						...(editor.storage.key && { 'Authorization': `token ${editor.storage.key}` })
 					}
