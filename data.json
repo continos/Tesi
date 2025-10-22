@@ -131,7 +131,7 @@
 			{
 				"item": {
 					"innerHTML": "Prenota Aule",
-					"href": "/Tesi/classroom-booking.html",
+					"href": "/Tesi/aule.html",
 					"id": "booking-link",
 					"class": null,
 					"alt": null,
