@@ -155,10 +155,15 @@ function renderCourseItem(course, index) {
 
     return `<div class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1">${course.title} ${detailsButtonHtml}</h5>
-                    <small class="text-muted">${course.cfu}</small>
+                    <h5 class="mb-1 d-flex justify-content-between align-items-center w-100"> 
+                        <span>${course.title}</span>
+                        ${detailsButtonHtml}
+                    </h5>
                 </div>
-                ${professorsHtml}
+                <div class="d-flex w-100 justify-content-between">
+                    <small class="text-muted">${course.cfu}</small>
+                    ${professorsHtml}
+                </div>
             </div>`;
 }
 
