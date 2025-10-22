@@ -84,15 +84,7 @@ function parseGompData(data) {
     return allCourses;
 }
 
-function renderStructuredCourses(courses, container) {
-    if (!courses.length) {
-        container.innerHTML = '<div class="alert alert-warning">Nessun corso trovato.</div>';
-        return;
-    }
-
-    let html = '';
-    let courseCounter = 0;
-    const yearsData = GOMP_COURSES_DATA; // Usa la struttura gerarchica
+function renderStructuredCourses(years, container) {
 
     yearsData.forEach(year => {
         html += `<div class="card mb-4"><div class="card-body"><h5 class="card-title">${year.yearNumber}° anno</h5>`;
