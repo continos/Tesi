@@ -60,7 +60,7 @@ const updateUI = async () => {
   const isAuth = await isAuthenticated();
   const userRole = localStorage.getItem('userRole');
   const editModeButton = document.getElementById('edit-mode-button');
-  const authLink = document.querySelector('#footer .footer-links a');
+  const authLink = document.getElementById('auth-link');
 
   // La visibilità del pulsante di modifica dipende dal RUOLO (autorizzazione)
   if (editModeButton) {
@@ -105,7 +105,7 @@ const updateUI = async () => {
   }
 };
 
-// --- NUOVA FUNZIONE PER LA GESTIONE DEI RUOLI ---
+// --- FUNZIONE PER LA GESTIONE DEI RUOLI ---
 const checkUserRole = async () => {
   const isAuthenticated = await auth0Client.isAuthenticated();
   if (!isAuthenticated) {

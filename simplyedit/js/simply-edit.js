@@ -3546,22 +3546,6 @@
 									bodyEl.textContent = 'Errore durante la scrittura su GitHub: ' + (writeErr.error || 'sconosciuto');
 									return;
 								}
-								/* La scrittura è andata a buon fine, ora inizia il polling dell'URL
-								const finalUrl = new URL(fullPath, window.location.origin).href;
-								setTimeout(function pollPage() {
-									const bodyEl = dialog.querySelector('.simply-dialog-body');
-
-									// Usiamo una richiesta HEAD che è più leggera di GET
-									fetch(finalUrl, { method: 'HEAD', cache: 'no-store' })
-										.then(response => {
-											if (response.ok) {
-												// Successo! La pagina è online.
-												bodyEl.innerHTML = "Pagina online! Reindirizzamento in corso...";
-												setTimeout(() => {
-													// Non chiamiamo la callback, ma facciamo il reload diretto
-													// per essere sicuri di caricare la nuova pagina.
-													window.location.reload();
-												}, 1500);*/
 								const newCommitSha = commitData.commit.sha;
 								bodyEl.innerHTML = `Commit ${newCommitSha.substring(0)} creato! <br> Avvio del deploy su Github Pages...<br> Verifico lo stato...`;
 								const pollDeploy = () => {							

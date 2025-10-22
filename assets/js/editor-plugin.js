@@ -394,31 +394,6 @@ document.addEventListener('simply-toolbars-loaded', function() {
       if (jsonEditor) {
         jsonEditor.setValue(JSON.stringify(relevantData, null, 2));
       }
-
-      /*if (htmlEditor) {
-        let filePath = window.location.pathname;
-        if (editor.storage.repoName && window.location.hostname.includes('github.io')) {
-          const repoPrefix = '/' + editor.storage.repoName;
-          if (filePath.startsWith(repoPrefix)) {
-            filePath = filePath.substring(repoPrefix.length);
-          }
-        }
-        if (filePath.startsWith('/')) {
-          filePath = filePath.substring(1);
-        }
-        
-        // Usa una Promise per attendere il caricamento asincrono dell'HTML
-        await new Promise(resolve => {
-          editor.storage.repo.read(editor.storage.repoBranch, filePath, (err, fileContent) => {
-            if (!err) {
-              const parser = new DOMParser();
-              const doc = parser.parseFromString(fileContent, 'text/html');
-              htmlEditor.setValue(doc.body.innerHTML);
-            }
-            resolve(); // Risolvi la promise anche in caso di errore per non bloccare tutto
-          });
-        });
-      }*/
     };
 
     await syncEditors(); // Attendi il completamento della sincronizzazione

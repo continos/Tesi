@@ -8,30 +8,7 @@ var customSettings = {
       { name: 'Blank Page', template: 'blank-template.html'},
       { name: 'Research Page', template: 'research-template.html' }
     ]
-  },
-  'simply-text-cursor': textSettings,
-  'simply-text-selection': textSettings
-};
-
-var textSettings = {
-    'style': [
-         {
-             description: 'Color',
-             selector: '*',
-             styles: [
-                 {'class':'red', name: 'Red', icon: 'fa-paint-brush'},
-                 {'class':'green', name: 'Green', icon: 'fa-paint-brush'},
-                 {'class':'blue', name: 'Blue', icon: 'fa-paint-brush'}
-             ]
-         },{
-             description: 'Emphasis',
-             selector: 'h1,h2,h3,p',
-             styles: [
-                 {'class':'highlight', name: 'Highlight', icon: 'fa-sun-o'},
-                 {'class':'lowlight', name: 'Lowlight', icon: 'fa-moon-o'}
-             ]
-         }
-    ]
+  }
 };
 
 // Script per gestire il click del bottone Edit Mode con il tag <base> attivo
