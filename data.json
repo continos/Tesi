@@ -130,13 +130,6 @@
 			},
 			{
 				"item": {
-					"innerHTML": "News",
-					"href": "/Tesi/blog-e-news.html"
-				},
-				"data-simply-template": "item"
-			},
-			{
-				"item": {
 					"innerHTML": "Prenota Aule",
 					"href": "/Tesi/classroom-booking.html",
 					"id": "booking-link",
