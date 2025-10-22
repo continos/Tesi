@@ -145,11 +145,12 @@ function renderStructuredCourses(years, container) {
     container.innerHTML = html;
 }
 
-function renderCourseItem(course) {
-    const professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small><br>` : '';
+function renderCourseItem(course, index) {
+    const professorsHtml = course.professors ? `<p class="card-text"><small class="text-muted">Docenti: ${course.professors}</small></p>` : '';
+    // CORREZIONE: Usa un'icona Bootstrap (bi) invece di Font Awesome (fa) e aggiunge href="#"
     const detailsButtonHtml = (course.details && Object.keys(course.details).some(k => course.details[k])) ? 
         `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${course.index}" title="Dettagli corso">
-            <i class="fa-solid fa-circle-info float-right text-info" style="cursor: pointer; font-size: 1.2em; vertical-align: middle; margin-left: 8px;"></i>
+            <i class="bi bi-info-circle-fill float-end text-info" style="cursor: pointer; font-size: 1.2em; vertical-align: middle; margin-left: 8px;"></i>
         </a>` : '';
 
     return `<div class="list-group-item list-group-item-action flex-column align-items-start">
