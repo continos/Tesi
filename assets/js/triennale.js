@@ -51,25 +51,28 @@ function parseGompData(data) {
 
         activities.forEach(activity => {
             if (activity.type === 'activity') {
+                // Logica più tollerante: estrai sempre il corso,
+                // i dettagli del professore sono opzionali.
                 const mainProfessorData = activity.partitions[0]?.professors[0];
-                if (!mainProfessorData) return;
 
-                const details = {
-                    obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
-                    programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
-                    prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
-                    modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
-                    testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
-                };
+                let details = {};
+                if (mainProfessorData) {
+                    details = {
+                        obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                        programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                        prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                        modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
+                    };
+                }
 
                 allCourses.push({
                     title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
                     cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
-                    professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
+                    professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
                     details: details
                 });
             } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
-                // CORREZIONE: Scendi nell'array 'children' per trovare le attività del gruppo
                 extractCoursesFromActivities(activity.children[0].activities);
             }
         });
@@ -92,7 +95,8 @@ function renderCourses(courses, container) {
 
   const coursesHtml = courses.map((course, index) => {
     const professorsHtml = course.professors ? `<p class="card-text"><small class="text-muted">Docenti: ${course.professors}</small></p>` : '';
-    const detailsButtonHtml = course.details ? 
+    // Mostra il pulsante dettagli solo se ci sono dettagli da mostrare
+    const detailsButtonHtml = (course.details && Object.keys(course.details).some(k => course.details[k])) ? 
         `<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${index}">
           Dettagli
         </button>` : '';
@@ -137,6 +141,6 @@ if (courseDetailsModal) {
         if(details.testiAdottati) bodyHtml += `<h6 class="mt-4">Testi Adottati</h6><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
         if(details.prerequisiti) bodyHtml += `<h6 class="mt-4">Prerequisiti</h6><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
         
-        modalBody.innerHTML = bodyHtml;
+        modalBody.innerHTML = bodyHtml || '<p>Nessun dettaglio disponibile per questo corso.</p>';
     });
 }
