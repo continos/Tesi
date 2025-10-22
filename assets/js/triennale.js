@@ -31,10 +31,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('La risposta dell\'API non ha un formato valido.');
     }
 
-    GOMP_COURSES = parseGompData(apiResponse.data);
+    const structuredData = parseGompData(apiResponse.data);
+    GOMP_COURSES = structuredData.allCourses;
 
     loadingIndicator.style.display = 'none';
-    renderStructuredCourses(GOMP_COURSES, coursesContainer);
+    renderStructuredCourses(structuredData.years, coursesContainer);
 
   } catch (error) {
     console.error('Errore durante il fetch dei dati da GOMP API:', error);
@@ -45,11 +46,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function parseGompData(data) {
     const allCourses = [];
+    let courseCounter = 0;
 
     function extractCoursesFromActivities(activities) {
-        if (!activities) return;
+        if (!activities) return [];
 
-        activities.forEach(activity => {
+        return activities.map(activity => {
             if (activity.type === 'activity') {
                 const mainProfessorData = activity.partitions[0]?.professors[0];
                 let details = {};
@@ -63,29 +65,50 @@ function parseGompData(data) {
                     };
                 }
 
-                allCourses.push({
+                const courseObject = {
+                    index: courseCounter++,
+                    type: 'course',
                     title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
                     cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
                     professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
                     details: details
-                });
+                };
+                allCourses.push(courseObject);
+                return courseObject;
+
             } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
-                extractCoursesFromActivities(activity.children[0].activities);
+                return {
+                    type: 'group',
+                    title: activity.name.find(t => t.iso === 'ita')?.text || 'Gruppo Opzionale',
+                    activities: extractCoursesFromActivities(activity.children[0].activities)
+                };
             }
-        });
+            return null;
+        }).filter(Boolean);
     }
 
-    data.curricula[0]?.years.forEach(year => {
-        year.units.forEach(unit => {
-            extractCoursesFromActivities(unit.activities);
-        });
+    const years = data.curricula[0]?.years.map(year => {
+        return {
+            yearNumber: year.number,
+            semesters: year.units.map(unit => {
+                return {
+                    semesterNumber: unit.number,
+                    activities: extractCoursesFromActivities(unit.activities)
+                };
+            })
+        };
     });
 
-    return allCourses;
+    return { years, allCourses };
 }
 
 function renderStructuredCourses(years, container) {
+    if (!years || !years.length) {
+        container.innerHTML = '<div class="alert alert-warning">Nessun dato sul piano di studi trovato.</div>';
+        return;
+    }
 
+    let html = '';
     years.forEach(year => {
         html += `<div class="card mb-4"><div class="card-body"><h5 class="card-title">${year.yearNumber}° anno</h5>`;
         year.semesters.forEach(semester => {
@@ -95,19 +118,19 @@ function renderStructuredCourses(years, container) {
                         </a>`;
             semester.activities.forEach(activity => {
                 if (activity.type === 'course') {
-                    html += renderCourseItem(activity, courseCounter++);
+                    html += renderCourseItem(activity);
                 } else if (activity.type === 'group') {
-                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${courseCounter}`.replace(/\s/g, '_');
-                    html += `<div class="accordion accordion-flush border" id="${groupId}">
-                                <div class="accordion-item bg-warning-subtle">
+                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${activity.title.replace(/\s/g, '_')}`;
+                    html += `<div class="accordion accordion-flush border mt-2" id="${groupId}">
+                                <div class="accordion-item bg-light">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush_${groupId}" aria-expanded="false" aria-controls="${groupId}">
+                                        <button class="accordion-button collapsed bg-warning-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#flush_${groupId}" aria-expanded="false" aria-controls="${groupId}">
                                             ${activity.title}
                                         </button>
                                     </h2>
                                     <div id="flush_${groupId}" class="accordion-collapse collapse" data-bs-parent="#${groupId}">
-                                        <div class="accordion-body">
-                                            ${activity.activities.map(subActivity => renderCourseItem(subActivity, courseCounter++)).join('')}
+                                        <div class="accordion-body p-0">
+                                            ${activity.activities.map(subActivity => renderCourseItem(subActivity)).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -122,11 +145,11 @@ function renderStructuredCourses(years, container) {
     container.innerHTML = html;
 }
 
-function renderCourseItem(course, index) {
+function renderCourseItem(course) {
     const professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small><br>` : '';
     const detailsButtonHtml = (course.details && Object.keys(course.details).some(k => course.details[k])) ? 
-        `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${index}" title="Dettagli corso">
-            <i class="fa-solid fa-circle-info float-right text-info" style="cursor: pointer;"></i>
+        `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${course.index}" title="Dettagli corso">
+            <i class="fa-solid fa-circle-info float-right text-info" style="cursor: pointer; font-size: 1.2em; vertical-align: middle; margin-left: 8px;"></i>
         </a>` : '';
 
     return `<div class="list-group-item list-group-item-action flex-column align-items-start">
