@@ -6,12 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const requestPayload = {
     "mode": "classRoom",
     "uid": "dd5da305-df9c-4bbd-b66f-f2682e1bf721",
-    "code": "",
     "academicYear": 2025,
-    "curricula": null,
-    "years": null,
-    "iso": "ita",
-    "showCUINs": "False"
+    "iso": "ita"
   };
 
   try {
@@ -27,34 +23,14 @@ document.addEventListener('DOMContentLoaded', async () => {
       throw new Error(`Errore di rete: ${response.status}`);
     }
     
-    const data = await response.json();
+    const apiResponse = await response.json();
 
-    // Estrai i dettagli dai modal (che sono ancora utili)
-    const courseDetailsMap = new Map();
-    if (data.html && data.html.modals) {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data.html.modals, 'text/html');
-        doc.querySelectorAll('.modal').forEach(modal => {
-            const title = modal.querySelector('.modal-title')?.textContent.trim().toUpperCase();
-            const body = modal.querySelector('.modal-body');
-            if (title && body) {
-                courseDetailsMap.set(title, body.innerHTML);
-            }
-        });
+    if (!apiResponse.success || !apiResponse.data || !apiResponse.data.curricula) {
+        throw new Error('La risposta dell\'API non ha un formato valido.');
     }
 
-    // Estrai i corsi dalla risposta JSON
-    const coursesData = data.results.map(course => {
-        const detailsHtml = courseDetailsMap.get(course.name.toUpperCase());
-        return {
-            title: course.name,
-            cfu: `${course.cfu} CFU - ${course.ssd}`,
-            professors: course.professors.map(p => p.name).join(', '),
-            details: detailsHtml
-        };
-    });
+    const coursesData = parseGompData(apiResponse.data);
 
-    // Rendering dell'HTML
     loadingIndicator.style.display = 'none';
     renderCourses(coursesData, coursesContainer);
 
@@ -65,6 +41,37 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
+function parseGompData(data) {
+    const courses = [];
+    // Itera attraverso anni, unità didattiche e attività per trovare i corsi
+    data.curricula[0]?.years.forEach(year => {
+        year.units.forEach(unit => {
+            unit.activities.forEach(activity => {
+                if (activity.type === 'activity') {
+                    const mainProfessorData = activity.partitions[0]?.professors[0];
+                    if (!mainProfessorData) return;
+
+                    const details = {
+                        obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                        programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                        prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                        modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
+                    };
+
+                    courses.push({
+                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                        cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`, 
+                        professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
+                        details: details
+                    });
+                }
+            });
+        });
+    });
+    return courses;
+}
+
 function renderCourses(courses, container) {
   if (!courses.length) {
     container.innerHTML = '<div class="alert alert-warning">Nessun corso trovato.</div>';
@@ -74,7 +81,7 @@ function renderCourses(courses, container) {
   const coursesHtml = courses.map(course => {
     const professorsHtml = course.professors ? `<p class="card-text"><small class="text-muted">Docenti: ${course.professors}</small></p>` : '';
     const detailsButtonHtml = course.details ? 
-        `<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-details-html="${encodeURIComponent(course.details)}" data-course-title="${course.title}">
+        `<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-details='${encodeURIComponent(JSON.stringify(course.details))}' data-course-title="${course.title}">
           Dettagli
         </button>` : '';
 
@@ -97,18 +104,24 @@ function renderCourses(courses, container) {
   container.innerHTML = `<div class="row">${coursesHtml}</div>`;
 }
 
-// Gestione del modal per mostrare i dettagli
 const courseDetailsModal = document.getElementById('course-details-modal');
 if (courseDetailsModal) {
     courseDetailsModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
-        const detailsHtml = decodeURIComponent(button.getAttribute('data-details-html'));
+        const details = JSON.parse(decodeURIComponent(button.getAttribute('data-details')));
         const courseTitle = button.getAttribute('data-course-title');
 
         const modalTitle = courseDetailsModal.querySelector('.modal-title');
         const modalBody = courseDetailsModal.querySelector('.modal-body');
 
         modalTitle.textContent = courseTitle;
-        modalBody.innerHTML = detailsHtml;
+        let bodyHtml = '';
+        if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
+        if(details.programma) bodyHtml += `<h6 class="mt-4">Programma del Corso</h6><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
+        if(details.modalitaValutazione) bodyHtml += `<h6 class="mt-4">Modalità di Valutazione</h6><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
+        if(details.testiAdottati) bodyHtml += `<h6 class="mt-4">Testi Adottati</h6><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
+        if(details.prerequisiti) bodyHtml += `<h6 class="mt-4">Prerequisiti</h6><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
+        
+        modalBody.innerHTML = bodyHtml;
     });
 }
