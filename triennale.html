@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title data-simply-field="pageTitle">Laurea Triennale in Informatica</title>
+  <title data-simply-field="pageTitle">Nuova Pagina</title>
   <base href="/Tesi/">
 
   <!-- Favicons -->
@@ -25,52 +25,158 @@
 
   <!-- Main CSS File -->
   <link href="assets/css/mainInformatica.css" rel="stylesheet">
+
 </head>
 
 <body class="details-page">
 
   <header id="header" class="header d-flex align-items-center fixed-top">
-    <!-- L'header verrà popolato da SimplyEdit -->
+    <div class="container-fluid container-xl position-relative d-flex align-items-center justify-content-between">
+        <a href="index.html" class="logo d-flex align-items-center">
+          <!-- Uncomment the line below if you also wish to use an image logo -->
+          <img src="assets/img/logoTv.png" alt="Informatica - Università di Roma Tor Vergata"  data-simply-field="logo" data-simply-path="/"> 
+          <!-- <h1 class="sitename"></h1> -->
+        </a>
+        <nav id="navmenu" class="navmenu">
+          <ul data-simply-list="header" data-simply-path="/" data-simply-sortable>
+            <template data-simply-template="item">
+              <li><a data-simply-field="item">Item</a></li>
+            </template>
+            <template data-simply-template="submenu">
+              <li class="dropdown">
+                <a href="#">
+                  <span data-simply-field="item">Submenu</span> 
+                  <i class="bi bi-chevron-down toggle-dropdown"></i>
+                </a>
+                <ul data-simply-list="submenu" data-simply-sortable>
+                  <template data-simply-template="item">
+                    <li><a data-simply-field="item">Item</a></li>
+                  </template>
+                </ul>
+              </li>
+            </template>
+            <template data-simply-template="search-icon">
+              <li class="search-icon"><a href="#"><i class="bi bi-search"></i></a></li>
+            </template>
+          </ul>
+          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        </nav>
+    </div>
   </header>
 
   <main id="main" class="main">
-    <!-- Page Title -->
-    <div class="page-title dark-background" style="background-image: url(assets/img/services-page-title-bg.jpg);">
-      <div class="container">
-        <h1>Laurea Triennale in Informatica</h1>
-        <nav class="breadcrumbs">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Offerta Formativa</li>
-          </ol>
-        </nav>
-      </div>
-    </div><!-- End Page Title -->
-
-    <!-- Courses Section -->
-    <section id="courses-section" class="courses-section section">
-      <div class="container">
-        <div class="section-title" data-aos="fade-up">
-          <h2>Piano di Studi</h2>
-          <p>Insegnamenti previsti per l'Anno Accademico 2025/2026</p>
-        </div>
-        <div id="courses-container" data-aos="fade-up" data-aos-delay="100">
-          <!-- Indicatore di caricamento -->
-          <div id="loading-indicator" class="text-center mt-5">
-            <div class="spinner-border" role="status">
-              <span class="visually-hidden">Caricamento...</span>
-            </div>
-            <p class="mt-2">Caricamento offerta formativa da GOMP...</p>
+    <div class="sections" data-simply-list="sections" data-simply-sortable="true">
+      <!-- Page Title -->
+      <template data-simply-template="pageTitle" data-simply-template-icon="fa-header">
+        <div class="page-title dark-background" >
+          <img class="page-title-bg" data-simply-field="backgroundImage" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/11/ai-2-scaled.jpeg" alt="">
+          <div class="container page-title-content">
+            <h1 data-simply-field="mainHeading">Titolo Principale</h1>
+            <nav class="breadcrumbs">
+              <ol>
+                <li><a href="index.html">Home</a></li>
+                <li class="current" data-simply-field="breadcrumb">Sottotitolo</li>
+              </ol>
+            </nav>
           </div>
-          <!-- I corsi verranno iniettati qui dallo script -->
         </div>
-      </div>
-    </section><!-- End Courses Section -->
-
+      </template>
+      <!-- Row: Image Left, Text Right -->
+      <template data-simply-template="image-left">
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6" data-aos="fade-up">
+            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
+          </div>
+        </div>
+      </template>
+      <!-- Row: Text Left, Image Right -->
+      <template data-simply-template="image-right">
+        <div class="row align-items-center gy-4 mb-5">
+          <div class="col-lg-6 order-lg-2" data-aos="fade-up">
+            <img data-simply-field="image" src="https://via.placeholder.com/800x600" class="img-fluid" alt="Research Area Image">
+          </div>
+          <div class="col-lg-6 order-lg-1" data-aos="fade-up" data-aos-delay="100">
+            <h3 data-simply-field="title">Research Area Title</h3>
+            <p data-simply-field="description">Description of the research area.</p>
+            <a data-simply-field="link" href="#" class="readmore"><span>Read More</span><i class="bi bi-arrow-right"></i></a>          
+          </div>
+        </div>
+      </template>
+      <!-- Section Title -->
+       <template data-simply-template="sectionTitle" data-simply-template-icon="fa-minus">
+        <div class="container section-title" data-aos="fade-up">
+          <h2 data-simply-field="sectionTitle">Titolo Sezione</h2>
+        </div>
+      </template>
+      <!-- People -->
+      <template data-simply-template="peopleGrid" data-simply-template-icon="fa-users">
+        <section id="team" class="team section">
+          <div class="container">
+            <!-- Questa è la lista che conterrà le singole card -->
+            <div class="row gy-4" data-simply-list="people" data-simply-sortable="true">
+              <template data-simply-template="person" data-simply-template-icon="fa-user-plus">
+                <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="fade-up">
+                  <div class="team-member">
+                      <div class="member-img">
+                          <img data-simply-field="personImage" src="assets/img/team/team-1.jpg" class="img-fluid" alt="">
+                          <div class="social">
+                              <a href="#" data-simply-field="twitterLink"><i class="bi bi-twitter-x"></i></a>
+                              <a href="#" data-simply-field="facebookLink"><i class="bi bi-facebook"></i></a>
+                              <a href="#" data-simply-field="instagramLink"><i class="bi bi-instagram"></i></a>
+                              <a href="#" data-simply-field="linkedinLink"><i class="bi bi-linkedin"></i></a>
+                          </div>
+                      </div>
+                      <div class="member-info">
+                          <h4 data-simply-field="personName">Nome Cognome</h4>
+                          <span data-simply-field="personRole">Ruolo</span>
+                      </div>
+                  </div>
+                </div>
+              </template>
+            </div>
+          </div>
+        </section>
+      </template>
+    </div>
   </main>
 
   <footer id="footer" class="footer light-background">
-    <!-- Il footer verrà popolato da SimplyEdit -->
+    <div class="footer-top">
+      <div class="container">
+        <div class="row gy-4 justify-content-center">
+
+          <!-- Colonna 1: Logo Università -->
+          <div class="col-lg-4 col-md-6 footer-about text-center">
+            <a href="https://web.uniroma2.it/" class="logo d-block mb-4" target="_blank" rel="noopener noreferrer">
+              <img data-simply-field="footerLogo" data-simply-path="/" src="https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png" alt="Università di Roma Tor Vergata">
+            </a>
+          </div>
+
+          <!-- Colonna 2: Link Utili/Admin -->
+          <div class="col-lg-2 col-6 footer-links">
+            <h4>Area Riservata</h4>
+            <ul>
+              <li><a id="auth-link" href="login.html">Accedi</a></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="container copyright text-center">
+      <p>
+        © <span>Copyright</span> <strong class="px-1 sitename">Nova</strong> <span>All Rights Reserved</span>
+      </p>
+      <div class="credits">
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
   </footer>
 
   <!-- Scroll Top -->
@@ -78,24 +184,6 @@
 
   <!-- Preloader -->
   <div id="preloader"></div>
-  
-  <!-- Modal per i dettagli del corso -->
-  <div class="modal fade" id="course-details-modal" tabindex="-1" aria-labelledby="courseDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="courseDetailsModalLabel">Dettagli del Corso</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body" id="course-details-modal-body">
-          <!-- Il contenuto del modal verrà inserito qui -->
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -108,14 +196,22 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
-  <script src="assets/js/triennale.js" defer></script>
-
-  <!-- SimplyEdit & Auth0 -->
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
   <script src="assets/js/auth-config.js"></script>
+  <!-- SimplyEdit -->
   <script src="assets/js/simply-edit-config.js"></script>
-  <script src="simplyedit/js/simply-edit.js" data-simply-storage="customGithub" data-simply-repo-user="continos" data-simply-repo-name="Tesi" data-simply-repo-branch="gh-pages" data-simply-settings="customSettings"></script>
-
+  <!-- Configurazione SimplyEdit per GitHub -->
+  <script
+    src="simplyedit/js/simply-edit.js"
+    data-simply-storage="customGithub"
+    data-simply-repo-user="continos"
+    data-simply-repo-name="Tesi"
+    data-simply-repo-branch="gh-pages"
+    data-simply-settings="customSettings"
+  ></script>
+  <!-- Pulsante per attivare Edit Mode -->
+  <a href="#simply-edit" id="edit-mode-button" title="Attiva Edit Mode">
+    <i class="bi bi-pencil-square"></i>
+  </a>
 </body>
-
 </html>
