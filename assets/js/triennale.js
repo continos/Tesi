@@ -44,33 +44,48 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function parseGompData(data) {
-    const courses = [];
+    const allCourses = [];
+
+    // Funzione ricorsiva per estrarre corsi da liste di attività
+    function extractCoursesFromActivities(activities) {
+        if (!activities) return;
+
+        activities.forEach(activity => {
+            // Se è un corso singolo, lo elaboriamo
+            if (activity.type === 'activity') {
+                const mainProfessorData = activity.partitions[0]?.professors[0];
+                if (!mainProfessorData) return;
+
+                const details = {
+                    obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                    programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                    prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                    modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                    testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
+                };
+
+                allCourses.push({
+                    title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                    cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
+                    professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
+                    details: details
+                });
+            } 
+            // Se è un gruppo, chiamiamo ricorsivamente la funzione sulle sue attività
+            else if (activity.type === 'group' && activity.activities) {
+                extractCoursesFromActivities(activity.activities);
+            }
+        });
+    }
+
+    // Iniziamo il processo partendo dagli anni del curriculum
     data.curricula[0]?.years.forEach(year => {
         year.units.forEach(unit => {
-            unit.activities.forEach(activity => {
-                if (activity.type === 'activity') {
-                    const mainProfessorData = activity.partitions[0]?.professors[0];
-                    if (!mainProfessorData) return;
-
-                    const details = {
-                        obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
-                        programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
-                        prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
-                        modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
-                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
-                    };
-
-                    courses.push({
-                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
-                        cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
-                        professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
-                        details: details
-                    });
-                }
-            });
+            extractCoursesFromActivities(unit.activities);
         });
     });
-    return courses;
+
+    return allCourses;
 }
 
 function renderCourses(courses, container) {
