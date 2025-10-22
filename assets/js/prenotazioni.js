@@ -91,14 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
       feedbackDiv.textContent = 'Salvataggio in corso...';
       feedbackDiv.className = 'alert alert-info';
 
-      const newBooking = {
+      const newPrenotazione = {
         classroom: document.getElementById('classroom').value,
         date: document.getElementById('prenotazione-date').value,
         timeslot: document.getElementById('timeslot').value,
         professor: localStorage.getItem('userName') || 'Utente Sconosciuto'
       };
 
-      prenotazioni.push(newBooking);
+      prenotazioni.push(newPrenotazione);
       const updatedJsonData = JSON.stringify(prenotazioni, null, 2);
 
       try {
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
           editor.storage.repoBranch,
           'data/prenotazioni.json',
           updatedJsonData,
-          `Aggiunta prenotazione aula da ${newBooking.professor}`,
+          `Aggiunta prenotazione aula da ${newPrenotazione.professor}`,
           (err) => {
             if (err) {
               console.error("Errore durante la scrittura su GitHub:", err);
