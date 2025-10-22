@@ -143,6 +143,24 @@
         </section>
       </template>
     </div>
+    <!-- Sezione corsi -->
+     <section id="courses-section" class="courses-section section">
+        <div class="container">
+          <div class="section-title" data-aos="fade-up">
+            <h2>Piano di studi</h2>
+            <p>Insegnamenti previsti per l'Anno Accademico 2025/2026</p>
+          </div>
+          <div id="courses-container" data-aos="fade-up" data-aos-delay="100">
+            <div id="loading-indicator" class="text-center mt-5">
+              <div class="spinner-border" role="status">
+                <span class="visually-hidden">Caricamento... </span>
+              </div>
+              <p class="mt-2">Caricamento offerta formativa da GOMP ...</p>
+            </div>
+            <!-- I corsi verranno iniettati qui dallo script-->
+          </div>
+        </div>
+     </section>
   </main>
 
   <footer id="footer" class="footer light-background">
@@ -196,8 +214,9 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/triennale.js"></script>
   <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
-  <script src="assets/js/auth-config.js"></script>
+  <script src="assets/js/auth-config.js"></script
   <!-- SimplyEdit -->
   <script src="assets/js/simply-edit-config.js"></script>
   <!-- Configurazione SimplyEdit per GitHub -->
