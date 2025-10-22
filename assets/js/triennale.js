@@ -1,3 +1,5 @@
+let GOMP_COURSES = []; // Variabile globale per memorizzare i dati dei corsi
+
 document.addEventListener('DOMContentLoaded', async () => {
   const coursesContainer = document.getElementById('courses-container');
   const loadingIndicator = document.getElementById('loading-indicator');
@@ -29,10 +31,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('La risposta dell\'API non ha un formato valido.');
     }
 
-    const coursesData = parseGompData(apiResponse.data);
+    GOMP_COURSES = parseGompData(apiResponse.data); // Salva i dati nella variabile globale
 
     loadingIndicator.style.display = 'none';
-    renderCourses(coursesData, coursesContainer);
+    renderCourses(GOMP_COURSES, coursesContainer);
 
   } catch (error) {
     console.error('Errore durante il fetch dei dati da GOMP API:', error);
@@ -43,7 +45,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 function parseGompData(data) {
     const courses = [];
-    // Itera attraverso anni, unità didattiche e attività per trovare i corsi
     data.curricula[0]?.years.forEach(year => {
         year.units.forEach(unit => {
             unit.activities.forEach(activity => {
@@ -61,7 +62,7 @@ function parseGompData(data) {
 
                     courses.push({
                         title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
-                        cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`, 
+                        cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
                         professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
                         details: details
                     });
@@ -78,10 +79,10 @@ function renderCourses(courses, container) {
     return;
   }
 
-  const coursesHtml = courses.map(course => {
+  const coursesHtml = courses.map((course, index) => {
     const professorsHtml = course.professors ? `<p class="card-text"><small class="text-muted">Docenti: ${course.professors}</small></p>` : '';
     const detailsButtonHtml = course.details ? 
-        `<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-details='${encodeURIComponent(JSON.stringify(course.details))}' data-course-title="${course.title}">
+        `<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${index}">
           Dettagli
         </button>` : '';
 
@@ -108,14 +109,17 @@ const courseDetailsModal = document.getElementById('course-details-modal');
 if (courseDetailsModal) {
     courseDetailsModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
-        const details = JSON.parse(decodeURIComponent(button.getAttribute('data-details')));
-        const courseTitle = button.getAttribute('data-course-title');
+        const courseIndex = button.getAttribute('data-course-index');
+        const course = GOMP_COURSES[courseIndex]; // Recupera i dati dall'array globale
+
+        if (!course) return;
 
         const modalTitle = courseDetailsModal.querySelector('.modal-title');
         const modalBody = courseDetailsModal.querySelector('.modal-body');
 
-        modalTitle.textContent = courseTitle;
+        modalTitle.textContent = course.title;
         let bodyHtml = '';
+        const details = course.details;
         if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
         if(details.programma) bodyHtml += `<h6 class="mt-4">Programma del Corso</h6><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
         if(details.modalitaValutazione) bodyHtml += `<h6 class="mt-4">Modalità di Valutazione</h6><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
