@@ -2,8 +2,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const coursesContainer = document.getElementById('courses-container');
   const loadingIndicator = document.getElementById('loading-indicator');
 
-  // API Endpoint e payload per GOMP
-  const gompApiUrl = 'https://uniroma2public.gomp.it/CourseAPI/getCourse';
+  const gompApiUrl = 'https://corsproxy.io/?' + encodeURIComponent('https://uniroma2public.gomp.it/CourseAPI/getCourse');
   const requestPayload = {
     "mode": "classRoom",
     "uid": "dd5da305-df9c-4bbd-b66f-f2682e1bf721",
