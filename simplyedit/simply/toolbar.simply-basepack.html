@@ -2653,7 +2653,11 @@
 		switch (editor.plugins.browse.insertMode) {
 			case 'page':
 				// FIXME: check for dirty fields and stash/save the changes
-				document.location.href = target + "#simply-edit";
+				// Fix per GitHub Pages
+				const basePath = document.querySelector('base')?.getAttribute('href') || '/';
+				let finalUrl = new URL(basePath + target.replace(/^\//,''), window.location.origin).href;
+				document.location.href = finalUrl + "#simply-edit";
+				//document.location.href = target + "#simply-edit";
 			break;
 			case 'image':
 				editor.actions["simply-image-src"](target);

@@ -62,14 +62,6 @@
 			"src": "https://www-2020.cs.uniroma2.it/wp-content/uploads/2020/09/logo-small-png.png",
 			"alt": "Universit\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a0 di Roma Tor Vergata"
 		},
-		"footerLoginLink": {
-			"innerHTML": "Logout",
-			"href": "#",
-			"class": null,
-			"alt": null,
-			"title": null,
-			"name": null
-		},
 		"logo": {
 			"src": "/Tesi/assets/img/logoTv.png",
 			"alt": "Informatica - Universit\u00c3\u0083\u00c2\u0083\u00c3\u0082\u00c2\u00a0 di Roma Tor Vergata"
