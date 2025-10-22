@@ -86,7 +86,7 @@ function parseGompData(data) {
 
 function renderStructuredCourses(years, container) {
 
-    yearsData.forEach(year => {
+    years.forEach(year => {
         html += `<div class="card mb-4"><div class="card-body"><h5 class="card-title">${year.yearNumber}° anno</h5>`;
         year.semesters.forEach(semester => {
             html += `<div class="list-group mt-3">
