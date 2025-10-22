@@ -27,28 +27,28 @@ document.addEventListener('DOMContentLoaded', () => {
     editor.storage.connect(() => {
       console.log("Connessione allo storage GitHub stabilita.");
       // 2. Solo dopo la connessione, carica i dati
-      loadBookings();
+      loadPrenotazioni();
     });
 
-    const tableBody = document.getElementById('bookings-table-body');
-    const noBookingsMessage = document.getElementById('no-bookings-message');
+    const tableBody = document.getElementById('prenotazioni-table-body');
+    const noPrenotazioniMessage = document.getElementById('no-prenotazioni-message');
     const bookingForm = document.getElementById('booking-form');
     const feedbackDiv = document.getElementById('booking-feedback');
 
-    let allBookings = [];
+    let prenotazioni = [];
 
     // 3. Usa editor.storage.repo.read() invece di fetch
-    async function loadBookings() {
+    async function loadPrenotazioni() {
       tableBody.innerHTML = '<tr><td colspan="4">Caricamento...</td></tr>';
       editor.storage.repo.read(
         editor.storage.repoBranch,
-        'data/bookings.json',
+        'data/prenotazioni.json',
         (err, data) => {
           if (err) {
             // Se il file non esiste (errore 404), lo trattiamo come un array vuoto
             if (err.error === 404) {
-              console.log('File bookings.json non trovato, inizio con un array vuoto.');
-              allBookings = [];
+              console.log('File prenotazioni.json non trovato, inizio con un array vuoto.');
+              prenotazioni = [];
             } else {
               console.error("Errore nel caricamento del file JSON da GitHub:", err);
               tableBody.innerHTML = '<tr><td colspan="4" class="text-danger">Errore nel caricamento delle prenotazioni.</td></tr>';
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           } else {
             try {
-              allBookings = JSON.parse(data);
+              prenotazioni = JSON.parse(data);
             } catch (parseErr) {
               console.error("Errore nel parsing del JSON:", parseErr);
               tableBody.innerHTML = '<tr><td colspan="4" class="text-danger">Errore nel formato dei dati delle prenotazioni.</td></tr>';
@@ -70,11 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderTable() {
       tableBody.innerHTML = '';
-      if (!allBookings || allBookings.length === 0) {
-        noBookingsMessage.style.display = 'block';
+      if (!prenotazioni || prenotazioni.length === 0) {
+        noPrenotazioniMessage.style.display = 'block';
       } else {
-        noBookingsMessage.style.display = 'none';
-        allBookings.forEach(booking => {
+        noPrenotazioniMessage.style.display = 'none';
+        prenotazioni.forEach(booking => {
           const row = tableBody.insertRow();
           row.innerHTML = `
             <td>${booking.classroom || 'N/D'}</td>
@@ -98,13 +98,13 @@ document.addEventListener('DOMContentLoaded', () => {
         professor: localStorage.getItem('userName') || 'Utente Sconosciuto'
       };
 
-      allBookings.push(newBooking);
-      const updatedJsonData = JSON.stringify(allBookings, null, 2);
+      prenotazioni.push(newBooking);
+      const updatedJsonData = JSON.stringify(prenotazioni, null, 2);
 
       try {
         editor.storage.repo.write(
           editor.storage.repoBranch,
-          'data/bookings.json',
+          'data/prenotazioni.json',
           updatedJsonData,
           `Aggiunta prenotazione aula da ${newBooking.professor}`,
           (err) => {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
               console.error("Errore durante la scrittura su GitHub:", err);
               feedbackDiv.textContent = 'Errore durante il salvataggio della prenotazione.';
               feedbackDiv.className = 'alert alert-danger';
-              allBookings.pop();
+              prenotazioni.pop();
               renderTable();
               return;
             }
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error("Errore imprevisto durante il salvataggio su GitHub:", error);
         feedbackDiv.textContent = 'Errore imprevisto durante il salvataggio.';
         feedbackDiv.className = 'alert alert-danger';
-        allBookings.pop();
+        prenotazioni.pop();
         renderTable();
       }
     });
