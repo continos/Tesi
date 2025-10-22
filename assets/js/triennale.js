@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (error) {
     console.error('Errore durante il fetch dei dati da GOMP API:', error);
     loadingIndicator.style.display = 'none';
-    coursesContainer.innerHTML = `<div class="alert alert-danger">Impossibile caricare i dati dall'offerta formativa. Dettagli: ${error.message}</div>`;
+    coursesContainer.innerHTML = `<div class="alert alert-danger">Impossibile caricare i dati dall\'offerta formativa. Dettagli: ${error.message}</div>`;
   }
 });
 
@@ -54,22 +54,37 @@ function parseGompData(data) {
         return activities.map(activity => {
             if (activity.type === 'activity') {
                 const mainProfessorData = activity.partitions[0]?.professors[0];
+                const creditData = activity.credits[0];
                 let details = {};
+
                 if (mainProfessorData) {
                     details = {
                         obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
                         programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
                         prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
                         modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
-                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
+                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text,
+                        modalitaFrequenza: mainProfessorData.classRoomMode?.find(t => t.iso === 'ita')?.text,
+                        modalitaSvolgimento: mainProfessorData.lessonsMode?.find(t => t.iso === 'ita')?.text
                     };
+                }
+                if (creditData) {
+                    details.ore = {
+                        aula: creditData.oreAula,
+                        esercitazioni: creditData.oreEsercitazioni,
+                        laboratorio: creditData.oreLaboratorio,
+                        seminari: creditData.oreSeminari,
+                        altro: creditData.oreAltro
+                    };
+                    details.attivita = creditData.macroSector;
+                    details.ambito = creditData.exportationCode;
                 }
 
                 const courseObject = {
                     index: courseCounter++,
                     type: 'course',
                     title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
-                    cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
+                    cfu: `${creditData?.credits || 'N/A'} CFU - ${creditData?.sector || 'N/A'}`,
                     professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
                     details: details
                 };
@@ -145,25 +160,24 @@ function renderStructuredCourses(years, container) {
     container.innerHTML = html;
 }
 
-function renderCourseItem(course, index) {
-    const professorsHtml = course.professors ? `<p class="card-text"><small class="text-muted">Docenti: ${course.professors}</small></p>` : '';
-    // CORREZIONE: Usa un'icona Bootstrap (bi) invece di Font Awesome (fa) e aggiunge href="#"
-    const detailsButtonHtml = (course.details && Object.keys(course.details).some(k => course.details[k])) ? 
+function renderCourseItem(course) {
+    const professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small><br>` : '';
+    const detailsButtonHtml = (course.details && Object.keys(course.details).length > 0) ? 
         `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${course.index}" title="Dettagli corso">
             <i class="bi bi-info-circle-fill float-end text-info" style="cursor: pointer; font-size: 1.2em; vertical-align: middle; margin-left: 8px;"></i>
         </a>` : '';
 
     return `<div class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
-                    <h5 class="mb-1 d-flex justify-content-between align-items-center w-100"> 
+                    <h5 class="mb-1 d-flex justify-content-between align-items-center w-100">
                         <span>${course.title}</span>
                         ${detailsButtonHtml}
                     </h5>
                 </div>
                 <div class="d-flex w-100 justify-content-between">
                     <small class="text-muted">${course.cfu}</small>
-                    ${professorsHtml}
                 </div>
+                ${professorsHtml}
             </div>`;
 }
 
@@ -182,11 +196,24 @@ if (courseDetailsModal) {
         modalTitle.textContent = course.title;
         let bodyHtml = '';
         const details = course.details;
+
         if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
-        if(details.programma) bodyHtml += `<h6 class="mt-4">Programma del Corso</h6><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
-        if(details.modalitaValutazione) bodyHtml += `<h6 class="mt-4">Modalità di Valutazione</h6><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
-        if(details.testiAdottati) bodyHtml += `<h6 class="mt-4">Testi Adottati</h6><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
-        if(details.prerequisiti) bodyHtml += `<h6 class="mt-4">Prerequisiti</h6><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
+        
+        if(details.ore) {
+            bodyHtml += `<table class="table table-bordered table-striped" style="margin-top: 20px;"><tbody>
+                        <tr><th>Ore in Aula</th><th>Ore Esercitazioni</th><th>Ore Seminari</th><th>Ore Laboratorio</th><th>Ore Altro</th></tr>
+                        <tr><td>${details.ore.aula || 0}</td><td>${details.ore.esercitazioni || 0}</td><td>${details.ore.seminari || 0}</td><td>${details.ore.laboratorio || 0}</td><td>${details.ore.altro || 0}</td></tr>
+                        </tbody></table>`;
+        }
+
+        if(details.attivita) bodyHtml += `<br><strong>Attività</strong><p>${details.attivita}</p>`;
+        if(details.ambito) bodyHtml += `<strong>Ambito</strong><p>${details.ambito}</p>`;
+        if(details.prerequisiti) bodyHtml += `<strong>Prerequisiti</strong><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
+        if(details.programma) bodyHtml += `<strong class="mt-4">Programma del Corso</h6><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
+        if(details.modalitaValutazione) bodyHtml += `<strong class="mt-4">Modalità di Valutazione</h6><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
+        if(details.testiAdottati) bodyHtml += `<strong class="mt-4">Testi Adottati</h6><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
+        if(details.modalitaFrequenza) bodyHtml += `<strong class="mt-4">Modalità di frequenza</h6><p>${details.modalitaFrequenza.replace(/\n/g, '<br>')}</p>`;
+        if(details.modalitaSvolgimento) bodyHtml += `<strong class="mt-4">Modalità di svolgimento delle lezioni</h6><p>${details.modalitaSvolgimento.replace(/\n/g, '<br>')}</p>`;
         
         modalBody.innerHTML = bodyHtml || '<p>Nessun dettaglio disponibile per questo corso.</p>';
     });
