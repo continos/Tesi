@@ -1,4 +1,4 @@
-let GOMP_COURSES_DATA = {}; // Variabile globale per memorizzare i dati strutturati
+let GOMP_COURSES = []; // Variabile globale per memorizzare i dati dei corsi
 
 document.addEventListener('DOMContentLoaded', async () => {
   const coursesContainer = document.getElementById('courses-container');
@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('La risposta dell\'API non ha un formato valido.');
     }
 
-    GOMP_COURSES_DATA = parseGompData(apiResponse.data); // Salva i dati strutturati
+    GOMP_COURSES = parseGompData(apiResponse.data);
 
     loadingIndicator.style.display = 'none';
-    renderStructuredCourses(GOMP_COURSES_DATA, coursesContainer);
+    renderStructuredCourses(GOMP_COURSES, coursesContainer);
 
   } catch (error) {
     console.error('Errore durante il fetch dei dati da GOMP API:', error);
@@ -44,73 +44,68 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function parseGompData(data) {
-    const yearsData = data.curricula[0]?.years.map(year => {
-        return {
-            yearNumber: year.number,
-            semesters: year.units.map(unit => {
-                return {
-                    semesterNumber: unit.number,
-                    activities: extractCoursesFromActivities(unit.activities)
-                };
-            })
-        };
-    });
-    return yearsData;
-}
+    const allCourses = [];
 
-function extractCoursesFromActivities(activities) {
-    if (!activities) return [];
+    function extractCoursesFromActivities(activities) {
+        if (!activities) return;
 
-    return activities.map(activity => {
-        if (activity.type === 'activity') {
-            const mainProfessorData = activity.partitions[0]?.professors[0];
-            let details = {};
-            if (mainProfessorData) {
-                details = {
-                    obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
-                    programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
-                    prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
-                    modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
-                    testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
-                };
+        activities.forEach(activity => {
+            if (activity.type === 'activity') {
+                const mainProfessorData = activity.partitions[0]?.professors[0];
+                let details = {};
+                if (mainProfessorData) {
+                    details = {
+                        obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                        programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                        prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                        modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text
+                    };
+                }
+
+                allCourses.push({
+                    title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                    cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
+                    professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
+                    details: details
+                });
+            } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
+                extractCoursesFromActivities(activity.children[0].activities);
             }
-            return {
-                type: 'course',
-                title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
-                cfu: `${activity.credits[0]?.credits || 'N/A'} CFU - ${activity.credits[0]?.sector || 'N/A'}`,
-                professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
-                details: details
-            };
-        } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
-            return {
-                type: 'group',
-                title: activity.name.find(t => t.iso === 'ita')?.text || 'Gruppo Opzionale',
-                activities: extractCoursesFromActivities(activity.children[0].activities)
-            };
-        }
-        return null;
-    }).filter(Boolean); // Rimuove eventuali elementi null
+        });
+    }
+
+    data.curricula[0]?.years.forEach(year => {
+        year.units.forEach(unit => {
+            extractCoursesFromActivities(unit.activities);
+        });
+    });
+
+    return allCourses;
 }
 
-function renderStructuredCourses(years, container) {
-    if (!years.length) {
-        container.innerHTML = '<div class="alert alert-warning">Nessun dato sul piano di studi trovato.</div>';
+function renderStructuredCourses(courses, container) {
+    if (!courses.length) {
+        container.innerHTML = '<div class="alert alert-warning">Nessun corso trovato.</div>';
         return;
     }
 
     let html = '';
-    years.forEach(year => {
+    let courseCounter = 0;
+    const yearsData = GOMP_COURSES_DATA; // Usa la struttura gerarchica
+
+    yearsData.forEach(year => {
         html += `<div class="card mb-4"><div class="card-body"><h5 class="card-title">${year.yearNumber}° anno</h5>`;
         year.semesters.forEach(semester => {
             html += `<div class="list-group mt-3">
                         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark bg-gradient">
                             <div class="d-flex w-100 justify-content-between"><h5 class="mb-1">${semester.semesterNumber}° semestre</h5></div>
                         </a>`;
-            semester.activities.forEach((activity, index) => {
+            semester.activities.forEach(activity => {
                 if (activity.type === 'course') {
-                    html += renderCourseItem(activity, `${year.yearNumber}-${semester.semesterNumber}-${index}`);
+                    html += renderCourseItem(activity, courseCounter++);
                 } else if (activity.type === 'group') {
-                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${index}`.replace(/\s/g, '_');
+                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${courseCounter}`.replace(/\s/g, '_');
                     html += `<div class="accordion accordion-flush border" id="${groupId}">
                                 <div class="accordion-item bg-warning-subtle">
                                     <h2 class="accordion-header">
@@ -120,7 +115,7 @@ function renderStructuredCourses(years, container) {
                                     </h2>
                                     <div id="flush_${groupId}" class="accordion-collapse collapse" data-bs-parent="#${groupId}">
                                         <div class="accordion-body">
-                                            ${activity.activities.map((subActivity, subIndex) => renderCourseItem(subActivity, `${groupId}-${subIndex}`)).join('')}
+                                            ${activity.activities.map(subActivity => renderCourseItem(subActivity, courseCounter++)).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -135,25 +130,28 @@ function renderStructuredCourses(years, container) {
     container.innerHTML = html;
 }
 
-function renderCourseItem(course, uniqueId) {
-    const professorsHtml = course.professors ? `<small data-cuin=\"...\"><span>...</span><a href=\"javascript:"><strong>${course.professors} Vai alla scheda</strong></a></small><br>` : '';
+function renderCourseItem(course, index) {
+    const professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small><br>` : '';
     const detailsButtonHtml = (course.details && Object.keys(course.details).some(k => course.details[k])) ? 
-        `<i class="fa-solid fa-circle-info float-right text-info" aria-hidden="true" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course='${encodeURIComponent(JSON.stringify(course))}' style="cursor: pointer;"></i>` : '';
+        `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${index}" title="Dettagli corso">
+            <i class="fa-solid fa-circle-info float-right text-info" style="cursor: pointer;"></i>
+        </a>` : '';
 
-    return `<a href="javascript:" class="list-group-item list-group-item-action flex-column align-items-start">
+    return `<div class="list-group-item list-group-item-action flex-column align-items-start">
                 <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">${course.title} ${detailsButtonHtml}</h5>
                     <small class="text-muted">${course.cfu}</small>
                 </div>
                 ${professorsHtml}
-            </a>`;
+            </div>`;
 }
 
 const courseDetailsModal = document.getElementById('course-details-modal');
 if (courseDetailsModal) {
     courseDetailsModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
-        const course = JSON.parse(decodeURIComponent(button.getAttribute('data-course')));
+        const courseIndex = button.getAttribute('data-course-index');
+        const course = GOMP_COURSES[courseIndex];
 
         if (!course) return;
 
