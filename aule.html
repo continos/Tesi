@@ -77,10 +77,10 @@
       </div>
     </div>
 
-    <section id="booking-section" class="booking-section section">
+    <section id="prenotazione-section" class="prenotazione-section section">
       <div class="container">
         
-        <div id="booking-app" style="display: none;">
+        <div id="prenotazione-app" style="display: none;">
           <div class="row">
             <div class="col-lg-8">
               <h3>Prenotazioni Esistenti</h3>
@@ -94,16 +94,16 @@
                       <th scope="col">Professore</th>
                     </tr>
                   </thead>
-                  <tbody id="bookings-table-body">
+                  <tbody id="prenotazioni-table-body">
                   </tbody>
                 </table>
-                <p id="no-bookings-message" style="display: none;">Nessuna prenotazione trovata.</p>
+                <p id="no-prenotazioni-message" style="display: none;">Nessuna prenotazione trovata.</p>
               </div>
             </div>
 
             <div class="col-lg-4">
               <h3>Nuova Prenotazione</h3>
-              <form id="booking-form">
+              <form id="prenotazione-form">
                 <div class="mb-3">
                   <label for="classroom" class="form-label">Aula</label>
                   <select class="form-select" id="classroom" required>
@@ -115,8 +115,8 @@
                   </select>
                 </div>
                 <div class="mb-3">
-                  <label for="booking-date" class="form-label">Data</label>
-                  <input type="date" class="form-control" id="booking-date" required>
+                  <label for="prenotazione-date" class="form-label">Data</label>
+                  <input type="date" class="form-control" id="prenotazione-date" required>
                 </div>
                 <div class="mb-3">
                   <label for="timeslot" class="form-label">Fascia Oraria</label>
@@ -128,7 +128,7 @@
                   </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Prenota</button>
-                <div id="booking-feedback" class="mt-3"></div>
+                <div id="prenotazione-feedback" class="mt-3"></div>
               </form>
             </div>
           </div>
@@ -220,7 +220,7 @@
   <script>
     window.addEventListener('auth-ready', () => {
       const userRole = localStorage.getItem('userRole');
-      const bookingApp = document.getElementById('booking-app');
+      const bookingApp = document.getElementById('prenotazione-app');
       const accessDenied = document.getElementById('access-denied');
 
       if (userRole === 'administrator' || userRole === 'professor') {

@@ -32,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const tableBody = document.getElementById('prenotazioni-table-body');
     const noPrenotazioniMessage = document.getElementById('no-prenotazioni-message');
-    const bookingForm = document.getElementById('booking-form');
-    const feedbackDiv = document.getElementById('booking-feedback');
+    const prenotazioneForm = document.getElementById('prenotazione-form');
+    const feedbackDiv = document.getElementById('prenotazione-feedback');
 
     let prenotazioni = [];
 
@@ -74,26 +74,26 @@ document.addEventListener('DOMContentLoaded', () => {
         noPrenotazioniMessage.style.display = 'block';
       } else {
         noPrenotazioniMessage.style.display = 'none';
-        prenotazioni.forEach(booking => {
+        prenotazioni.forEach(prenotazione => {
           const row = tableBody.insertRow();
           row.innerHTML = `
-            <td>${booking.classroom || 'N/D'}</td>
-            <td>${booking.date || 'N/D'}</td>
-            <td>${booking.timeslot || 'N/D'}</td>
-            <td>${booking.professor || 'N/D'}</td>
+            <td>${prenotazione.classroom || 'N/D'}</td>
+            <td>${prenotazione.date || 'N/D'}</td>
+            <td>${prenotazione.timeslot || 'N/D'}</td>
+            <td>${prenotazione.professor || 'N/D'}</td>
           `;
         });
       }
     }
 
-    bookingForm.addEventListener('submit', async (e) => {
+    prenotazioneForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       feedbackDiv.textContent = 'Salvataggio in corso...';
       feedbackDiv.className = 'alert alert-info';
 
       const newBooking = {
         classroom: document.getElementById('classroom').value,
-        date: document.getElementById('booking-date').value,
+        date: document.getElementById('prenotazione-date').value,
         timeslot: document.getElementById('timeslot').value,
         professor: localStorage.getItem('userName') || 'Utente Sconosciuto'
       };
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             feedbackDiv.textContent = 'Prenotazione salvata con successo!';
             feedbackDiv.className = 'alert alert-success';
-            bookingForm.reset();
+            prenotazioneForm.reset();
             renderTable();
           }
         );
