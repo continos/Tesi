@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title data-simply-field="pageTitle">Laurea Triennale in Informatica</title>
+  <base href="/Tesi/">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/mainInformatica.css" rel="stylesheet">
+</head>
+
+<body class="details-page">
+
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <!-- L'header verrà popolato da SimplyEdit -->
+  </header>
+
+  <main id="main" class="main">
+    <!-- Page Title -->
+    <div class="page-title dark-background" style="background-image: url(assets/img/services-page-title-bg.jpg);">
+      <div class="container">
+        <h1>Laurea Triennale in Informatica</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">Offerta Formativa</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Courses Section -->
+    <section id="courses-section" class="courses-section section">
+      <div class="container">
+        <div class="section-title" data-aos="fade-up">
+          <h2>Piano di Studi</h2>
+          <p>Insegnamenti previsti per l'Anno Accademico 2025/2026</p>
+        </div>
+        <div id="courses-container" data-aos="fade-up" data-aos-delay="100">
+          <!-- Indicatore di caricamento -->
+          <div id="loading-indicator" class="text-center mt-5">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Caricamento...</span>
+            </div>
+            <p class="mt-2">Caricamento offerta formativa da GOMP...</p>
+          </div>
+          <!-- I corsi verranno iniettati qui dallo script -->
+        </div>
+      </div>
+    </section><!-- End Courses Section -->
+
+  </main>
+
+  <footer id="footer" class="footer light-background">
+    <!-- Il footer verrà popolato da SimplyEdit -->
+  </footer>
+
+  <!-- Scroll Top -->
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Preloader -->
+  <div id="preloader"></div>
+  
+  <!-- Modal per i dettagli del corso -->
+  <div class="modal fade" id="course-details-modal" tabindex="-1" aria-labelledby="courseDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="courseDetailsModalLabel">Dettagli del Corso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="course-details-modal-body">
+          <!-- Il contenuto del modal verrà inserito qui -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+  <!-- Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/triennale.js" defer></script>
+
+  <!-- SimplyEdit & Auth0 -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+  <script src="assets/js/auth-config.js"></script>
+  <script src="assets/js/codemirror-editor-plugin.js"></script>
+  <script src="assets/js/simply-custom-plugins.js"></script>
+  <script src="assets/js/simply-edit-config.js"></script>
+  <script src="simplyedit/js/simply-edit.js" data-simply-storage="customGithub" data-simply-repo-user="continos" data-simply-repo-name="Tesi" data-simply-repo-branch="gh-pages" data-simply-settings="customSettings"></script>
+
+</body>
+
+</html>
