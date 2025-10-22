@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         throw new Error('La risposta dell\'API non ha un formato valido.');
     }
 
-    GOMP_COURSES = parseGompData(apiResponse.data); // Salva i dati nella variabile globale
+    GOMP_COURSES = parseGompData(apiResponse.data);
 
     loadingIndicator.style.display = 'none';
     renderCourses(GOMP_COURSES, coursesContainer);
@@ -46,12 +46,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 function parseGompData(data) {
     const allCourses = [];
 
-    // Funzione ricorsiva per estrarre corsi da liste di attività
     function extractCoursesFromActivities(activities) {
         if (!activities) return;
 
         activities.forEach(activity => {
-            // Se è un corso singolo, lo elaboriamo
             if (activity.type === 'activity') {
                 const mainProfessorData = activity.partitions[0]?.professors[0];
                 if (!mainProfessorData) return;
@@ -70,15 +68,13 @@ function parseGompData(data) {
                     professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', '),
                     details: details
                 });
-            } 
-            // Se è un gruppo, chiamiamo ricorsivamente la funzione sulle sue attività
-            else if (activity.type === 'group' && activity.activities) {
-                extractCoursesFromActivities(activity.activities);
+            } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
+                // CORREZIONE: Scendi nell'array 'children' per trovare le attività del gruppo
+                extractCoursesFromActivities(activity.children[0].activities);
             }
         });
     }
 
-    // Iniziamo il processo partendo dagli anni del curriculum
     data.curricula[0]?.years.forEach(year => {
         year.units.forEach(unit => {
             extractCoursesFromActivities(unit.activities);
@@ -125,7 +121,7 @@ if (courseDetailsModal) {
     courseDetailsModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         const courseIndex = button.getAttribute('data-course-index');
-        const course = GOMP_COURSES[courseIndex]; // Recupera i dati dall'array globale
+        const course = GOMP_COURSES[courseIndex];
 
         if (!course) return;
 
