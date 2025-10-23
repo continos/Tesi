@@ -151,11 +151,13 @@ function parseGompData(data) {
                     return courseObject;
                 }
 
-            } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
+            } else if (activity.type === 'group' && activity.children) {
+                // Gestisce entrambi i tipi di gruppo
+                const groupActivities = activity.children[0]?.activities ? activity.children[0].activities : activity.children;
                 return {
                     type: 'group',
                     title: activity.name.find(t => t.iso === 'ita')?.text || 'Gruppo Opzionale',
-                    activities: extractCoursesFromActivities(activity.children[0].activities)
+                    activities: extractCoursesFromActivities(groupActivities)
                 };
             }
             return null;
