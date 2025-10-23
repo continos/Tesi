@@ -177,79 +177,9 @@ function renderCourseItem(course) {
                 <div class="d-flex w-100 justify-content-between">
                     <small class="text-muted">${course.cfu}</small>
                 </div>
-  function populateCourses(insegnamenti) {
-    const courseTemplate = document.getElementById('course-template');
-    if (!courseTemplate) return;
-
-    // Pulisci i contenitori esistenti
-    document.getElementById('year-1-courses').innerHTML = '';
-    document.getElementById('year-2-courses').innerHTML = '';
-    document.getElementById('year-3-courses').innerHTML = '';
-
-    // Funzione robusta per estrarre i nomi dei docenti
-    function getProfessorNames(course) {
-      // 1. Cerca nella struttura complessa (moduli e partizioni)
-      if (course.partitions && course.partitions.length > 0) {
-        const allProfs = course.partitions.flatMap(part => 
-          part.professors ? part.professors.map(prof => `${prof.name} ${prof.lastName}`.trim()) : []
-        );
-        if (allProfs.length > 0) {
-          return allProfs.join(', ');
-        }
-      }
-
-      // 2. Cerca l'array `docenti` (plurale)
-      if (course.docenti && Array.isArray(course.docenti)) {
-        return course.docenti.join(', ');
-      }
-
-      // 3. Cerca la stringa `docente` (singolare)
-      if (course.docente) {
-        return course.docente;
-      }
-
-      // 4. Fallback
-      return 'Non disponibile';
-    }
-
-    // 1. Crea una lista "appiattita" di tutte le attività didattiche reali
-    const allActivities = [];
-    insegnamenti.forEach(activity => {
-        if (activity.children && activity.children.length > 0) {
-            const parentNameIta = activity.name.find(n => n.iso === 'ita')?.text || 'Corso Integrato';
-            activity.children.forEach(module => {
-                module.parentName = parentNameIta; 
-                allActivities.push(module);
-            });
-        } else {
-            allActivities.push(activity);
-        }
-    });
-
-    // 2. Itera sulla lista appiattita per renderizzare l'HTML
-    allActivities.forEach(course => {
-        const clone = courseTemplate.content.cloneNode(true);
-
-        const itaName = course.name.find(n => n.iso === 'ita');
-        let finalName = itaName ? itaName.text : 'Nome non disponibile';
-        
-        if (course.parentName) {
-            finalName = `${course.parentName} (${course.code} ${finalName})`;
-        }
-        clone.querySelector('[data-course-name]').textContent = finalName;
-
-        clone.querySelector('[data-course-cfu]').textContent = course.credits && course.credits[0] ? course.credits[0].credits : 'N/D';
-        clone.querySelector('[data-course-ssd]').textContent = course.credits && course.credits[0] ? course.credits[0].sector : 'N/D';
-        
-        clone.querySelector('[data-course-docente]').textContent = getProfessorNames(course);
-
-        const year = course.anno || (course.temporalUnits && course.temporalUnits[0] ? course.temporalUnits[0].year : null);
-        const targetContainer = document.getElementById(`year-${year}-courses`);
-        if (targetContainer) {
-            targetContainer.appendChild(clone);
-        }
-    });
-  }
+                ${professorsHtml}
+            </div>`;
+}
 
 const courseDetailsModal = document.getElementById('course-details-modal');
 if (courseDetailsModal) {
