@@ -191,7 +191,7 @@ function renderStructuredCourses(years, container) {
         year.semesters.forEach(semester => {
             html += `<div class="list-group mt-3">
                         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start active bg-dark bg-gradient">
-                            <div class="d-flex w-100 justify-content-between"><h5 class="mb-1">${semester.semesterNumber}° semestre</h5></div>
+                            <div class="d-flex w-100 justify-content-between"><h5 class="mb-1 text-white">${semester.semesterNumber}° semestre</h5></div>
                         </a>`;
             semester.activities.forEach(activity => {
                 if (activity.type === 'course') {
