@@ -53,43 +53,103 @@ function parseGompData(data) {
 
         return activities.map(activity => {
             if (activity.type === 'activity') {
-                const mainProfessorData = activity.partitions[0]?.professors[0];
-                const creditData = activity.credits[0];
-                let details = {};
+                // Check if it's a modular course
+                if (activity.children && activity.children.length > 0) {
+                    const mainCourseCreditData = activity.credits[0];
+                    const modules = [];
+                    const allProfessors = new Set();
 
-                if (mainProfessorData) {
-                    details = {
-                        obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
-                        programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
-                        prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
-                        modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
-                        testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text,
-                        modalitaFrequenza: mainProfessorData.classRoomMode?.find(t => t.iso === 'ita')?.text,
-                        modalitaSvolgimento: mainProfessorData.lessonsMode?.find(t => t.iso === 'ita')?.text
-                    };
-                }
-                if (creditData) {
-                    details.ore = {
-                        aula: creditData.oreAula,
-                        esercitazioni: creditData.oreEsercitazioni,
-                        laboratorio: creditData.oreLaboratorio,
-                        seminari: creditData.oreSeminari,
-                        altro: creditData.oreAltro
-                    };
-                    details.attivita = creditData.macroSector;
-                    details.ambito = creditData.exportationCode;
-                }
+                    activity.children.forEach(moduleActivity => {
+                        const moduleProfessorData = moduleActivity.partitions[0]?.professors[0];
+                        const moduleCreditData = moduleActivity.credits[0];
+                        let moduleDetails = {};
 
-                const courseObject = {
-                    index: courseCounter++,
-                    type: 'course',
-                    title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
-                    cfu: `${creditData?.credits || 'N/A'} CFU - ${creditData?.sector || 'N/A'}`,
-                    professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
-                    details: details
-                };
-                allCourses.push(courseObject);
-                return courseObject;
+                        if (moduleProfessorData) {
+                            moduleDetails = {
+                                obiettivi: moduleProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                                programma: moduleProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                                prerequisiti: moduleProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                                modalitaValutazione: moduleProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                                testiAdottati: moduleProfessorData.books?.find(t => t.iso === 'ita')?.text,
+                                modalitaFrequenza: moduleProfessorData.classRoomMode?.find(t => t.iso === 'ita')?.text,
+                                modalitaSvolgimento: moduleProfessorData.lessonsMode?.find(t => t.iso === 'ita')?.text
+                            };
+                        }
+                        if (moduleCreditData) {
+                             moduleDetails.ore = {
+                                aula: moduleCreditData.oreAula,
+                                esercitazioni: moduleCreditData.oreEsercitazioni,
+                                laboratorio: moduleCreditData.oreLaboratorio,
+                                seminari: moduleCreditData.oreSeminari,
+                                altro: moduleCreditData.oreAltro
+                            };
+                            moduleDetails.attivita = moduleCreditData.macroSector;
+                            moduleDetails.ambito = moduleCreditData.exportationCode;
+                        }
+
+                        const moduleProfessors = moduleActivity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`));
+                        moduleProfessors.forEach(p => allProfessors.add(p));
+
+                        modules.push({
+                            code: moduleActivity.code,
+                            name: moduleActivity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                            professors: moduleProfessors.join(', ') || 'Non assegnato',
+                            details: moduleDetails,
+                            cfu: `${moduleCreditData?.credits || 'N/A'} CFU - ${moduleCreditData?.sector || 'N/A'}`
+                        });
+                    });
+
+                    const courseObject = {
+                        index: courseCounter++,
+                        type: 'course',
+                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                        cfu: `${mainCourseCreditData?.credits || 'N/A'} CFU - ${mainCourseCreditData?.sector || 'N/A'}`,
+                        professors: Array.from(allProfessors).join(', ') || 'Non assegnato',
+                        modules: modules,
+                        details: {} // Details are per-module, the main object will use module details
+                    };
+                    allCourses.push(courseObject);
+                    return courseObject;
+
+                } else { // It's a simple, non-modular course
+                    const mainProfessorData = activity.partitions[0]?.professors[0];
+                    const creditData = activity.credits[0];
+                    let details = {};
+
+                    if (mainProfessorData) {
+                        details = {
+                            obiettivi: mainProfessorData.educationalObjectives?.find(t => t.iso === 'ita')?.text,
+                            programma: mainProfessorData.courseProgram?.find(t => t.iso === 'ita')?.text,
+                            prerequisiti: mainProfessorData.prerequisites?.find(t => t.iso === 'ita')?.text,
+                            modalitaValutazione: mainProfessorData.examMode?.find(t => t.iso === 'ita')?.text,
+                            testiAdottati: mainProfessorData.books?.find(t => t.iso === 'ita')?.text,
+                            modalitaFrequenza: mainProfessorData.classRoomMode?.find(t => t.iso === 'ita')?.text,
+                            modalitaSvolgimento: mainProfessorData.lessonsMode?.find(t => t.iso === 'ita')?.text
+                        };
+                    }
+                    if (creditData) {
+                        details.ore = {
+                            aula: creditData.oreAula,
+                            esercitazioni: creditData.oreEsercitazioni,
+                            laboratorio: creditData.oreLaboratorio,
+                            seminari: creditData.oreSeminari,
+                            altro: creditData.oreAltro
+                        };
+                        details.attivita = creditData.macroSector;
+                        details.ambito = creditData.exportationCode;
+                    }
+
+                    const courseObject = {
+                        index: courseCounter++,
+                        type: 'course',
+                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                        cfu: `${creditData?.credits || 'N/A'} CFU - ${creditData?.sector || 'N/A'}`,
+                        professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
+                        details: details
+                    };
+                    allCourses.push(courseObject);
+                    return courseObject;
+                }
 
             } else if (activity.type === 'group' && activity.children && activity.children[0] && activity.children[0].activities) {
                 return {
@@ -161,8 +221,18 @@ function renderStructuredCourses(years, container) {
 }
 
 function renderCourseItem(course) {
-    const professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small><br>` : '';
-    const detailsButtonHtml = (course.details && Object.keys(course.details).length > 0) ? 
+    let professorsHtml = '';
+    if (course.modules && course.modules.length > 0) {
+        professorsHtml = '<ul class="list-unstyled mt-2 mb-0">';
+        course.modules.forEach(module => {
+            professorsHtml += `<li><small class="text-muted"><strong>${module.code} ${module.name}:</strong> ${module.professors}</small></li>`;
+        });
+        professorsHtml += '</ul>';
+    } else {
+        professorsHtml = course.professors ? `<small class="text-muted">Docenti: ${course.professors}</small>` : '';
+    }
+
+    const detailsButtonHtml = (course.details && Object.keys(course.details).length > 0) || (course.modules && course.modules.length > 0) ? 
         `<a href="#" class="info-icon" data-bs-toggle="modal" data-bs-target="#course-details-modal" data-course-index="${course.index}" title="Dettagli corso">
             <i class="bi bi-info-circle-fill float-end text-info" style="cursor: pointer; font-size: 1.2em; vertical-align: middle; margin-left: 8px;"></i>
         </a>` : '';
@@ -195,25 +265,49 @@ if (courseDetailsModal) {
 
         modalTitle.textContent = course.title;
         let bodyHtml = '';
-        const details = course.details;
 
-        if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
-        
-        if(details.ore) {
-            bodyHtml += `<table class="table table-bordered table-striped" style="margin-top: 20px;"><tbody>
-                        <tr><th>Ore in Aula</th><th>Ore Esercitazioni</th><th>Ore Seminari</th><th>Ore Laboratorio</th><th>Ore Altro</th></tr>
-                        <tr><td>${details.ore.aula || 0}</td><td>${details.ore.esercitazioni || 0}</td><td>${details.ore.seminari || 0}</td><td>${details.ore.laboratorio || 0}</td><td>${details.ore.altro || 0}</td></tr>
-                        </tbody></table>`;
+        if (course.modules && course.modules.length > 0) {
+            course.modules.forEach(module => {
+                bodyHtml += `<div class="module-details mb-4 p-3 border rounded">
+`;
+                bodyHtml += `<h4>${module.code} - ${module.name} (${module.cfu})</h4>`;
+                bodyHtml += `<p><strong>Docente:</strong> ${module.professors}</p>`;
+                const details = module.details;
+                if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
+                if(details.ore) {
+                    bodyHtml += `<table class="table table-bordered table-striped" style="margin-top: 20px;"><tbody>
+                                <tr><th>Ore in Aula</th><th>Ore Esercitazioni</th><th>Ore Seminari</th><th>Ore Laboratorio</th><th>Ore Altro</th></tr>
+                                <tr><td>${details.ore.aula || 0}</td><td>${details.ore.esercitazioni || 0}</td><td>${details.ore.seminari || 0}</td><td>${details.ore.laboratorio || 0}</td><td>${details.ore.altro || 0}</td></tr>
+                                </tbody></table>`;
+                }
+                if(details.attivita) bodyHtml += `<br><strong>Attività</strong><p>${details.attivita}</p>`;
+                if(details.ambito) bodyHtml += `<strong>Ambito</strong><p>${details.ambito}</p>`;
+                if(details.prerequisiti) bodyHtml += `<strong>Prerequisiti</strong><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
+                if(details.programma) bodyHtml += `<strong class="mt-4">Programma del Corso</strong><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
+                if(details.modalitaValutazione) bodyHtml += `<strong class="mt-4">Modalità di Valutazione</strong><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
+                if(details.testiAdottati) bodyHtml += `<strong class="mt-4">Testi Adottati</strong><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
+                if(details.modalitaFrequenza) bodyHtml += `<strong class="mt-4">Modalità di frequenza</strong><p>${details.modalitaFrequenza.replace(/\n/g, '<br>')}</p>`;
+                if(details.modalitaSvolgimento) bodyHtml += `<strong class="mt-4">Modalità di svolgimento delle lezioni</strong><p>${details.modalitaSvolgimento.replace(/\n/g, '<br>')}</p>`;
+                bodyHtml += `</div>`;
+            });
+        } else { // Logic for non-modular courses
+            const details = course.details;
+            if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
+            if(details.ore) {
+                bodyHtml += `<table class="table table-bordered table-striped" style="margin-top: 20px;"><tbody>
+                            <tr><th>Ore in Aula</th><th>Ore Esercitazioni</th><th>Ore Seminari</th><th>Ore Laboratorio</th><th>Ore Altro</th></tr>
+                            <tr><td>${details.ore.aula || 0}</td><td>${details.ore.esercitazioni || 0}</td><td>${details.ore.seminari || 0}</td><td>${details.ore.laboratorio || 0}</td><td>${details.ore.altro || 0}</td></tr>
+                            </tbody></table>`;
+            }
+            if(details.attivita) bodyHtml += `<br><strong>Attività</strong><p>${details.attivita}</p>`;
+            if(details.ambito) bodyHtml += `<strong>Ambito</strong><p>${details.ambito}</p>`;
+            if(details.prerequisiti) bodyHtml += `<strong>Prerequisiti</strong><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
+            if(details.programma) bodyHtml += `<strong class="mt-4">Programma del Corso</strong><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
+            if(details.modalitaValutazione) bodyHtml += `<strong class="mt-4">Modalità di Valutazione</strong><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
+            if(details.testiAdottati) bodyHtml += `<strong class="mt-4">Testi Adottati</strong><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
+            if(details.modalitaFrequenza) bodyHtml += `<strong class="mt-4">Modalità di frequenza</strong><p>${details.modalitaFrequenza.replace(/\n/g, '<br>')}</p>`;
+            if(details.modalitaSvolgimento) bodyHtml += `<strong class="mt-4">Modalità di svolgimento delle lezioni</strong><p>${details.modalitaSvolgimento.replace(/\n/g, '<br>')}</p>`;
         }
-
-        if(details.attivita) bodyHtml += `<br><strong>Attività</strong><p>${details.attivita}</p>`;
-        if(details.ambito) bodyHtml += `<strong>Ambito</strong><p>${details.ambito}</p>`;
-        if(details.prerequisiti) bodyHtml += `<strong>Prerequisiti</strong><p>${details.prerequisiti.replace(/\n/g, '<br>')}</p>`;
-        if(details.programma) bodyHtml += `<strong class="mt-4">Programma del Corso</h6><p>${details.programma.replace(/\n/g, '<br>')}</p>`;
-        if(details.modalitaValutazione) bodyHtml += `<strong class="mt-4">Modalità di Valutazione</h6><p>${details.modalitaValutazione.replace(/\n/g, '<br>')}</p>`;
-        if(details.testiAdottati) bodyHtml += `<strong class="mt-4">Testi Adottati</h6><p>${details.testiAdottati.replace(/\n/g, '<br>')}</p>`;
-        if(details.modalitaFrequenza) bodyHtml += `<strong class="mt-4">Modalità di frequenza</h6><p>${details.modalitaFrequenza.replace(/\n/g, '<br>')}</p>`;
-        if(details.modalitaSvolgimento) bodyHtml += `<strong class="mt-4">Modalità di svolgimento delle lezioni</h6><p>${details.modalitaSvolgimento.replace(/\n/g, '<br>')}</p>`;
         
         modalBody.innerHTML = bodyHtml || '<p>Nessun dettaglio disponibile per questo corso.</p>';
     });
