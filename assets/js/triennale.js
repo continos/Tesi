@@ -102,7 +102,7 @@ function parseGompData(data) {
                     const courseObject = {
                         index: courseCounter++,
                         type: 'course',
-                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                        title: `${activity.code} ${activity.name.find(t => t.iso === 'ita')?.text || 'N/A'}`,
                         cfu: `${mainCourseCreditData?.credits || 'N/A'} CFU - ${mainCourseCreditData?.sector || 'N/A'}`,
                         professors: Array.from(allProfessors).join(', ') || 'Non assegnato',
                         modules: modules,
@@ -142,7 +142,7 @@ function parseGompData(data) {
                     const courseObject = {
                         index: courseCounter++,
                         type: 'course',
-                        title: activity.name.find(t => t.iso === 'ita')?.text || 'N/A',
+                        title: `${activity.code} ${activity.name.find(t => t.iso === 'ita')?.text || 'N/A'}`,
                         cfu: `${creditData?.credits || 'N/A'} CFU - ${creditData?.sector || 'N/A'}`,
                         professors: activity.partitions.flatMap(p => p.professors.map(prof => `${prof.name} ${prof.lastName}`)).join(', ') || 'Non assegnato',
                         details: details
