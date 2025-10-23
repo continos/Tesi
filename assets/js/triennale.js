@@ -197,18 +197,14 @@ function renderStructuredCourses(years, container) {
                 if (activity.type === 'course') {
                     html += renderCourseItem(activity);
                 } else if (activity.type === 'group') {
-                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${activity.title.replace(/\s/g, '_')}`;
-                    html += `<div class="accordion accordion-flush border mt-2" id="${groupId}">
-                                <div class="accordion-item bg-light">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed bg-warning-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#flush_${groupId}" aria-expanded="false" aria-controls="flush_${groupId}">
-                                            ${activity.title}
-                                        </button>
-                                    </h2>
-                                    <div id="flush_${groupId}" class="accordion-collapse collapse" data-bs-parent="#${groupId}">
-                                        <div class="accordion-body p-0">
-                                            ${activity.activities.map(subActivity => renderCourseItem(subActivity)).join('')}
-                                        </div>
+                    const groupId = `group_${year.yearNumber}_${semester.semesterNumber}_${activity.title.replace(/\s/g, '_')}`.replace(/[^a-zA-Z0-9_]/g, '');
+                    html += `<div class="course-group border mt-2">
+                                <button class="btn btn-warning w-100 text-start p-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapse_${groupId}">
+                                    ${activity.title}
+                                </button>
+                                <div class="collapse" id="collapse_${groupId}">
+                                    <div class="list-group list-group-flush">
+                                        ${activity.activities.map(subActivity => renderCourseItem(subActivity)).join('')}
                                     </div>
                                 </div>
                              </div>`;
