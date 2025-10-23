@@ -53,7 +53,7 @@ function parseGompData(data) {
 
         return activities.map(activity => {
             if (activity.type === 'activity') {
-                // Check if it's a modular course
+                // Controlla se è un corso con i moduli
                 if (activity.children && activity.children.length > 0) {
                     const mainCourseCreditData = activity.credits[0];
                     const modules = [];
@@ -106,12 +106,12 @@ function parseGompData(data) {
                         cfu: `${mainCourseCreditData?.credits || 'N/A'} CFU - ${mainCourseCreditData?.sector || 'N/A'}`,
                         professors: Array.from(allProfessors).join(', ') || 'Non assegnato',
                         modules: modules,
-                        details: {} // Details are per-module, the main object will use module details
+                        details: {} // Dettagli sono per la modale
                     };
                     allCourses.push(courseObject);
                     return courseObject;
 
-                } else { // It's a simple, non-modular course
+                } else { // Per corsi senza moduli
                     const mainProfessorData = activity.partitions[0]?.professors[0];
                     const creditData = activity.credits[0];
                     let details = {};
@@ -223,7 +223,7 @@ function renderCourseItem(course) {
     if (course.modules && course.modules.length > 0) {
         professorsHtml = '<ul class="list-unstyled mt-2 mb-0">';
         course.modules.forEach(module => {
-            professorsHtml += `<li><small class="text-muted"><strong>${module.code} ${module.name}:</strong> ${module.professors}</small></li>`;
+            professorsHtml += `<li><small class="text-muted">${module.code} ${module.name}: ${module.professors}</small></li>`;
         });
         professorsHtml += '</ul>';
     } else {
@@ -288,7 +288,7 @@ if (courseDetailsModal) {
                 if(details.modalitaSvolgimento) bodyHtml += `<strong class="mt-4">Modalità di svolgimento delle lezioni</strong><p>${details.modalitaSvolgimento.replace(/\n/g, '<br>')}</p>`;
                 bodyHtml += `</div>`;
             });
-        } else { // Logic for non-modular courses
+        } else { // Logica per corsi senza moduli
             const details = course.details;
             if(details.obiettivi) bodyHtml += `<h6>Obiettivi Formativi</h6><p>${details.obiettivi.replace(/\n/g, '<br>')}</p>`;
             if(details.ore) {
