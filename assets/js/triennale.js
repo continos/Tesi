@@ -201,7 +201,7 @@ function renderStructuredCourses(years, container) {
                     html += `<div class="accordion accordion-flush border mt-2" id="${groupId}">
                                 <div class="accordion-item bg-light">
                                     <h2 class="accordion-header">
-                                        <button class="accordion-button collapsed bg-warning-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#flush_${groupId}" aria-expanded="false" aria-controls="${groupId}">
+                                        <button class="accordion-button collapsed bg-warning-subtle" type="button" data-bs-toggle="collapse" data-bs-target="#flush_${groupId}" aria-expanded="false" aria-controls="flush_${groupId}">
                                             ${activity.title}
                                         </button>
                                     </h2>
