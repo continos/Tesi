@@ -107,7 +107,11 @@
 					{
 						"item": {
 							"innerHTML": "Bachelor",
-							"href": "http://www.informatica.uniroma2.it/"
+							"href": "/Tesi/triennale.html",
+							"class": null,
+							"alt": null,
+							"title": null,
+							"name": null
 						},
 						"data-simply-template": "item"
 					},
@@ -139,9 +143,6 @@
 					"name": null
 				},
 				"data-simply-template": "item"
-			},
-			{
-				"data-simply-template": "search-icon"
 			}
 		]
 	},
